@@ -1,0 +1,221 @@
+#leftnav {
+width:130px;
+height:auto;
+overflow:hidden;
+margin:0;
+padding:0;
+background:#efefef; /*light grey background color */
+border:solid 2px #ccc; /* 2 pixels thick grey border  */
+border-radius:10px; /* round corners with a 10 pixels radius */
+-moz-border-radius:10px; /* mozilla Firefox web browsers */
+-webkit-border-radius:10px; /* Webkit Engine Bases Wed browsers: Google Chrome & Apple Safari */
+-o-border-radius:10px; /* Opera web browser */
+-ms-border-radius:10px;
+}
+
+#leftnav ul{
+width:100%; /* matches the width of its parent container #leftnav */
+list-style:none; /* prevent the display of bullets  decoration */
+margin:10px 0; /* makes sure the first and last <li>..</li> elements are 10px away from the top and bottom edges */
+padding:0;
+}
+
+#leftnav ul li{
+float:none; /* just in case */
+margin:1px 0 0; /*   */
+padding:0;
+}
+
+#leftnav ul li a{
+display:block; /* Remove this rule and see what happens to help you understand its meaning    */
+height:30px; /* defines the height of each link */
+line-height:28px; /* use to vertically center the link text */
+text-align:left /* flushes the link text to left */
+color:#000; /* text color */
+text-decoration:none; /* prevent the underline */
+margin:0;
+padding:0;
+background:#e5e5e5; /* you can define a background color/image */
+}
+#leftnav ul li a:hover{
+/* add rules to create a rollover effects: background color/image, text color, … */
+background:#fff; /* changes the background color to white as a rollover effect */
+}
+
+#leftnav ul li a:visited{
+color:#000; /* prevent text link to change color when the target page is already visited */
+}
+
+#leftnav ul li ul{
+width:150px; /* default width of sub-menus */
+height:auto;
+overflow:hidden;
+border:solid 1px #ccc;
+position:absolute;
+top:0; /* you can add a few more pixels to nudge it down   */
+right:0; /* use left:0; instead for a right sidebar */
+z-index:1000;
+display:none; /* sub-menu will be hidden by default */
+}
+
+#leftnav ul li ul li{
+width:100%;
+}
+
+#leftnav ul li ul li a{
+/* not really needed unless the sub-links have CSS different from the top level navigation links */
+
+}
+
+#leftnav ul li:hover ul{
+display:block; /*reveal the sub-menu when the mouse is over the main list/link item */
+}
+
+/*  The ”list-style:none;” CSS rule defined earlier in the #leftnav ul selector also applies to sub-menus . 
+Although the sub-menu selector #leftnav ul li ul is more specific, all the rules defined in the #leftnav ul 
+selector apply to it unless overridden. In the same token, all the rules defines in the #leftnav ul li also 
+applied #leftnav ul li ul li because the latter is just a special case. The same rules apply to #leftnav ul 
+li a and #leftnav ul li ul li a selectors.
+
+Adding CSS IDs to the top-level list item (e.g. <li id=”home”>…</li>) allows us in this case to target a 
+specific sub-menu and also choose which main link should be highlighted to give your web site visitors an
+indication about which section of your web site the current page is part of. So let first use that
+specificity to target each sub-menu in our navigation bar.
+
+Although we defined a default width of 150px in the sub-menu selector # leftnav ul li ul, because some
+links in the sub-menu have more anchor text than other in most case you would have different widths for
+those sub-menus. You can also define a default width that is enough to accommodate the longest anchor
+text in your sub-menus.
+
+I personally call that choice a lack of aesthetic sense. It doesn’t hurt to write a few extra lines of CSS to
+get visually pleasing sub-menus. So here we go:
+*/
+
+#leftnav ul li#services li ul{
+width:180px; /* adjust this number as needed */
+}
+#leftnav ul li#products li ul{
+width:200px; /* adjust as needed */
+}
+
+
+#topnav{
+width:100%;
+height:30px;
+background:#e5e5e5;
+position:absolute;
+top:100px;
+left:0;
+margin:0;
+padding:0;
+border:none;
+}
+
+/* We keep the style of ul the same for both vertical and horizontal navigation layouts  */
+#topnav ul{
+width:100%;
+list-style:none;
+margin:0;
+padding:0;
+}
+
+/*
+We add a 1px margin at the right hand-side to create a vertical separator by having the background color applied to #topnav (#E5E5E5) bleed through.
+*/
+#topnav ul li{
+position:relative;
+margin:0 0 0 20px;
+padding:0;
+float:left;
+clear:none;
+display:inline;
+}
+
+/*
+#topnav ul li a:visited selector help keep the navigation links style remain the same whether the page is visited or not. Otherwise your link text may turn purple. That behavior can be user-friendly for links in a text section but will look just awful.
+*/
+#topnav ul li a, #topnav ul li a:visited {
+display:block;
+height:30px; /* vertically centers the hyperlink text  */
+text-align:center; /* better than adding padding to left and right sides */
+line-height:28px; /* vertical centering instead using padding to top and bottom sides. You can adjust this number as needed depending on the font used. */
+color:#000;
+background:#efefef;  /*  use a background color or background image to style these buttons  */
+text-decoration:none;  /* removes the default underline  */
+}
+
+#topnav ul li ul{
+width:150px; /* default width for the sub-menus */
+height:auto;
+overflow:hidden;
+border:1px solid #ccc;
+position:absolute;
+top:30px;
+left:0;
+display:none; /* hide the sub-menus by default  */
+z-index:1000; /* or any number to ensure the sub-menus will appear on top of every other element in the page. */
+}
+
+/* shows the sub-menu when the mouse is over the parent li element (i.e. li:hover) .  This selector will inherit all the styles applied to #topnav ul li ul. So we only need to override the display property to show the sub-menu during the hover state of the parent <li> container */
+#topnav ul li:hover ul{
+display:block;
+}
+
+/*
+List items in a sub-menu should be vertically aligned. So, the floating will be set to none so these block-level elements can revert to their default alignment: stacked vertically.
+*/
+#topnav ul li ul li{
+float:none;
+margin:0;
+padding:0;
+}
+
+/* Sub-menu links   */
+#topnav ul li ul li a, #topnav ul li ul li a:visited {
+display:block;
+height:30px; /* redundant but just in case */
+margin:0;
+padding:0;
+text-align:left; /* aligns sub-menu anchor text to the left */
+text-indent:5px; /*adds a 5px spacing between anchor text and sub-menu left border */
+text-decoration:none; /* redundant but just in case */
+line-height:28px; /* redundant but just in case */
+}
+
+/*  More space for the first item */
+#topnav ul li#firstitem{
+margin:0 0 0 100px;
+}
+/* Because top level links such as home, services, … do not have the same number of text characters, it’s always a good idea to specify the width of each item proportionally to the amount of horizontal space needed.     */
+#topnav ul li#f{
+width:80px;
+}
+
+#topnav ul li#services{
+width:120px;
+}
+
+#topnav ul li#products{
+width:120px;
+}
+
+#topnav ul li#contact{
+width:80px;
+}
+
+#topnav ul li#testimonials{
+width:150px;
+}
+
+#topnav ul li#about{
+width:80px;
+}
+
+/* It’s also wise the specify the width for each sub-menu. It’s just a matter of general look-and-feel. */
+#topnav ul li#services ul{
+width:180px;
+}
+
+#topnav ul li#products ul{
+width:200px;
+}

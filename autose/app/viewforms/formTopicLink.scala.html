@@ -1,0 +1,42 @@
+
+@(f: Form[MdlTopicLink], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+@defining(f("fTopic").value.get.toLong) { topic =>   
+@topicPage(SqlTopics.select(topic)) {
+
+
+<div class="column span-18 last">
+    <fieldset>
+    @helper.form(routes.TopicLinkController.saveTopicLink(newEntry)) {
+
+
+		  
+            @defining(f("fidTopicLink")) { fidTopicLink =>
+                <input type="hidden" name="@fidTopicLink.name" id="@fidTopicLink.id" value="@fidTopicLink.value">
+			}
+    
+    		@defining(f("fTopic")) { fTopic =>
+                <input type="hidden" name="@fTopic.name" id="@fTopic.id" value="@fTopic.value">
+			}
+
+			
+            @textarea(field = f("fLink"), args = 'rows -> 2, 'cols -> 100, '_label-> "Link", '_help-> "Ensure that your link is prefaced with http://")
+        	@*@inputText(f("fLink"), '_label -> "Link")*@
+
+            @textarea(field = f("fDescription"), args = 'rows -> 2, 'cols -> 100, '_label-> "Description")
+        	@*@inputText(f("fDescription"), '_label -> "Description")*@
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+      		</fieldset>
+          		<a href="@routes.TopicLinkController.listSelectedTopicLink(topic)">Cancel and return to listing</a>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+}
+

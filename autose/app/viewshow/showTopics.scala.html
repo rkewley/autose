@@ -1,0 +1,34 @@
+
+@(vTopics: MdlTopics)
+
+    @import persistence._
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>Topics Information</h3>
+		  <dl>
+
+		  	<dt>Topic</dt>
+		  	<dd>@Html(vTopics.vTopic.toString)</dd>
+
+		  	<dt>Topic Short Description</dt>
+		  	<dd>@Html(vTopics.vTopicShortDescription.toString)</dd>
+
+		  	<dt>Topic Detailed Description</dt>
+		  	<dd>@Html(vTopics.vTopicDetailedDescription.toString)</dd>
+	       </dl>
+     <div>
+       <a href="@routes.TopicsController.listTopics">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

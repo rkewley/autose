@@ -1,0 +1,25 @@
+@(idLesson: Long)(content: Html)
+@import persistence._
+
+@defining(SqlLessons.select(idLesson)) { lesson =>
+@defining(SqlCourses.select(lesson.vidCourse)) { course =>
+@main("Systems Net", course.vCourseIDNumber) {
+
+	<div class="column span-4 colborder">
+		<nav id="leftnav">
+		  <ul>
+			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse)">Course Home</a></li>
+			<li><a href="@routes.LessonsController.listLessons(course.vidCourse)">Syllabus</a></li>
+			<li><a href="@routes.LessonTopicObjectivesController.listLessonTopicObjectives(lesson.vLessonIndex)">Knowledge and Skills</a></li>
+			<li><a href="@routes.LessonLinksController.listLessonLinks(lesson.vLessonIndex)">Lesson Links and Files</a></li>
+			<li><a href="@routes.LessonLinkTopicObjectivesController.listLessonLinkTopicObjectives(lesson.vLessonIndex)">Link Files to Objectives</a></li>
+		  </ul>
+		</nav>
+	</div>
+
+	<div>
+		@content
+	</div>
+    }
+  }	
+}

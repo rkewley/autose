@@ -1,0 +1,50 @@
+
+@(listTopicObjectives: List[MdlTopicObjectives], topicId: Long)
+    
+    @import persistence._
+    
+@defining(SqlTopics.select(topicId)) { topic =>   
+    @topicPage(topic) {
+	<div>
+    
+    <div class="column span-18 last">
+		  <h3>@topic.vTopic Knowledge and Skills</h3>
+		  <table>
+			<tr>
+				<th>Objective</th>
+				<th>Topic</th>
+				<th>Type</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listTopicObjectives.map { vTopicObjectives =>
+    			
+    		<tr>
+				<td>@vTopicObjectives.vObjective</td>
+
+    		@defining(SqlTopics.select(vTopicObjectives.vTopic)){pkModel =>
+      		  <td><a href="@routes.TopicsController.showTopics(vTopicObjectives.vTopic)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+      		  <td>@vTopicObjectives.vKSAB</a></td>
+
+    			<td><a href="@routes.TopicObjectivesController.showTopicObjectives(vTopicObjectives.vTopicObjectiveNumber)">Show</a></td>
+    			<td><a href="@routes.TopicObjectivesController.editTopicObjectives(vTopicObjectives.vTopicObjectiveNumber)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.TopicObjectivesController.deleteTopicObjectives(vTopicObjectives.vTopicObjectiveNumber)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.TopicObjectivesController.createTopicObjectives(topicId)">Add knowledge and skills for @topic.vTopic</a>
+    </div>
+  </div>
+  }
+}

@@ -1,0 +1,173 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+# Courses Routes
+GET     /homeCourses/:id						 controllers.CoursesController.homeCourses(id: Long)
+GET     /listCourses						controllers.CoursesController.listCourses
+GET		/showCourses/:id					controllers.CoursesController.showCourses(id: Long)
+GET 	/editCourses/:id					controllers.CoursesController.editCourses(id: Long)
+GET 	/createCourses					controllers.CoursesController.createCourses
+POST	/deleteCourses/:id				controllers.CoursesController.deleteCourses(id: Long)
+POST 	/saveCourses/:newEntry			controllers.CoursesController.saveCourses(newEntry: Int)
+
+
+# Faculty Routes
+GET     /listFaculty						controllers.FacultyController.listFaculty
+GET		/showFaculty/:id					controllers.FacultyController.showFaculty(id: String)
+GET 	/editFaculty/:id					controllers.FacultyController.editFaculty(id: String)
+GET 	/createFaculty					controllers.FacultyController.createFaculty
+POST	/deleteFaculty/:id				controllers.FacultyController.deleteFaculty(id: String)
+POST 	/saveFaculty/:newEntry			controllers.FacultyController.saveFaculty(newEntry: Int)
+
+
+# Topics Routes
+GET		/homeTopics/:id					controllers.TopicsController.homeTopics(id: Long)
+GET     /listTopics						controllers.TopicsController.listTopics
+GET		/showTopics/:id					controllers.TopicsController.showTopics(id: Long)
+GET 	/editTopics/:id					controllers.TopicsController.editTopics(id: Long)
+GET 	/createTopics					controllers.TopicsController.createTopics
+POST	/deleteTopics/:id				controllers.TopicsController.deleteTopics(id: Long)
+POST 	/saveTopics/:newEntry			controllers.TopicsController.saveTopics(newEntry: Int)
+
+
+# TopicReferences Routes
+GET     /listTopicSelectedReferences/:topicId		controllers.TopicReferencesController.listSelectedTopicReferences(topicId: Long)
+GET		/showTopicReferences/:id					controllers.TopicReferencesController.showTopicReferences(id: Long)
+GET 	/editTopicReferences/:id					controllers.TopicReferencesController.editTopicReferences(id: Long)
+GET 	/createTopicReferences/:topicId					controllers.TopicReferencesController.createTopicReferences(topicId: Long)
+POST	/deleteTopicReferences/:id				controllers.TopicReferencesController.deleteTopicReferences(id: Long)
+POST 	/saveTopicReferences/:newEntry			controllers.TopicReferencesController.saveTopicReferences(newEntry: Int)
+
+# TopicPicture Routes
+GET     /listSelectedTopicPicture/:topicId		controllers.TopicPictureController.listSelectedTopicPicture(topicId: Long)
+GET		/showTopicPicture/:id					controllers.TopicPictureController.showTopicPicture(id: Long)
+GET 	/editTopicPicture/:id					controllers.TopicPictureController.editTopicPicture(id: Long)
+GET 	/createTopicPicture/:topicId					controllers.TopicPictureController.createTopicPicture(topicId: Long)
+POST	/deleteTopicPicture/:id				controllers.TopicPictureController.deleteTopicPicture(id: Long)
+POST 	/saveTopicPicture/:newEntry			controllers.TopicPictureController.saveTopicPicture(newEntry: Int)
+
+# TopicLink Routes
+GET     /listSelectedTopicLink/:topicId		controllers.TopicLinkController.listSelectedTopicLink(topicId: Long)
+GET		/showTopicLink/:id					controllers.TopicLinkController.showTopicLink(id: Long)
+GET 	/editTopicLink/:id					controllers.TopicLinkController.editTopicLink(id: Long)
+GET 	/createTopicLink/:topicId					controllers.TopicLinkController.createTopicLink(topicId: Long)
+POST	/deleteTopicLink/:id				controllers.TopicLinkController.deleteTopicLink(id: Long)
+POST 	/saveTopicLink/:newEntry			controllers.TopicLinkController.saveTopicLink(newEntry: Int)
+
+# Reference Routes
+GET     /listReference						controllers.ReferenceController.listReference
+GET		/showReference/:id					controllers.ReferenceController.showReference(id: Long)
+GET 	/editReference/:id					controllers.ReferenceController.editReference(id: Long)
+GET 	/createReference					controllers.ReferenceController.createReference
+POST	/deleteReference/:id				controllers.ReferenceController.deleteReference(id: Long)
+POST 	/saveReference/:newEntry			controllers.ReferenceController.saveReference(newEntry: Int)
+
+# Picture Routes
+GET     /listPicture						controllers.PictureController.listPicture
+GET		/showPicture/:id					controllers.PictureController.showPicture(id: Long)
+GET 	/editPicture/:id					controllers.PictureController.editPicture(id: Long)
+GET 	/createPicture					controllers.PictureController.createPicture
+POST	/deletePicture/:id				controllers.PictureController.deletePicture(id: Long)
+POST 	/savePicture/:newEntry			controllers.PictureController.savePicture(newEntry: Int)
+
+
+# Departments Routes
+GET     /listDepartments						controllers.DepartmentsController.listDepartments
+GET		/showDepartments/:id					controllers.DepartmentsController.showDepartments(id: Long)
+GET 	/editDepartments/:id					controllers.DepartmentsController.editDepartments(id: Long)
+GET 	/createDepartments					controllers.DepartmentsController.createDepartments
+POST	/deleteDepartments/:id				controllers.DepartmentsController.deleteDepartments(id: Long)
+POST 	/saveDepartments/:newEntry			controllers.DepartmentsController.saveDepartments(newEntry: Int)
+
+
+# Programs Routes
+GET     /listPrograms						controllers.ProgramsController.listPrograms
+GET		/showPrograms/:id					controllers.ProgramsController.showPrograms(id: String)
+GET 	/editPrograms/:id					controllers.ProgramsController.editPrograms(id: String)
+GET 	/createPrograms					controllers.ProgramsController.createPrograms
+POST	/deletePrograms/:id				controllers.ProgramsController.deletePrograms(id: String)
+POST 	/savePrograms/:newEntry			controllers.ProgramsController.savePrograms(newEntry: Int)
+
+
+# TerminalLearningObjective Routes
+GET     /listSelectedTerminalLearningObjective/:topcId		controllers.TerminalLearningObjectiveController.listSelectedTerminalLearningObjective(topcId: Long)
+GET		/showTerminalLearningObjective/:id					controllers.TerminalLearningObjectiveController.showTerminalLearningObjective(id: Long)
+GET 	/editTerminalLearningObjective/:id					controllers.TerminalLearningObjectiveController.editTerminalLearningObjective(id: Long)
+GET 	/createTerminalLearningObjective/:topicId			controllers.TerminalLearningObjectiveController.createTerminalLearningObjective(topicId: Long)
+POST	/deleteTerminalLearningObjective/:id				controllers.TerminalLearningObjectiveController.deleteTerminalLearningObjective(id: Long)
+POST 	/saveTerminalLearningObjective/:newEntry			controllers.TerminalLearningObjectiveController.saveTerminalLearningObjective(newEntry: Int)
+
+# TopicObjectives Routes
+GET     /listSelectedTopicObjectives/:topicId			controllers.TopicObjectivesController.listSelectedTopicObjectives(topicId: Long)
+GET		/showTopicObjectives/:id					controllers.TopicObjectivesController.showTopicObjectives(id: Long)
+GET 	/editTopicObjectives/:id					controllers.TopicObjectivesController.editTopicObjectives(id: Long)
+GET 	/createTopicObjectives/:topicId					controllers.TopicObjectivesController.createTopicObjectives(topicId: Long)
+POST	/deleteTopicObjectives/:id				controllers.TopicObjectivesController.deleteTopicObjectives(id: Long)
+POST 	/saveTopicObjectives/:newEntry			controllers.TopicObjectivesController.saveTopicObjectives(newEntry: Int)
+
+# CourseLinks Routes
+GET     /listCourseLinks/:courseId						controllers.CourseLinksController.listCourseLinks(courseId: Long)
+GET		/showCourseLinks/:id					controllers.CourseLinksController.showCourseLinks(id: Long)
+GET 	/editCourseLinks/:id					controllers.CourseLinksController.editCourseLinks(id: Long)
+GET 	/createCourseLinks/:courseId					controllers.CourseLinksController.createCourseLinks(courseId: Long)
+POST	/deleteCourseLinks/:id				controllers.CourseLinksController.deleteCourseLinks(id: Long)
+POST 	/saveCourseLinks/:newEntry			controllers.CourseLinksController.saveCourseLinks(newEntry: Int)
+
+# CourseReferences Routes
+GET     /listCourseReferences/:courseId						controllers.CourseReferencesController.listCourseReferences(courseId: Long)
+GET		/showCourseReferences/:id					controllers.CourseReferencesController.showCourseReferences(id: Long)
+GET 	/editCourseReferences/:id					controllers.CourseReferencesController.editCourseReferences(id: Long)
+GET 	/createCourseReferences/:courseId					controllers.CourseReferencesController.createCourseReferences(courseId: Long)
+POST	/deleteCourseReferences/:id				controllers.CourseReferencesController.deleteCourseReferences(id: Long)
+POST 	/saveCourseReferences/:newEntry			controllers.CourseReferencesController.saveCourseReferences(newEntry: Int)
+
+# Authentication
+POST    /login                      controllers.LoginController.authenticate
+GET     /logout                     controllers.LoginController.logout
+GET		/login						controllers.LoginController.login
+
+# User Routes
+GET     /listUser						controllers.UserController.listUser
+GET		/showUser/:id					controllers.UserController.showUser(id: String)
+GET 	/editUser/:id					controllers.UserController.editUser(id: String)
+GET 	/createUser					controllers.UserController.createUser
+POST	/deleteUser/:id				controllers.UserController.deleteUser(id: String)
+POST 	/saveUser/:newEntry			controllers.UserController.saveUser(newEntry: Int)
+
+# LessonLinks Routes
+GET     /listLessonLinks/:idLessons						controllers.LessonLinksController.listLessonLinks(idLessons: Long)
+GET		/showLessonLinks/:id					controllers.LessonLinksController.showLessonLinks(id: Long)
+GET 	/editLessonLinks/:id					controllers.LessonLinksController.editLessonLinks(id: Long)
+GET 	/createLessonLinks/:idLessons					controllers.LessonLinksController.createLessonLinks(idLessons: Long)
+POST	/deleteLessonLinks/:id				controllers.LessonLinksController.deleteLessonLinks(id: Long)
+POST 	/saveLessonLinks/:newEntry			controllers.LessonLinksController.saveLessonLinks(newEntry: Int)
+
+# LessonLinkTopicObjectives Routes
+GET     /listLessonLinkTopicObjectives/:idLessonLinks						controllers.LessonLinkTopicObjectivesController.listLessonLinkTopicObjectives(idLessonLinks: Long)
+GET		/showLessonLinkTopicObjectives/:id					controllers.LessonLinkTopicObjectivesController.showLessonLinkTopicObjectives(id: Long)
+GET 	/editLessonLinkTopicObjectives/:id					controllers.LessonLinkTopicObjectivesController.editLessonLinkTopicObjectives(id: Long)
+GET 	/createLessonLinkTopicObjectives/:idLessonLinks					controllers.LessonLinkTopicObjectivesController.createLessonLinkTopicObjectives(idLessonLinks: Long)
+POST	/deleteLessonLinkTopicObjectives/:id				controllers.LessonLinkTopicObjectivesController.deleteLessonLinkTopicObjectives(id: Long)
+POST 	/saveLessonLinkTopicObjectives/:newEntry			controllers.LessonLinkTopicObjectivesController.saveLessonLinkTopicObjectives(newEntry: Int)
+
+# LessonTopicObjectives Routes
+GET     /listLessonTopicObjectives/:idLessons						controllers.LessonTopicObjectivesController.listLessonTopicObjectives(idLessons: Long)
+GET		/showLessonTopicObjectives/:id					controllers.LessonTopicObjectivesController.showLessonTopicObjectives(id: Long)
+GET 	/editLessonTopicObjectives/:id					controllers.LessonTopicObjectivesController.editLessonTopicObjectives(id: Long)
+GET 	/createLessonTopicObjectives/:idLessons					controllers.LessonTopicObjectivesController.createLessonTopicObjectives(idLessons: Long)
+POST	/deleteLessonTopicObjectives/:id				controllers.LessonTopicObjectivesController.deleteLessonTopicObjectives(id: Long)
+POST 	/saveLessonTopicObjectives/:newEntry			controllers.LessonTopicObjectivesController.saveLessonTopicObjectives(newEntry: Int)
+
+# Lessons Routes
+GET     /listLessons/:idCourses						controllers.LessonsController.listLessons(idCourses: Long)
+GET		/showLessons/:id					controllers.LessonsController.showLessons(id: Long)
+GET 	/editLessons/:id					controllers.LessonsController.editLessons(id: Long)
+GET 	/createLessons/:idCourses					controllers.LessonsController.createLessons(idCourses: Long)
+POST	/deleteLessons/:id				controllers.LessonsController.deleteLessons(id: Long)
+POST 	/saveLessons/:newEntry			controllers.LessonsController.saveLessons(newEntry: Int)
+
