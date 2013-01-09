@@ -2,22 +2,18 @@
 @(listLessonLinkTopicObjectives: List[MdlLessonLinkTopicObjectives], idLessonLinks: Long)
     
     @import persistence._
-    
-    
-    @main("Systems Net", "Systems Body of Knowledge") {
-	<div>
-	  <div class="column span-4">
-		 
-	  </div>
+
+@defining(SqlLessonLinks.select(idLessonLinks)) { vLessonLinks =>
+@defining(SqlLessons.select(vLessonLinks.vLesson)) { vLessons =>
+@lessonPage(vLessons.vLessonIndex) {
 
     
-    <div class="column span-20 last">
-		  <h3>LessonLinkTopicObjectives Listing</h3>
+    <div class="column span-18 last">
+		  <h3>Knowledge and Skills linked to @vLessonLinks.vDescription in Lesson @vLessons.vLessonNumber</h3>
 		  <table>
 			<tr>
-				<th>idLessonLinkTopicObjective</th>
-				<th>LessonLink</th>
-				<th>TopicObjective</th>
+				<th>Lesson Link</th>
+				<th>Knowledge and Skills</th>
 				<th>Show</th>
 				<th>Edit</th>
 				<th>Delete</th>
@@ -26,7 +22,6 @@
             @listLessonLinkTopicObjectives.map { vLessonLinkTopicObjectives =>
     			
     		<tr>
-				<td>@vLessonLinkTopicObjectives.vidLessonLinkTopicObjective</td>
 
     		@defining(SqlLessonLinks.select(vLessonLinkTopicObjectives.vLessonLink)){pkModel =>
       		  <td><a href="@routes.LessonLinksController.showLessonLinks(vLessonLinkTopicObjectives.vLessonLink)">@pkModel.selectIdentifier._2</a></td>
@@ -49,7 +44,9 @@
       		}
 
       	</table>
-      <a href="@routes.LessonLinkTopicObjectivesController.createLessonLinkTopicObjectives(idLessonLinks)">Create new LessonLinkTopicObjectives</a>
+      <a href="@routes.LessonLinkTopicObjectivesController.createLessonLinkTopicObjectives(idLessonLinks)">Link additional knowledge and skills to @vLessonLinks.vDescription in Lesson @vLessons.vLessonNumber</a>
     </div>
   </div>
   }
+}
+}

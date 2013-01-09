@@ -6,38 +6,25 @@
 
 
     @main("Systems Net", "Systems Body of Knowledge") {
-	<div>
-	  <div class="column span-4">
-		 
-	  </div>
 
 
 @defining(f("fLessonLink").value.get.toLong) { vLessonLink =>  
 <div class="column span-20 last">
     <fieldset>
     @helper.form(routes.LessonLinkTopicObjectivesController.saveLessonLinkTopicObjectives(newEntry)) {
-
-
-        @if(newEntry == 0) {
 		  
             @defining(f("fidLessonLinkTopicObjective")) { fidLessonLinkTopicObjective =>
                 <input type="hidden" name="@fidLessonLinkTopicObjective.name" id="@fidLessonLinkTopicObjective.id" value="@fidLessonLinkTopicObjective.value">
 			}
-    
-		}
-		@if(newEntry != 0) {
-     		
-            @inputText(f("fidLessonLinkTopicObjective"), '_label -> "idLessonLinkTopicObjective")
 
-     	}
 
             @defining(f("fLessonLink")) { fLessonLink =>
                 <input type="hidden" name="@fLessonLink.name" id="@fLessonLink.id" value="@fLessonLink.value">
 			}
     
             @{val selectvTopicObjectives = SqlTopicObjectives.all.map(vTopicObjectives => vTopicObjectives.selectIdentifier).toSeq
-            select(field = f("fTopicObjective"), options = selectvTopicObjectives, args = '_label-> "TopicObjective")}
-    		<a href="@routes.TopicsController.listTopics">Create new TopicObjectives</a>
+            select(field = f("fTopicObjective"), options = selectvTopicObjectives, args = '_label-> "TopicObjective", '_help->"Select the knowledge or skills you would like to link to associate with your link.  If it is not available in the list, you may create it using the link below.")}
+    		<a href="@routes.TopicsController.listTopics">Create new knowledge and skills</a>
 
        		<fieldset style="margin-top: 10px;">
           		<input type="submit" value="Submit" />

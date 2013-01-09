@@ -3,15 +3,10 @@
     
     @import persistence._
     
+@defining(SqlCourses.select(courseId)) { vCourses =>
+@coursePage(vCourses) {
     
-    @main("Systems Net", "Systems Body of Knowledge") {
-	<div>
-	  <div class="column span-4">
-		 
-	  </div>
-
-    
-    <div class="column span-20 last">
+    <div class="column span-18 last">
 		  <h3>Course References Listing</h3>
 		  <table>
 			<tr>
@@ -51,3 +46,4 @@
     </div>
   </div>
   }
+}

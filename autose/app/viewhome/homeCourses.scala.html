@@ -27,7 +27,7 @@
 	</div>
 	
 	<div class="column span-4 last">
-		<h4>Course Files<h4>
+		<h4>Course Files</h4>
 		@defining(SqlCourseLinks.selectWhere("Course = " + vCourses.vidCourse + " AND IsFileLink = 1")) { listCourseLinks =>
        		@listCourseLinks.map { vCourseLinks =>
          		<p><a href="@vCourseLinks.vLink">@vCourseLinks.vDisplayDescription</a></p>
@@ -35,7 +35,7 @@
 	   	}
 		<hr>
 		
-		<h4>Course Links<h4>
+		<h4>Course Links</h4>
 		@defining(SqlCourseLinks.selectWhere("Course = " + vCourses.vidCourse + " AND IsFileLink = 0")) { listCourseLinks =>
        		@listCourseLinks.map { vCourseLinks =>
          		<p><a href="@vCourseLinks.vLink">@vCourseLinks.vDisplayDescription</a></p>
