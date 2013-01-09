@@ -1,0 +1,39 @@
+
+@(vCourseLinks: MdlCourseLinks)
+
+    @import persistence._
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>CourseLinks Information</h3>
+		  <dl>
+
+    		@defining(SqlCourses.select(vCourseLinks.vCourse)){pkModel =>
+      		  <dt>Course</dt>
+      		  <dd><a href="@routes.CoursesController.showCourses(vCourseLinks.vCourse)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+		  	<dt>Link</dt>
+		  	<dd><a href="@vCourseLinks.vLink">@vCourseLinks.vLink</a></dd>
+
+		  	<dt>Display Description</dt>
+		  	<dd>@Html(vCourseLinks.vDisplayDescription.toString)</dd>
+
+		  	<dt>Is this link a file?</dt>
+		  	<dd>@Html(vCourseLinks.vIsFileLink.toString)</dd>
+	       </dl>
+     <div>
+       <a href="@routes.CourseLinksController.listCourseLinks(vCourseLinks.vCourse)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

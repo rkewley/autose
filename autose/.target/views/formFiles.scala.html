@@ -1,0 +1,52 @@
+
+@(f: Form[MdlFiles], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+<div><fieldset>
+    @form(routes.FilesController.saveFiles(newEntry), 'enctype -> "multipart/form-data") {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidFile")) { fidFile =>
+                <input type="hidden" name="@fidFile.name" id="@fidFile.id" value="@fidFile.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @inputText(f("fidFile"), '_label -> "idFile")
+
+     	}
+
+            @defining(f("fFileLocation")) { fFileLocation =>
+                <input type="hidden" name="@fFileLocation.name" id="@fFileLocation.id" value="@fFileLocation.value">
+			}
+            @defining(f("fFileContentType")) { fFileContentType =>
+                <input type="hidden" name="@fFileContentType.name" id="@fFileContentType.id" value="@fFileContentType.value">
+			}
+            @defining(f("fOriginalFileName")) { fOriginalFileName =>
+                <input type="hidden" name="@fOriginalFileName.name" id="@fOriginalFileName.id" value="@fOriginalFileName.value">
+			}
+			
+			<p>
+				Choose the file you wish to upload:
+        		<input type="file" name="picture">
+    		</p>
+			
+
+			@*
+            @textarea(field = f("fFileLocation"), args = 'rows -> 2, 'cols -> 100, '_label-> "FileLocation")
+
+            @textarea(field = f("fFileContentType"), args = 'rows -> 2, 'cols -> 100, '_label-> "FileContentType")
+            *@
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.FilesController.listFiles">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>

@@ -1,0 +1,21 @@
+
+@(vFiles: MdlFiles)
+
+
+
+     <div>
+		  <h3>Files Information</h3>
+		  <dl>
+
+		  	<dt>idFile</dt>
+		  	<dd>@vFiles.vidFile</dd>
+
+		  	<dt>FileLocation</dt>
+		  	<dd>@vFiles.vFileLocation</dd>
+
+		  	<dt>FileContentType</dt>
+		  	<dd>@vFiles.vFileContentType</dd>
+
+		  	<dt>OriginalFileName</dt>
+		  	<dd>@vFiles.vOriginalFileName</dd>
+	       </dl>	  </div>     <div>       <a href="@routes.FilesController.listFiles">Return to listing</a>     </div>

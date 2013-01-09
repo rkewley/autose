@@ -1,0 +1,47 @@
+
+@(f: Form[MdlFaculty], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+<div><fieldset>
+    @helper.form(routes.FacultyController.saveFaculty(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fEmail")) { fEmail =>
+                <input type="hidden" name="@fEmail.name" id="@fEmail.id" value="@fEmail.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @inputText(f("fEmail"), '_label -> "Email")
+
+     	}
+
+            @inputText(f("fLastName"), '_label -> "Last Name")
+
+			@inputText(f("fFirstName"), '_label -> "First Name")
+
+            @inputText(f("fTitle"), '_label -> "Title")
+
+            @inputText(f("fOfficeNumber"), '_label -> "Office Number")
+
+            @inputText(f("fOfficePhone"), '_label -> "Office Phone")
+
+            @inputText(f("fBranchofService"), '_label -> "Branch of Service")
+            
+			<p>Use <a href="http://192.168.145.132/webdav1/FacultyPhotos/">this link</a> to browse faculty photos.  Copy and paste the link to your picture into the space below.</p>
+            @textarea(field = f("fFacultyPhotoFile"), args = 'rows -> 2, 'cols -> 100, '_label-> "Faculty Photo File")
+
+            @textarea(field = f("fBiography"), args = 'rows -> 2, 'cols -> 100, '_label-> "Biography")
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.FacultyController.listFaculty">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>

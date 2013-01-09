@@ -1,0 +1,47 @@
+
+@(f: Form[MdlCourseReferences], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+@defining(f("fCourse").value.get.toLong) { course =>      
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.CourseReferencesController.saveCourseReferences(newEntry)) {
+		  
+            @defining(f("fidCourseReferences")) { fidCourseReferences =>
+                <input type="hidden" name="@fidCourseReferences.name" id="@fidCourseReferences.id" value="@fidCourseReferences.value">
+			}
+
+            @defining(f("fCourse")) { fCourse =>
+                <input type="hidden" name="@fCourse.name" id="@fCourse.id" value="@fCourse.value">
+			}
+
+            @*@{val selectvReference = SqlReference.all.map(vReference => vReference.selectIdentifier).toSeq.sortWith(ModelUtils.compareListings)
+            
+            select(field = f("fReference"), options = selectvReference, args = '_label-> "Reference", '_help-> "")}*@
+            
+            @defining(SqlReference.all.map(vReference => vReference.selectIdentifier).toSeq.sortWith(ModelUtils.compareListings)) { selectvReference =>
+              @println(selectvReference)
+              @select(field = f("fReference"), options = selectvReference, args = '_label-> "Reference", '_help-> "Select the reference you would like to add to your course from the list above.  If your reference is not listed, you must create it using the link below.  Submit when complete.")
+            }
+    		
+    		<a href="@routes.ReferenceController.createReference">Create new reference</a>
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.CourseReferencesController.listCourseReferences(course)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+}

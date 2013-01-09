@@ -1,0 +1,24 @@
+@(vTopics: MdlTopics)(content: Html)
+
+@main("Systems Net", vTopics.vTopic) {
+
+	<div class="column span-4 colborder">
+		 <nav id="leftnav">
+		   <ul>
+		 	<li><a href="@routes.TopicsController.homeTopics(vTopics.vTopicsIndex)">Topic Home</a></li>
+		 	<li><a href="@routes.TerminalLearningObjectiveController.listSelectedTerminalLearningObjective(vTopics.vTopicsIndex)">TLOs</a></li>
+		 	<li><a href="@routes.TopicObjectivesController.listSelectedTopicObjectives(vTopics.vTopicsIndex)">Knowledge and Skills</a></li>
+		 	<li><a href="@routes.TopicReferencesController.listSelectedTopicReferences(vTopics.vTopicsIndex)">Topic References</a></li>
+		 	<li><a href="@routes.TopicPictureController.listSelectedTopicPicture(vTopics.vTopicsIndex)">Topic Pictures</a></li>
+		 	<li><a href="@routes.TopicLinkController.listSelectedTopicLink(vTopics.vTopicsIndex)">Topic Links</a></li>
+		   </ul>
+		 </nav>
+
+	</div>
+
+	<div>
+		@content
+	</div>
+	
+	
+}

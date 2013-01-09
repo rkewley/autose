@@ -1,0 +1,44 @@
+
+@(f: Form[MdlTopicObjectives], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+@defining(f("fTopic").value.get.toLong) { topic =>        
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.TopicObjectivesController.saveTopicObjectives(newEntry)) {
+
+		  
+            @defining(f("fTopicObjectiveNumber")) { fTopicObjectiveNumber =>
+                <input type="hidden" name="@fTopicObjectiveNumber.name" id="@fTopicObjectiveNumber.id" value="@fTopicObjectiveNumber.value">
+			}
+
+            @defining(f("fTopic")) { fTopic =>
+                <input type="hidden" name="@fTopic.name" id="@fTopic.id" value="@fTopic.value">
+			}
+
+            @textarea(field = f("fObjective"), args = 'rows -> 2, 'cols -> 100, '_label-> "Objective")
+        	@*@inputText(f("fObjective"), '_label -> "Objective")*@
+
+
+            @{val selectvValueListKSAB = SqlValueListKSAB.all.map(vValueListKSAB => vValueListKSAB.selectIdentifier).toSeq
+            select(field = f("fKSAB"), options = selectvValueListKSAB, args = '_label-> "Does this objective represent knowledge, skills, attitudes, or behaviors?")}
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.TopicObjectivesController.listSelectedTopicObjectives(topic)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+}

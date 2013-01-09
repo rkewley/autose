@@ -1,0 +1,42 @@
+
+@(f: Form[MdlTerminalLearningObjective], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+@defining(f("fTopic").value.get.toLong) { topic =>    
+    @topicPage(SqlTopics.select(topic)) {
+
+
+<div class="column span-18 last">
+    <fieldset>
+    @helper.form(routes.TerminalLearningObjectiveController.saveTerminalLearningObjective(newEntry)) {
+
+
+		  
+            @defining(f("fidTerminalLearningObjective")) { fidTerminalLearningObjective =>
+                <input type="hidden" name="@fidTerminalLearningObjective.name" id="@fidTerminalLearningObjective.id" value="@fidTerminalLearningObjective.value">
+			}
+    
+            @defining(f("fTopic")) { fTopic =>
+                <input type="hidden" name="@fTopic.name" id="@fTopic.id" value="@fTopic.value">
+			}
+
+            @textarea(field = f("fTerminalLearningObjective"), args = 'rows -> 2, 'cols -> 100, '_label-> "Terminal Learning Objective", 
+            '_help-> "This objective is expected to be achieved by cadets upon graduation. It will vary by program. They will learn material related to this objective and be evaluated on that material in one or more courses.")
+        	@*@inputText(f("fTerminalLearningObjective"), '_label -> "Terminal Learning Objective")*@
+
+
+            @{val selectvPrograms = SqlPrograms.all.map(vPrograms => vPrograms.selectIdentifier).toSeq
+            select(field = f("fProgram"), options = selectvPrograms, args = '_label-> "Program")}
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.TerminalLearningObjectiveController.listSelectedTerminalLearningObjective(topic)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+}

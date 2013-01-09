@@ -1,0 +1,41 @@
+
+@(listFiles: List[MdlFiles])
+    
+    <div>
+		  <h3>Files Listing</h3>
+		  <table>
+			<tr>
+				<th>idFile</th>
+				<th>FileLocation</th>
+				<th>FileContentType</th>
+				<th>OriginalFileName</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listFiles.map { vFiles =>
+    			
+    		<tr>
+				<td>@vFiles.vidFile</td>
+				<td>@vFiles.vFileLocation</td>
+				<td>@vFiles.vFileContentType</td>
+				<td>@vFiles.vOriginalFileName</td>
+
+    			<td><a href="@routes.FilesController.showFiles(vFiles.vidFile)">Show</a></td>
+    			<td><a href="@routes.FilesController.editFiles(vFiles.vidFile)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.FilesController.deleteFiles(vFiles.vidFile)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+    </div>
+    <div>
+      <a href="@routes.FilesController.createFiles">Create new Files</a>
+    </div>

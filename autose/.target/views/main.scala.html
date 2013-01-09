@@ -1,0 +1,68 @@
+@(title: String, subTitle: String)(content: Html)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+    	<!-- Framework CSS -->
+    	
+    		<!-- Liquid Blueprint CSS -->
+	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/src/reset.css")" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/src/liquid.css")" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/src/typography.css")" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/src/forms.css")" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/plugins/fancy-type/fancy-type.css")" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/sticky-footer.css")" type="text/css" media="screen, projection">
+ 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/systems-theme.css")" type="text/css" media="screen, projection">
+ 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/nav.css")" type="text/css" media="screen, projection">
+    	
+    	<!--[if lt IE 8]><link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/ie.css")" type="text/css" media="screen, projection"><![endif]-->
+    
+     	<!--[if !IE 7]>
+			<style type="text/css">
+				#wrap {display:table;height:100%}
+			</style>
+		<![endif]-->
+		
+        <title>@title</title>
+   </head>
+   <body>
+   <div 
+   		<div id="wrap">
+   		<div id="main">
+    		<div class="container">
+		  		<div class="block">
+		    		<div class="column span-18">
+			  			<div>
+			    			<h1>Department of Systems Engineering</h1>
+							<h2 class="alt">@subTitle</h2>
+			  			</div>
+		    		</div>
+		  			<div class="column span-6 last">
+		    			<div>
+			  				<img style="float: right;" alt="" height=90 src="@routes.Assets.at("images/DSE Logo 128x128 ClearBack.png")" />
+						</div>
+		  			</div>
+	    		</div>
+				<nav id="topnav">
+				  <ul>
+				    <li id="firstitem"><a href="@routes.TopicsController.listTopics">Topic Listing</a>
+		 			<li><a href="@routes.CoursesController.listCourses">Course Listing</a></li>
+		 			<li><a href="@routes.ReferenceController.listReference">References</a></li> 
+				  </ul>
+				</nav> 
+				<hr>
+				<hr class="space">				
+        		@content
+        		<hr>
+
+    		</div>
+    	</div>
+    	</div>
+		<div id="footer">
+			All Systems Go!!!
+		</div>
+
+    
+    </body>
+</html>

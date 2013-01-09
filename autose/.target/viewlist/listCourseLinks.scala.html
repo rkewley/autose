@@ -1,0 +1,54 @@
+
+@(listCourseLinks: List[MdlCourseLinks], courseId: Long)
+    
+    @import persistence._
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>Course Links Listing</h3>
+		  <table>
+			<tr>
+				<th>Course</th>
+				<th>Link</th>
+				<th>Display Description</th>
+				<th>Is this link a file?</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listCourseLinks.map { vCourseLinks =>
+    			
+    		<tr>
+
+    		@defining(SqlCourses.select(vCourseLinks.vCourse)){pkModel =>
+      		  <td><a href="@routes.CoursesController.showCourses(vCourseLinks.vCourse)">@pkModel.selectIdentifier._2</a></td>
+    		}
+				<td><a href="@vCourseLinks.vLink">@vCourseLinks.vLink</td>
+				<td>@vCourseLinks.vDisplayDescription</td>
+				<td>@vCourseLinks.vIsFileLink</td>
+
+    			<td><a href="@routes.CourseLinksController.showCourseLinks(vCourseLinks.vidCourseLinks)">Show</a></td>
+    			<td><a href="@routes.CourseLinksController.editCourseLinks(vCourseLinks.vidCourseLinks)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.CourseLinksController.deleteCourseLinks(vCourseLinks.vidCourseLinks)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.CourseLinksController.createCourseLinks(courseId)">Create new course link</a>
+    </div>
+  </div>
+  }
