@@ -6,10 +6,6 @@
 
 
     @main("Systems Net", "Systems Body of Knowledge") {
-	<div>
-	  <div class="column span-4">
-		 
-	  </div>
 
     
 <div class="column span-20 last">
@@ -17,20 +13,13 @@
     @helper.form(routes.ReferenceController.saveReference(newEntry)) {
 
 
-        @if(newEntry == 0) {
+
 		  
             @defining(f("fidReference")) { fidReference =>
                 <input type="hidden" name="@fidReference.name" id="@fidReference.id" value="@fidReference.value">
 			}
     
-		}
-		@if(newEntry != 0) {
-     		
-            @defining(f("fidReference")) { fidReference =>
-                <input type="hidden" name="@fidReference.name" id="@fidReference.id" value="@fidReference.value">
-			}
-    
-     	}
+
 
             @textarea(field = f("fTitle"), args = 'rows -> 2, 'cols -> 100, '_label-> "Title")
         	@*@inputText(f("fTitle"), '_label -> "Title")*@
@@ -38,7 +27,12 @@
             @textarea(field = f("fText"), args = 'rows -> 2, 'cols -> 100, '_label-> "Citation (all but title)")
         	@*@inputText(f("fText"), '_label -> "Text")*@
 
-            @textarea(field = f("fLink"), args = 'rows -> 2, 'cols -> 100, '_label-> "Link to the source - perhaps on Amazon.com")
+            @textarea(field = f("fLink"), args = 'rows -> 2, 'cols -> 100)
+            <p>Enter the full url link to your link above.  It must start with "http://"
+               If you are linking to a file that you need to upload, please use BitKinex.  See 
+               <a href="@routes.UserController.fileManagement">this link</a> for instructions on its use.
+               Once uploaded, you can use <a href="http://134.240.171.49/webdav1/References/">this link</a> 
+               to browse to your link, copy it, and paste it above.</p>
         	@*@inputText(f("fLink"), '_label -> "Link")*@
 
        		<fieldset style="margin-top: 10px;">

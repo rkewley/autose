@@ -138,6 +138,7 @@ GET 	/editUser/:id					controllers.UserController.editUser(id: String)
 GET 	/createUser					controllers.UserController.createUser
 POST	/deleteUser/:id				controllers.UserController.deleteUser(id: String)
 POST 	/saveUser/:newEntry			controllers.UserController.saveUser(newEntry: Int)
+GET	    /fileManagement				controllers.UserController.fileManagement
 
 # LessonLinks Routes
 GET     /listLessonLinks/:idLessons						controllers.LessonLinksController.listLessonLinks(idLessons: Long)

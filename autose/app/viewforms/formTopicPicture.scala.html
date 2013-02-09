@@ -4,7 +4,7 @@
 @import helper._
 @import persistence._
 
-<div>
+
 @defining(f("fTopic").value.get.toLong) { topic =>   
 @topicPage(SqlTopics.select(topic)) {
 
@@ -23,6 +23,11 @@
 			}
 
             @textarea(field = f("fHyperlink"), args = 'rows -> 2, 'cols -> 100, '_label-> "Hyperlink")
+            <p>Enter the full url link to your picture above.  It must start with "http://"
+               You will have to upload the picture using BitKinex.  See 
+               <a href="@routes.UserController.fileManagement">this link</a> for instructions on its use.
+               Once uploaded, you can use <a href="http://134.240.171.49/webdav1/Topics/">this link</a> 
+               to browse to your photo, copy the link, and paste it above.</p>
         	@*@inputText(f("fHyperlink"), '_label -> "Hyperlink")*@
 
             @textarea(field = f("fAlternateText"), args = 'rows -> 2, 'cols -> 100, '_label-> "AlternateText")

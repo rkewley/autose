@@ -23,8 +23,12 @@
             @defining(f("fCourse")) { fCourse =>
                 <input type="hidden" name="@fCourse.name" id="@fCourse.id" value="@fCourse.value">
 			}
-			<p>Ensure that your link is prefaced with "http://"</p>
             @textarea(field = f("fLink"), args = 'rows -> 2, 'cols -> 100, '_label-> "Link")
+            <p>Enter the full url link to your link above.  It must start with "http://"
+               If you are linking to a file that you need to upload, please use BitKinex.  See 
+               <a href="@routes.UserController.fileManagement">this link</a> for instructions on its use.
+               Once uploaded, you can use <a href="http://134.240.171.49/webdav1/Courses/">this link</a> 
+               to browse to your link, copy it, and paste it above.</p>
         	@*@inputText(f("fLink"), '_label -> "Copy and paste the link from your browser here")*@
 
             @textarea(field = f("fDisplayDescription"), args = 'rows -> 2, 'cols -> 100, '_label-> "DisplayDescription")

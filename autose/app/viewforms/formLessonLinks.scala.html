@@ -24,6 +24,11 @@
 
             @helper.checkbox(f("fIsFileLiink"), '_label -> "IsFileLiink", '_help->"Check this box if the link is to a file.")
             @textarea(field = f("fLink"), args = 'rows -> 2, 'cols -> 100, '_label-> "Link")
+            <p>Enter the full url link to your link above.  It must start with "http://"
+               If you are linking to a file that you need to upload, please use BitKinex.  See 
+               <a href="@routes.UserController.fileManagement">this link</a> for instructions on its use.
+               Once uploaded, you can use <a href="http://134.240.171.49/webdav1/Courses/">this link</a> 
+               to browse to your link, copy it, and paste it above.</p>
         	@*@inputText(f("fLink"), '_label -> "Link")*@
 
             @textarea(field = f("fDescription"), args = 'rows -> 2, 'cols -> 100, '_label-> "Description")

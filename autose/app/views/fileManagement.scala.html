@@ -1,0 +1,47 @@
+
+@(fileManagement: String)
+
+@main("Systems Net", "Systems Body of Knowledge") {
+
+<h3>Instructions For File and Picture Management</h3>
+
+<h4>Overview</h4>
+<p>The SE Body of knowledge web site uses a separate file server for file management.  
+It is an <a href'http://httpd.apache.org/">Apache Web Server</a> 
+using <a href="http://httpd.apache.org/docs/2.2/mod/mod_dav.html">WebDAV</a>
+file server technology.  This is a lightweight technology that serves files over
+the web using http protocols.  It is more secure that linking to local network servers,
+which many browsers will not allow.<p>
+
+<h4>Download and install BitKinex</h4>
+<p>BitKinex is a tool that allows you to connect to a WebDAV server to read, write, and manage
+files using an interface much like Windows Explorer.  Download BitKinex from 
+<a href="http://www.bitkinex.com/download">this link.</a><p>
+
+<p>Install the software and run BitKinex.  You will be presented with an interface like the one below:</p>
+<p><img src="http://134.240.171.49/webdav1/Admin/BitKinex/BitKinex.png"></p>
+<caption>BitKinex Opening Interface</caption>
+
+<p>Click the "Connect" button to see the login screen below:</p>
+<p><img src="http://134.240.171.49/webdav1/Admin/BitKinex/BitKinexLogin.png"></p>
+<caption>BitKinex Login Screen</caption>
+
+<p>The User is "seweb."  See your system administrator for the password.
+Once you connect, you will see the explorer interface below:</p>
+<p><img src="http://134.240.171.49/webdav1/Admin/BitKinex/BitKinexInterface.png" width="800"></p>
+<caption>BitKinex Explorer Interface</caption>
+
+<p>Using this explorer, you can copy files from your computer in the right pane to the WebDAV server in the left 
+and center panes.  Notice the folder structure on the WebDAV server.  There are folders for courses, topics, and faculty photos.
+Post course information in the courses folder.  When you initially set up a course at the start of the semester, you can use
+the file template in the CourseBlankTemplate folder to copy and past a blank course and lesson file structure into the
+appropriate semester under the Courses folder.  A word of caution about directory renaming.  Rename all directories at 
+the start of the semester before you upload and link any files.  If you rename a directory after you have linked to 
+a file in that directory, the link will be broken.</p>
+
+<p>Copy and paste the file to your desired location.  The file management interfaces in
+the SE Body of Knowledge will provide a convenience link to the WebDAV server like 
+<a href="http://134.240.171.49/webdav1/">this one.</a>Try it and browse around the file
+server in your browser</p>
+
+}

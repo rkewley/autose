@@ -7,7 +7,8 @@
     	<!-- Framework CSS -->
     	
     		<!-- Liquid Blueprint CSS -->
-	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/src/reset.css")" type="text/css" media="screen, projection">
+	<!-- link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/src/reset.css")" type="text/css" media="screen, projection"-->
+	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/boilerplate/normalize.css")" type="text/css" media="screen, projection">
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/src/liquid.css")" type="text/css" media="screen, projection">
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/src/typography.css")" type="text/css" media="screen, projection">
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/src/forms.css")" type="text/css" media="screen, projection">
@@ -24,6 +25,17 @@
 			</style>
 		<![endif]-->
 		
+<!--[if lt IE 9]>
+<script>
+  var e = ("abbr,article,aside,audio,canvas,datalist,details," +
+    "figure,footer,header,hgroup,mark,menu,meter,nav,output," +
+    "progress,section,time,video").split(',');
+  for (var i = 0; i < e.length; i++) {
+    document.createElement(e[i]);
+  }
+</script>
+<![endif]-->
+		
         <title>@title</title>
    </head>
    <body>
@@ -34,7 +46,7 @@
 		  		<div class="block">
 		    		<div class="column span-18">
 			  			<div>
-			    			<h1>Department of Systems Engineering Beta</h1>
+			    			<h1>Department of Systems Engineering</h1>
 							<h2 class="alt">@subTitle</h2>
 			  			</div>
 		    		</div>

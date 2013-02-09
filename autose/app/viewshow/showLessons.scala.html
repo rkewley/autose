@@ -35,7 +35,8 @@
 		  	  </tr>
 		  	  @toData.map { dataRow =>
 		  	    <tr>
-		  	      <td>@dataRow._2.vTopic</td>
+		  	      @*<td>@dataRow._2.vTopic</td>*@
+		  	      <td><a href="@routes.TopicsController.homeTopics(dataRow._2.vTopicsIndex)">@dataRow._2.vTopic</a></td>
 		  	      <td>@dataRow._1.vObjective</td>
 		  	      <td>@dataRow._1.vKSAB</td>
 		  	      <td>

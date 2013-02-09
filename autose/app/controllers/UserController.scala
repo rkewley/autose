@@ -76,4 +76,9 @@ object UserController extends Base {
     }
     errMess("Error Messages:\n", formUser.errors.toList)
   }
+  
+  def fileManagement = Action {
+    Ok(views.html.fileManagement("Systems Net"))
+  }
+
 }
