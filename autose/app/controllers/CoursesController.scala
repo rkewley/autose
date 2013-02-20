@@ -23,7 +23,7 @@ object CoursesController extends Base {
 	"fCourseName" -> text,
 	"fCourseDirectorEmail" -> text,
 	"fProgramDirectorEmail" -> text,
-	"fCourseDescriptionRedbook" -> text,
+	"fCourseDescriptionRedbook" -> text, 
 	"fCreditHours" -> of[Double],
 	"fPrerequisites" -> text,
 	"fCorequisites" -> text,

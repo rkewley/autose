@@ -10,16 +10,15 @@
     
 <div class="column span-20 last">
     <fieldset>
-    @helper.form(routes.ReferenceController.saveReference(newEntry)) {
-
-
-
-		  
+    @form(action = routes.ReferenceController.postReferenceFile(newEntry), 'enctype -> "multipart/form-data") {
+    		  
             @defining(f("fidReference")) { fidReference =>
                 <input type="hidden" name="@fidReference.name" id="@fidReference.id" value="@fidReference.value">
 			}
     
-
+            @defining(f("fLink")) { fLink =>
+                <input type="hidden" name="@fLink.name" id="@fLink.id" value="">
+			}
 
             @textarea(field = f("fTitle"), args = 'rows -> 2, 'cols -> 100, '_label-> "Title")
         	@*@inputText(f("fTitle"), '_label -> "Title")*@
@@ -27,9 +26,7 @@
             @textarea(field = f("fText"), args = 'rows -> 2, 'cols -> 100, '_label-> "Citation (all but title)")
         	@*@inputText(f("fText"), '_label -> "Text")*@
 
-            @textarea(field = f("fLink"), args = 'rows -> 2, 'cols -> 100)
-            <p>Enter the full url link to your link above.  It must start with "http://"</p>
-        	@*@inputText(f("fLink"), '_label -> "Link")*@
+        	<input type="file" name="referenceFile" size="40">	
 
        		<fieldset style="margin-top: 10px;">
           		<input type="submit" value="Submit" />

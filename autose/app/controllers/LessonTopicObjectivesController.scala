@@ -9,6 +9,7 @@ import persistence._
 import play.Logger
 import play.api.data._
 import play.api.data.Forms._
+import play.api.libs.json._
 import play.api.data.format.Formats._
 import FormFieldImplicits._
 
@@ -44,6 +45,13 @@ object LessonTopicObjectivesController extends Base {
   def createLessonTopicObjectives(idLessons: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
     val vLessonTopicObjectives = new MdlLessonTopicObjectives(0, idLessons, 0)
     Ok(viewforms.html.formLessonTopicObjectives(formLessonTopicObjectives.fill(vLessonTopicObjectives), 1))
+  }
+  
+  def getTopicObjectivesJson(id: Long) = Action {
+    val topicObjectives = SqlTopicObjectives.selectWhere("`Topic` = " + id)
+    val resultJson = JsObject(topicObjectives.map(topicObjective =>
+          topicObjective.vTopicObjectiveNumber.toString -> JsString(topicObjective.vObjective)))
+    Ok(resultJson)
   }
 
   def saveLessonTopicObjectives(newEntry: Int) = Action { implicit request =>

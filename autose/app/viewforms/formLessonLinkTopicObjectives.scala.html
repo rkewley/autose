@@ -4,6 +4,21 @@
 @import helper._
 @import persistence._
 
+<script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.1.min.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
+		<script type-"text/javascript">
+		$(document).ready(function(){
+			var selector = $('#fTopicObjective')
+			selector.attr("disabled", "disabled");
+			$("#topicSelect").change(function() {
+				var topicIndex = $("#topicSelect").val();
+				getNewOptions('/getTopicObjectivesJson/' + topicIndex, selector);
+				selector.removeAttr("disabled");
+			});
+		});
+		</script> 
+
+
 
     @main("Systems Net", "Systems Body of Knowledge") {
 
@@ -22,8 +37,18 @@
                 <input type="hidden" name="@fLessonLink.name" id="@fLessonLink.id" value="@fLessonLink.value">
 			}
     
-            @{val selectvTopicObjectives = SqlTopicObjectives.all.map(vTopicObjectives => vTopicObjectives.selectIdentifier).toSeq
-            select(field = f("fTopicObjective"), options = selectvTopicObjectives, args = '_label-> "TopicObjective", '_help->"Select the knowledge or skills you would like to link to associate with your link.  If it is not available in the list, you may create it using the link below.")}
+			<p>First select the topic for the knowledge and skills you will link to this lesson.</p>
+			@defining(SqlTopics.all.sortWith((v1: MdlTopics, v2: MdlTopics) => v1.vTopic < v2.vTopic)) { topicList =>
+			  <select id="topicSelect">
+			    <option value=""></option>
+			  @topicList.map { topic =>
+			    <option value="@topic.vTopicsIndex">@topic.vTopic</option>
+			  }
+			  </select>
+			}
+				
+    		@select(field = f("fTopicObjective"), options = Nil, args = '_label-> "Knowledge and Skills", '_help-> "Select the knowledge or skill you would like to link to this lesson.  If it is not listed above, you may create it using the link below.")
+                        
     		<a href="@routes.TopicsController.listTopics">Create new knowledge and skills</a>
 
        		<fieldset style="margin-top: 10px;">

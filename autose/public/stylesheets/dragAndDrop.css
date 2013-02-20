@@ -1,0 +1,17 @@
+#dropbox {
+	width: 425px;
+	height: 300px;
+	border: 2px solid #DDD;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	background-color: #FEFFEC;
+	text-align: center;
+	color: #BBB;
+	font-size: 2em;
+	font-family: Arial, sans-serif;
+}
+ 
+#droplabel {
+	position: relative;
+	top: 40%;
+}

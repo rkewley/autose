@@ -15,10 +15,8 @@
 		  <h3>Reference Listing</h3>
 		  <table>
 			<tr>
-				<th>idReference</th>
 				<th>Title</th>
 				<th>Text</th>
-				<th>Link</th>
 				<th>Show</th>
 				<th>Edit</th>
 				<th>Delete</th>
@@ -27,10 +25,8 @@
             @listReference.map { vReference =>
     			
     		<tr>
-				<td>@vReference.vidReference</td>
-				<td>@vReference.vTitle</td>
+				<td><a href="@vReference.vLink">@vReference.vTitle</a></td>
 				<td>@vReference.vText</td>
-				<td>@vReference.vLink</td>
 
     			<td><a href="@routes.ReferenceController.showReference(vReference.vidReference)">Show</a></td>
     			<td><a href="@routes.ReferenceController.editReference(vReference.vidReference)">Edit</a></td>
@@ -45,7 +41,8 @@
       		}
 
       	</table>
-      <a href="@routes.ReferenceController.createReference">Create new Reference</a>
+      <p><a href="@routes.ReferenceController.createReference">Create new reference link</a></p>
+      <p><a href="@routes.ReferenceController.uploadReferenceFile">Upload new reference</a></p>
     </div>
   </div>
   }
