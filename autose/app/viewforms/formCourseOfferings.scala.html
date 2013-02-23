@@ -1,0 +1,59 @@
+
+@(f: Form[MdlCourseOfferings], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.CourseOfferingsController.saveCourseOfferings(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidCourseOfferings")) { fidCourseOfferings =>
+                <input type="hidden" name="@fidCourseOfferings.name" id="@fidCourseOfferings.id" value="@fidCourseOfferings.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidCourseOfferings")) { fidCourseOfferings =>
+                <input type="hidden" name="@fidCourseOfferings.name" id="@fidCourseOfferings.id" value="@fidCourseOfferings.value">
+			}
+    
+     	}
+
+            @{val selectvCourses = SqlCourses.all.map(vCourses => vCourses.selectIdentifier).toSeq
+            select(field = f("fCourse"), options = selectvCourses, args = '_label-> "Course")}
+    		<a href="@routes.CoursesController.createCourses">Create new Courses</a>
+
+            @textarea(field = f("fClassHour"), args = 'rows -> 2, 'cols -> 100, '_label-> "ClassHour")
+        	@*@inputText(f("fClassHour"), '_label -> "ClassHour")*@
+
+            @inputText(f("fSection"), '_label -> "Section")
+
+            @textarea(field = f("fLocation"), args = 'rows -> 2, 'cols -> 100, '_label-> "Location")
+        	@*@inputText(f("fLocation"), '_label -> "Location")*@
+
+            @{val selectvFaculty = SqlFaculty.all.map(vFaculty => vFaculty.selectIdentifier).toSeq
+            select(field = f("fInstructorEmail"), options = selectvFaculty, args = '_label-> "InstructorEmail")}
+    		<a href="@routes.FacultyController.createFaculty">Create new Faculty</a>
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.CourseOfferingsController.listCourseOfferings">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }

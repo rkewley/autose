@@ -50,7 +50,11 @@ object SqlFaculty {
   			'sqlEmail -> vEmail).as(vFaculty *).head
 	}
 
-	def delete(vEmail: String) = DB.withConnection { implicit c =>
+  	def selectWhere(where: String): List[MdlFaculty] = DB.withConnection { implicit c =>
+  		SQL("select * from `Faculty` WHERE " + where).as(vFaculty *)
+	}
+
+  	def delete(vEmail: String) = DB.withConnection { implicit c =>
   		SQL("DELETE FROM `Faculty` WHERE `Email` = {sqlEmail}").on(
       'sqlEmail -> vEmail
   		).executeUpdate()

@@ -14,6 +14,7 @@
         <th>File?</th>
         <th>Lesson</th>
         <th>Associated Topics</th>
+        <th>Faculty</th>
         <th>Show</th>
         <th>Edit</th>
         <th>Link to topics</th>
@@ -43,6 +44,7 @@
     	        <p>@SqlTopicObjectives.shortenedTopicNameFor(SqlTopicObjectives.select(llto.vTopicObjective), 100)</p>
     	      }
     	    </td>
+    	    <td>@vLessonLinks.vFacultyEmail</td>
     	    <td><a href="@routes.LessonLinksController.showLessonLinks(vLessonLinks.vLessonLinkNumber)">Show</a></td>
     	    <td><a href="@routes.LessonLinksController.editLessonLinks(vLessonLinks.vLessonLinkNumber)">Edit</a></td>
     	    <td><a href="@routes.LessonLinkTopicObjectivesController.listLessonLinkTopicObjectives(vLessonLinks.vLessonLinkNumber)">Modify links to topics</a></td>

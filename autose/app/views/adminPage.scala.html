@@ -1,0 +1,20 @@
+@(content: Html)
+@import persistence._
+
+
+@main("Systems Net", "Administration") {
+
+	<div class="column span-4 colborder">
+		<nav id="leftnav">
+		  <ul>
+			<li><a href="@routes.FacultyController.listFaculty">Faculty</a></li>
+			<li><a href="@routes.UserController.listUser">Users</a></li>
+			<li><a href="@routes.CourseOfferingsController.listCourseOfferings">Course Offerings</a></li>
+		  </ul>
+		</nav>
+	</div>
+
+	<div>
+		@content
+	</div>
+}

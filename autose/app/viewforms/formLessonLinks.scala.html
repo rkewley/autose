@@ -33,6 +33,10 @@
             @textarea(field = f("fDescription"), args = 'rows -> 2, 'cols -> 100, '_label-> "Description")
         	@*@inputText(f("fDescription"), '_label -> "Description")*@
 
+        	@{val course = SqlLessons.select(vLesson).vidCourse
+        	val selectvFaculty = FacultyController.getFacultyListForCourse(course)
+            select(field = f("fFacultyEmail"), options = selectvFaculty, args = '_label-> "Faculty associated with this file, or a course level file")}
+    
             @defining(f("fLesson")) { fLesson =>
                 <input type="hidden" name="@fLesson.name" id="@fLesson.id" value="@fLesson.value">
 			}

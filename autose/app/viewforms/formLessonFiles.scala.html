@@ -37,6 +37,9 @@
             @defining(f("fLesson")) { fLesson =>
                 <input type="hidden" name="@fLesson.name" id="@fLesson.id" value="@fLesson.value">
 			}
+			
+        	@{val selectvFaculty = SqlFaculty.all.map(vFaculty => vFaculty.selectIdentifier).toSeq
+            select(field = f("fFacultyEmail"), options = selectvFaculty, args = '_label-> "Faculty associated with this file, or a course level file")}
     
        		<fieldset style="margin-top: 10px;">
           		<input type="submit" value="Submit" />
