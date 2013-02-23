@@ -69,6 +69,7 @@ object CourseLinksController extends Base {
             val courseIdNumber = SqlCourses.select(courseId).vCourseIDNumber
             val filename = Globals.webDavServer + "Courses/" + Globals.term + "/" + courseIdNumber + "/CourseFiles/" + courseFile.filename
             val path = filename.replaceAll(" ", "%20")
+            Logger.debug(path)
             val contentType = courseFile.contentType
             val sardine = SardineFactory.begin("seweb", "G0Systems!")
             val simpleResult = try {

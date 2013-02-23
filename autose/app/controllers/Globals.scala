@@ -1,6 +1,6 @@
 package controllers
 
 object Globals {
-  val webDavServer = "http://134.240.172.1/webdav1/"
-  val term = "AT12-2"
+  val webDavServer = "http://134.240.171.49/webdav1/"
+  val term = "AT13-2"
 }
