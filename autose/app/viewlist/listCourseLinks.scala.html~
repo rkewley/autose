@@ -17,6 +17,7 @@
 			<tr>
 				<th>Course</th>
 				<th>Link</th>
+				<th>Display Description</th>
 				<th>Is this link a file?</th>
         		<th>Faculty</th>
         		<th>Show</th>
@@ -31,9 +32,10 @@
     		@defining(SqlCourses.select(vCourseLinks.vCourse)){pkModel =>
       		  <td><a href="@routes.CoursesController.showCourses(vCourseLinks.vCourse)">@pkModel.selectIdentifier._2</a></td>
     		}
-				<td><a href="@vCourseLinks.vLink">@vCourseLinks.vDisplayDescription</td>
+				<td><a href="@vCourseLinks.vLink">@vCourseLinks.vLink</td>
+				<td>@vCourseLinks.vDisplayDescription</td>
 				<td>@vCourseLinks.vIsFileLink</td>
-    	    	<td>@vCourseLinks.vFacultyEmail</td>
+    	    	<td>@SqlFaculty.select(vLessonLinks.vFacultyEmail).selectIdentifier</td>
     			<td><a href="@routes.CourseLinksController.showCourseLinks(vCourseLinks.vidCourseLinks)">Show</a></td>
     			<td><a href="@routes.CourseLinksController.editCourseLinks(vCourseLinks.vidCourseLinks)">Edit</a></td>
     	  		<td>

@@ -1,7 +1,7 @@
 
 @(listFaculty: List[MdlFaculty])
-    
-    <div>
+@adminPage {
+   <div class="column span-19 last">
 		  <h3>Faculty Listing</h3>
 		  <table>
 			<tr>
@@ -41,3 +41,4 @@
     <div>
       <a href="@routes.FacultyController.createFaculty">Create new Faculty</a>
     </div>
+}

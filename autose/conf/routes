@@ -179,3 +179,12 @@ GET 	/createLessons/:idCourses				controllers.LessonsController.createLessons(id
 POST	/deleteLessons/:id						controllers.LessonsController.deleteLessons(id: Long)
 POST 	/saveLessons/:newEntry					controllers.LessonsController.saveLessons(newEntry: Int)
 
+# CourseOfferings Routes
+GET     /listCourseOfferings						controllers.CourseOfferingsController.listCourseOfferings
+GET		/showCourseOfferings/:id					controllers.CourseOfferingsController.showCourseOfferings(id: Long)
+GET 	/editCourseOfferings/:id					controllers.CourseOfferingsController.editCourseOfferings(id: Long)
+GET 	/createCourseOfferings					controllers.CourseOfferingsController.createCourseOfferings
+POST	/deleteCourseOfferings/:id				controllers.CourseOfferingsController.deleteCourseOfferings(id: Long)
+POST 	/saveCourseOfferings/:newEntry			controllers.CourseOfferingsController.saveCourseOfferings(newEntry: Int)
+
+

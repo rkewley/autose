@@ -74,10 +74,22 @@ object FacultyController extends Base {
     
   def formErrorMessage(errors: Seq[FormError]) = {
     def errMess(message: String, errorList: List[FormError]): String = {
-      if (errorList.isEmpty) message else {
+      if (errorList.isEmpty) message else { 
         errMess(message + errorList.head.message + "\n", errorList.tail)
       }
     }
     errMess("Error Messages:\n", formFaculty.errors.toList)
+  }
+  
+  def getFacultyListForCourse(idCourse: Long) = {
+    val courseOfferingList1 = SqlCourseOfferings.selectWhere("`Course` = " + idCourse).map(_.vInstructorEmail)
+    val courseOfferingList = courseOfferingList1.distinct
+    val inClause = courseOfferingList.reduceLeft[String] { (acc, name) =>
+        acc + " or " + ("Email = '" + name + "'")
+    }
+    println("Faculty Query: " + inClause)
+    val facultyList = SqlFaculty.selectWhere(inClause).sortWith((a:MdlFaculty, b:MdlFaculty) => a.vLastName < b.vLastName)
+    val identifierList = facultyList.map(_.selectIdentifier)
+    identifierList.+:(("all", "all"))
   }
 }

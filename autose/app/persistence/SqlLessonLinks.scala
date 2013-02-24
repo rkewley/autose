@@ -15,17 +15,20 @@ object SqlLessonLinks {
 	get[String]("Link") ~
 	get[String]("Description") ~
 	get[Boolean]("IsFileLiink") ~
-	get[Long]("Lesson") map { case
+	get[Long]("Lesson") ~
+	get[String]("FacultyEmail") map { case
     vLessonLinkNumber ~
 		vLink ~
 		vDescription ~
 		vIsFileLiink ~
-		vLesson =>
+		vLesson ~
+		vFacultyEmail =>
     MdlLessonLinks(vLessonLinkNumber,
 		vLink,
 		vDescription,
 		vIsFileLiink,
-		vLesson)
+		vLesson,
+		vFacultyEmail)
     }
   }
 
@@ -49,11 +52,11 @@ object SqlLessonLinks {
     }
 
 	def insert(vLessonLinks: MdlLessonLinks) = DB.withConnection { implicit c =>
-  		SQL("INSERT INTO `LessonLinks` (`Link`, `Description`, `IsFileLiink`, `Lesson`) VALUES ({sqlLink}, {sqlDescription}, {sqlIsFileLiink}, {sqlLesson})").on('sqlLink -> vLessonLinks.vLink, 'sqlDescription -> vLessonLinks.vDescription, 'sqlIsFileLiink -> vLessonLinks.vIsFileLiink, 'sqlLesson -> vLessonLinks.vLesson).executeInsert()
+  		SQL("INSERT INTO `LessonLinks` (`Link`, `Description`, `IsFileLiink`, `Lesson`, `FacultyEmail`) VALUES ({sqlLink}, {sqlDescription}, {sqlIsFileLiink}, {sqlLesson}, {sqlFacultyEmail})").on('sqlLink -> vLessonLinks.vLink, 'sqlDescription -> vLessonLinks.vDescription, 'sqlIsFileLiink -> vLessonLinks.vIsFileLiink, 'sqlLesson -> vLessonLinks.vLesson, 'sqlFacultyEmail -> vLessonLinks.vFacultyEmail).executeInsert()
 	}
 
 	def update(vLessonLinks: MdlLessonLinks) = DB.withConnection { implicit c =>
-  		SQL("UPDATE `LessonLinks` SET `Link` = {sqlLink}, `Description` = {sqlDescription}, `IsFileLiink` = {sqlIsFileLiink}, `Lesson` = {sqlLesson} WHERE `LessonLinkNumber` = {sqlLessonLinkNumber}").on('sqlLessonLinkNumber -> vLessonLinks.vLessonLinkNumber, 'sqlLink -> vLessonLinks.vLink, 'sqlDescription -> vLessonLinks.vDescription, 'sqlIsFileLiink -> vLessonLinks.vIsFileLiink, 'sqlLesson -> vLessonLinks.vLesson).executeUpdate()
+  		SQL("UPDATE `LessonLinks` SET `Link` = {sqlLink}, `Description` = {sqlDescription}, `IsFileLiink` = {sqlIsFileLiink}, `Lesson` = {sqlLesson}, `FacultyEmail` = {sqlFacultyEmail} WHERE `LessonLinkNumber` = {sqlLessonLinkNumber}").on('sqlLessonLinkNumber -> vLessonLinks.vLessonLinkNumber, 'sqlLink -> vLessonLinks.vLink, 'sqlDescription -> vLessonLinks.vDescription, 'sqlIsFileLiink -> vLessonLinks.vIsFileLiink, 'sqlLesson -> vLessonLinks.vLesson, 'sqlFacultyEmail -> vLessonLinks.vFacultyEmail).executeUpdate()
 
   }
 

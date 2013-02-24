@@ -1,0 +1,47 @@
+
+@(vCourseOfferings: MdlCourseOfferings)
+
+    @import persistence._
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>CourseOfferings Information</h3>
+		  <dl>
+
+		  	<dt>idCourseOfferings</dt>
+		  	<dd>@Html(vCourseOfferings.vidCourseOfferings.toString)</dd>
+
+    		@defining(SqlCourses.select(vCourseOfferings.vCourse)){pkModel =>
+      		  <dt>Course</dt>
+      		  <dd><a href="@routes.CoursesController.showCourses(vCourseOfferings.vCourse)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+		  	<dt>ClassHour</dt>
+		  	<dd>@Html(vCourseOfferings.vClassHour.toString)</dd>
+
+		  	<dt>Section</dt>
+		  	<dd>@Html(vCourseOfferings.vSection.toString)</dd>
+
+		  	<dt>Location</dt>
+		  	<dd>@Html(vCourseOfferings.vLocation.toString)</dd>
+
+    		@defining(SqlFaculty.select(vCourseOfferings.vInstructorEmail)){pkModel =>
+      		  <dt>InstructorEmail</dt>
+      		  <dd><a href="@routes.FacultyController.showFaculty(vCourseOfferings.vInstructorEmail)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+	       </dl>
+     <div>
+       <a href="@routes.CourseOfferingsController.listCourseOfferings">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }
