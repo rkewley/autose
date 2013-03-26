@@ -2,7 +2,8 @@
  package models
     
  case class MdlFaculty (
- 	vLastName : String,
+ 	vidFaculty : Long,
+	vLastName : String,
 	vFirstName : String,
 	vTitle : String,
 	vOfficeNumber : String,
@@ -13,12 +14,17 @@
 	vBiography : String
     )  {
     
-      def this() = this("", "", "", "", "", "", "", "", "")
+      def this() = this(0, "", "", "", "", "", "", "", "", "")
+      
+      def updatePhotoFile(newPhotoFilePath: String) = new MdlFaculty(vidFaculty, vLastName, vFirstName, vTitle, vOfficeNumber, vOfficePhone,
+          vBranchofService, vEmail, newPhotoFilePath, vBiography)
 
   	  def validate: Boolean = true
     
 	  def validationErrors: String = ""
     
-      def selectIdentifier: (String, String) = vEmail.toString -> (vTitle + " " + vFirstName + " " + vLastName)
+      def selectIdentifier: (String, String) = vidFaculty.toString -> (vLastName + ", " + vFirstName + " " + vTitle)
+    
+      def compare(a: MdlFaculty, b: MdlFaculty) = a.vLastName.compareTo(b.vLastName)
 }
     

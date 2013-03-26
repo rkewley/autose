@@ -33,11 +33,11 @@
         	@inputText(f("fCourseName"), '_label -> "Course Name")
 
             @{val selectvFaculty = SqlFaculty.all.map(vFaculty => vFaculty.selectIdentifier).toSeq
-            select(field = f("fCourseDirectorEmail"), options = selectvFaculty, args = '_label-> "Course Director")}
+            select(field = f("fCourseDirector"), options = selectvFaculty, args = '_label-> "Course Director")}
     		<a href="@routes.FacultyController.createFaculty">Create new Faculty</a>
 
             @{val selectvFaculty = SqlFaculty.all.map(vFaculty => vFaculty.selectIdentifier).toSeq
-            select(field = f("fProgramDirectorEmail"), options = selectvFaculty, args = '_label-> "Program Director")}
+            select(field = f("fProgramDirector"), options = selectvFaculty, args = '_label-> "Program Director")}
     		<a href="@routes.FacultyController.createFaculty">Create new Faculty</a>
 
             @textarea(field = f("fCourseDescriptionRedbook"), args = 'rows -> 2, 'cols -> 100, '_label-> "Course Description Redbook")

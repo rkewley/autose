@@ -1,0 +1,32 @@
+@(vTopics: MdlTopics)
+
+@import persistence._
+
+
+@topicPage(vTopics) {
+
+  @defining(SqlCourseTopics.selectWhere("TopicsIndex = " + vTopics.vTopicsIndex)) { courseTopics =>
+	<div class="column span-14 colborder">
+	  <h3>Courses Covering @vTopics.vTopic</h3>
+	  <div id="accordion">
+		@courseTopics.map(_.vidCourse).distinct.map { courseId =>
+		  @defining(courseTopics.filter(_.vidCourse == courseId)) { currentCourse =>
+		    <h3>@currentCourse.head.vCourseIDNumber - @currentCourse.head.vCourseName</h3>
+		    <div>
+		    @currentCourse.map(_.vLessonIndex).distinct.map { lessonIndex =>
+		      
+		      <h4><a href="@routes.LessonsController.showLessons(lessonIndex)">Lesson @currentCourse.filter(_.vLessonIndex == lessonIndex).map(_.vLessonNumber).head</a></h4>
+		      <ul>
+		        @currentCourse.filter(_.vLessonIndex == lessonIndex).map { lessonTopic =>
+		          <li>@lessonTopic.vObjective</li>
+		        }
+		      </ul>
+		    }
+		    </div>
+		  }
+		}
+	  </div>	  
+	</div>
+  }
+}
+

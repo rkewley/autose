@@ -24,7 +24,7 @@ object LessonLinksController extends Base {
 	"fDescription" -> text,
 	"fIsFileLiink" -> of[Boolean],
 	"fLesson" -> of[Long],
-	"fFacultyEmail" -> text
+	"fFaculty" -> of[Long]
     )(MdlLessonLinks.apply)(MdlLessonLinks.unapply)
   )
       
@@ -49,12 +49,12 @@ object LessonLinksController extends Base {
   }
 
   def createLessonLinks(idLessons: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    val vLessonLinks = new MdlLessonLinks(0, "", "", true, idLessons, "all")
+    val vLessonLinks = new MdlLessonLinks(0, "", "", true, idLessons, -1)
     Ok(viewforms.html.formLessonLinks(formLessonLinks.fill(vLessonLinks), 1))
   }
 
   def uploadLessonFile(idLessons: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    val vLessonLinks = new MdlLessonLinks(0, "", "", true, idLessons, "all")
+    val vLessonLinks = new MdlLessonLinks(0, "", "", true, idLessons, -1)
     Ok(viewforms.html.formLessonFiles(formLessonLinks.fill(vLessonLinks), 1))
   }
 
@@ -103,7 +103,7 @@ object LessonLinksController extends Base {
                   vLessonLinks.vDescription,
                   vLessonLinks.vIsFileLiink,
                   vLessonLinks.vLesson,
-                  vLessonLinks.vFacultyEmail)
+                  vLessonLinks.vFaculty)
                 println(vLessonLinks.vLink)
                 newEntry match {
                   case 0 => SqlLessonLinks.update(v2LessonLinks)
@@ -158,4 +158,6 @@ object LessonLinksController extends Base {
     }
     errMess("Error Messages:\n", formLessonLinks.errors.toList)
   }
+  
+  
 }

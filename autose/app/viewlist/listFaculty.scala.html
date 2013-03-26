@@ -10,6 +10,7 @@
 				<th>Office Phone</th>
 				<th>Branch of Service</th>
 				<th>Email</th>
+				<th>Photo</th>
 				<th>Show</th>
 				<th>Edit</th>
 				<th>Delete</th>
@@ -23,11 +24,14 @@
 				<td>@vFaculty.vOfficePhone</td>
 				<td>@vFaculty.vBranchofService</td>
 				<td>@vFaculty.vEmail</td>
+				<td><img src="@vFaculty.vFacultyPhotoFile" alt="Smiley face" height="50">
+				    <p><a href="@routes.FacultyController.newFacultyPhoto(vFaculty.vidFaculty)">Upload new photo</a></p>
+				</td>
 
-    			<td><a href="@routes.FacultyController.showFaculty(vFaculty.vEmail)">Show</a></td>
-    			<td><a href="@routes.FacultyController.editFaculty(vFaculty.vEmail)">Edit</a></td>
+    			<td><a href="@routes.FacultyController.showFaculty(vFaculty.vidFaculty)">Show</a></td>
+    			<td><a href="@routes.FacultyController.editFaculty(vFaculty.vidFaculty)">Edit</a></td>
     	  		<td>
-    	  			<form action="@routes.FacultyController.deleteFaculty(vFaculty.vEmail)" method="POST">
+    	  			<form action="@routes.FacultyController.deleteFaculty(vFaculty.vidFaculty)" method="POST">
     	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
     	  			</form>
     	  		</td>
@@ -39,6 +43,6 @@
       	</table>
     </div>
     <div>
-      <a href="@routes.FacultyController.createFaculty">Create new Faculty</a>
+      <a href="@routes.FacultyController.uploadFaculty">Create new Faculty</a>
     </div>
 }

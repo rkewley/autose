@@ -21,7 +21,7 @@ object CourseOfferingsController extends Base {
 	"fClassHour" -> text,
 	"fSection" -> of[Long],
 	"fLocation" -> text,
-	"fInstructorEmail" -> text
+	"fInstructor" -> of[Long]
     )(MdlCourseOfferings.apply)(MdlCourseOfferings.unapply)
   )
       

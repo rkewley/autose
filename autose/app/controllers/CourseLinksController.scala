@@ -23,13 +23,13 @@ object CourseLinksController extends Base {
 	"fLink" -> text,
 	"fDisplayDescription" -> text,
 	"fIsFileLink" -> of[Boolean],
-	"fFacultyEmail" -> text
+	"fFaculty" -> of[Long]
     )(MdlCourseLinks.apply)(MdlCourseLinks.unapply)
   )
       
 
-  def listCourseLinks(courseId: Long) = Action {
-    Ok(viewlist.html.listCourseLinks(SqlCourseLinks.selectWhere("Course = " + courseId), courseId))
+  def listCourseLinks(idCourses: Long) = Action {
+     Ok(viewlist.html.listCourseLinks(SqlCourseLinks.selectWhere("`Course` = " + idCourses), idCourses))
   }
 
    def editCourseLinks(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
@@ -47,12 +47,12 @@ object CourseLinksController extends Base {
   }
 
   def createCourseLinks(courseId: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    val vCourseLinks = new MdlCourseLinks(0, courseId, "http://", "", false, "all")
+    val vCourseLinks = new MdlCourseLinks(0, courseId, "http://", "", false, -1)
     Ok(viewforms.html.formCourseLinks(formCourseLinks.fill(vCourseLinks), 1))
   }
 
   def uploadCourseFile(courseId: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    val vCourseLinks = new MdlCourseLinks(0, courseId, "http://", "", true, "all")
+    val vCourseLinks = new MdlCourseLinks(0, courseId, "http://", "", true, -1)
     Ok(viewforms.html.formCourseFiles(formCourseLinks.fill(vCourseLinks), 1))
   }
 
@@ -92,7 +92,7 @@ object CourseLinksController extends Base {
                   path,
                   vCourseLinks.vDisplayDescription,
                   vCourseLinks.vIsFileLink,
-                  vCourseLinks.vFacultyEmail)
+                  vCourseLinks.vFaculty)
                 newEntry match {
                   case 0 => SqlCourseLinks.update(v2CourseLinks)
                   case _ => SqlCourseLinks.insert(v2CourseLinks)

@@ -18,11 +18,15 @@ POST 	/saveCourses/:newEntry					controllers.CoursesController.saveCourses(newEn
 
 # Faculty Routes
 GET     /listFaculty							controllers.FacultyController.listFaculty
-GET		/showFaculty/:id						controllers.FacultyController.showFaculty(id: String)
-GET 	/editFaculty/:id						controllers.FacultyController.editFaculty(id: String)
+GET		/showFaculty/:id						controllers.FacultyController.showFaculty(id: Long)
+GET 	/editFaculty/:id						controllers.FacultyController.editFaculty(id: Long)
 GET 	/createFaculty							controllers.FacultyController.createFaculty
-POST	/deleteFaculty/:id						controllers.FacultyController.deleteFaculty(id: String)
+POST	/deleteFaculty/:id						controllers.FacultyController.deleteFaculty(id: Long)
 POST 	/saveFaculty/:newEntry					controllers.FacultyController.saveFaculty(newEntry: Int)
+GET 	/uploadFaculty			   				controllers.FacultyController.uploadFaculty
+GET 	/newFacultyPhoto/:facultyId			   	controllers.FacultyController.newFacultyPhoto(facultyId: Long)
+POST 	/postFaculty/:newEntry				 	controllers.FacultyController.postFaculty(newEntry: Int)
+POST 	/postNewFacultyPicture/:facultyId		controllers.FacultyController.postNewFacultyPicture(facultyId: Long)
 
 
 # Topics Routes
@@ -48,8 +52,10 @@ GET     /listSelectedTopicPicture/:topicId		controllers.TopicPictureController.l
 GET		/showTopicPicture/:id					controllers.TopicPictureController.showTopicPicture(id: Long)
 GET 	/editTopicPicture/:id					controllers.TopicPictureController.editTopicPicture(id: Long)
 GET 	/createTopicPicture/:topicId			controllers.TopicPictureController.createTopicPicture(topicId: Long)
+GET 	/uploadTopicPicture/:topicId			controllers.TopicPictureController.uploadTopicPicture(topicId: Long)
 POST	/deleteTopicPicture/:id					controllers.TopicPictureController.deleteTopicPicture(id: Long)
 POST 	/saveTopicPicture/:newEntry				controllers.TopicPictureController.saveTopicPicture(newEntry: Int)
+POST 	/postTopicPicture/:newEntry				controllers.TopicPictureController.postTopicPicture(newEntry: Int)
 
 # TopicLink Routes
 GET     /listSelectedTopicLink/:topicId			controllers.TopicLinkController.listSelectedTopicLink(topicId: Long)
@@ -187,4 +193,7 @@ GET 	/createCourseOfferings					controllers.CourseOfferingsController.createCour
 POST	/deleteCourseOfferings/:id				controllers.CourseOfferingsController.deleteCourseOfferings(id: Long)
 POST 	/saveCourseOfferings/:newEntry			controllers.CourseOfferingsController.saveCourseOfferings(newEntry: Int)
 
-
+# CourseTopics Routes
+GET     /listCourseTopics						controllers.CourseTopicsController.listCourseTopics
+GET		/showCourseTopics/:courseId				controllers.CourseTopicsController.showCourseTopics(courseId: Long)
+GET		/showTopicsCourses/:topicId				controllers.CourseTopicsController.showTopicsCourses(topicId: Long)

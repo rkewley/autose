@@ -16,8 +16,8 @@ object SqlCourses {
 	get[Long]("AcademicYear") ~
 	get[Long]("AcademicTerm") ~
 	get[String]("CourseName") ~
-	get[String]("CourseDirectorEmail") ~
-	get[String]("ProgramDirectorEmail") ~
+	get[Long]("CourseDirector") ~
+	get[Long]("ProgramDirector") ~
 	get[String]("CourseDescriptionRedbook") ~
 	get[Double]("CreditHours") ~
 	get[String]("Prerequisites") ~
@@ -34,8 +34,8 @@ object SqlCourses {
 		vAcademicYear ~
 		vAcademicTerm ~
 		vCourseName ~
-		vCourseDirectorEmail ~
-		vProgramDirectorEmail ~
+		vCourseDirector ~
+		vProgramDirector ~
 		vCourseDescriptionRedbook ~
 		vCreditHours ~
 		vPrerequisites ~
@@ -52,8 +52,8 @@ object SqlCourses {
 		vAcademicYear,
 		vAcademicTerm,
 		vCourseName,
-		vCourseDirectorEmail,
-		vProgramDirectorEmail,
+		vCourseDirector,
+		vProgramDirector,
 		vCourseDescriptionRedbook,
 		vCreditHours,
 		vPrerequisites,
@@ -88,11 +88,11 @@ object SqlCourses {
     }
 
 	def insert(vCourses: MdlCourses) = DB.withConnection { implicit c =>
-  		SQL("INSERT INTO `Courses` (`CourseIDNumber`, `AcademicYear`, `AcademicTerm`, `CourseName`, `CourseDirectorEmail`, `ProgramDirectorEmail`, `CourseDescriptionRedbook`, `CreditHours`, `Prerequisites`, `Corequisites`, `Disqualifiers`, `CourseStrategy`, `CriteriaForPassing`, `AdminInstructions`, `DepartmentID`, `CourseWebsite`, `CourseDescriptionWebsite`) VALUES ({sqlCourseIDNumber}, {sqlAcademicYear}, {sqlAcademicTerm}, {sqlCourseName}, {sqlCourseDirectorEmail}, {sqlProgramDirectorEmail}, {sqlCourseDescriptionRedbook}, {sqlCreditHours}, {sqlPrerequisites}, {sqlCorequisites}, {sqlDisqualifiers}, {sqlCourseStrategy}, {sqlCriteriaForPassing}, {sqlAdminInstructions}, {sqlDepartmentID}, {sqlCourseWebsite}, {sqlCourseDescriptionWebsite})").on('sqlCourseIDNumber -> vCourses.vCourseIDNumber, 'sqlAcademicYear -> vCourses.vAcademicYear, 'sqlAcademicTerm -> vCourses.vAcademicTerm, 'sqlCourseName -> vCourses.vCourseName, 'sqlCourseDirectorEmail -> vCourses.vCourseDirectorEmail, 'sqlProgramDirectorEmail -> vCourses.vProgramDirectorEmail, 'sqlCourseDescriptionRedbook -> vCourses.vCourseDescriptionRedbook, 'sqlCreditHours -> vCourses.vCreditHours, 'sqlPrerequisites -> vCourses.vPrerequisites, 'sqlCorequisites -> vCourses.vCorequisites, 'sqlDisqualifiers -> vCourses.vDisqualifiers, 'sqlCourseStrategy -> vCourses.vCourseStrategy, 'sqlCriteriaForPassing -> vCourses.vCriteriaForPassing, 'sqlAdminInstructions -> vCourses.vAdminInstructions, 'sqlDepartmentID -> vCourses.vDepartmentID, 'sqlCourseWebsite -> vCourses.vCourseWebsite, 'sqlCourseDescriptionWebsite -> vCourses.vCourseDescriptionWebsite).executeInsert()
+  		SQL("INSERT INTO `Courses` (`CourseIDNumber`, `AcademicYear`, `AcademicTerm`, `CourseName`, `CourseDirector`, `ProgramDirector`, `CourseDescriptionRedbook`, `CreditHours`, `Prerequisites`, `Corequisites`, `Disqualifiers`, `CourseStrategy`, `CriteriaForPassing`, `AdminInstructions`, `DepartmentID`, `CourseWebsite`, `CourseDescriptionWebsite`) VALUES ({sqlCourseIDNumber}, {sqlAcademicYear}, {sqlAcademicTerm}, {sqlCourseName}, {sqlCourseDirector}, {sqlProgramDirector}, {sqlCourseDescriptionRedbook}, {sqlCreditHours}, {sqlPrerequisites}, {sqlCorequisites}, {sqlDisqualifiers}, {sqlCourseStrategy}, {sqlCriteriaForPassing}, {sqlAdminInstructions}, {sqlDepartmentID}, {sqlCourseWebsite}, {sqlCourseDescriptionWebsite})").on('sqlCourseIDNumber -> vCourses.vCourseIDNumber, 'sqlAcademicYear -> vCourses.vAcademicYear, 'sqlAcademicTerm -> vCourses.vAcademicTerm, 'sqlCourseName -> vCourses.vCourseName, 'sqlCourseDirector -> vCourses.vCourseDirector, 'sqlProgramDirector -> vCourses.vProgramDirector, 'sqlCourseDescriptionRedbook -> vCourses.vCourseDescriptionRedbook, 'sqlCreditHours -> vCourses.vCreditHours, 'sqlPrerequisites -> vCourses.vPrerequisites, 'sqlCorequisites -> vCourses.vCorequisites, 'sqlDisqualifiers -> vCourses.vDisqualifiers, 'sqlCourseStrategy -> vCourses.vCourseStrategy, 'sqlCriteriaForPassing -> vCourses.vCriteriaForPassing, 'sqlAdminInstructions -> vCourses.vAdminInstructions, 'sqlDepartmentID -> vCourses.vDepartmentID, 'sqlCourseWebsite -> vCourses.vCourseWebsite, 'sqlCourseDescriptionWebsite -> vCourses.vCourseDescriptionWebsite).executeInsert()
 	}
 
 	def update(vCourses: MdlCourses) = DB.withConnection { implicit c =>
-  		SQL("UPDATE `Courses` SET `CourseIDNumber` = {sqlCourseIDNumber}, `AcademicYear` = {sqlAcademicYear}, `AcademicTerm` = {sqlAcademicTerm}, `CourseName` = {sqlCourseName}, `CourseDirectorEmail` = {sqlCourseDirectorEmail}, `ProgramDirectorEmail` = {sqlProgramDirectorEmail}, `CourseDescriptionRedbook` = {sqlCourseDescriptionRedbook}, `CreditHours` = {sqlCreditHours}, `Prerequisites` = {sqlPrerequisites}, `Corequisites` = {sqlCorequisites}, `Disqualifiers` = {sqlDisqualifiers}, `CourseStrategy` = {sqlCourseStrategy}, `CriteriaForPassing` = {sqlCriteriaForPassing}, `AdminInstructions` = {sqlAdminInstructions}, `DepartmentID` = {sqlDepartmentID}, `CourseWebsite` = {sqlCourseWebsite}, `CourseDescriptionWebsite` = {sqlCourseDescriptionWebsite} WHERE `idCourse` = {sqlidCourse}").on('sqlidCourse -> vCourses.vidCourse, 'sqlCourseIDNumber -> vCourses.vCourseIDNumber, 'sqlAcademicYear -> vCourses.vAcademicYear, 'sqlAcademicTerm -> vCourses.vAcademicTerm, 'sqlCourseName -> vCourses.vCourseName, 'sqlCourseDirectorEmail -> vCourses.vCourseDirectorEmail, 'sqlProgramDirectorEmail -> vCourses.vProgramDirectorEmail, 'sqlCourseDescriptionRedbook -> vCourses.vCourseDescriptionRedbook, 'sqlCreditHours -> vCourses.vCreditHours, 'sqlPrerequisites -> vCourses.vPrerequisites, 'sqlCorequisites -> vCourses.vCorequisites, 'sqlDisqualifiers -> vCourses.vDisqualifiers, 'sqlCourseStrategy -> vCourses.vCourseStrategy, 'sqlCriteriaForPassing -> vCourses.vCriteriaForPassing, 'sqlAdminInstructions -> vCourses.vAdminInstructions, 'sqlDepartmentID -> vCourses.vDepartmentID, 'sqlCourseWebsite -> vCourses.vCourseWebsite, 'sqlCourseDescriptionWebsite -> vCourses.vCourseDescriptionWebsite).executeUpdate()
+  		SQL("UPDATE `Courses` SET `CourseIDNumber` = {sqlCourseIDNumber}, `AcademicYear` = {sqlAcademicYear}, `AcademicTerm` = {sqlAcademicTerm}, `CourseName` = {sqlCourseName}, `CourseDirector` = {sqlCourseDirector}, `ProgramDirector` = {sqlProgramDirector}, `CourseDescriptionRedbook` = {sqlCourseDescriptionRedbook}, `CreditHours` = {sqlCreditHours}, `Prerequisites` = {sqlPrerequisites}, `Corequisites` = {sqlCorequisites}, `Disqualifiers` = {sqlDisqualifiers}, `CourseStrategy` = {sqlCourseStrategy}, `CriteriaForPassing` = {sqlCriteriaForPassing}, `AdminInstructions` = {sqlAdminInstructions}, `DepartmentID` = {sqlDepartmentID}, `CourseWebsite` = {sqlCourseWebsite}, `CourseDescriptionWebsite` = {sqlCourseDescriptionWebsite} WHERE `idCourse` = {sqlidCourse}").on('sqlidCourse -> vCourses.vidCourse, 'sqlCourseIDNumber -> vCourses.vCourseIDNumber, 'sqlAcademicYear -> vCourses.vAcademicYear, 'sqlAcademicTerm -> vCourses.vAcademicTerm, 'sqlCourseName -> vCourses.vCourseName, 'sqlCourseDirector -> vCourses.vCourseDirector, 'sqlProgramDirector -> vCourses.vProgramDirector, 'sqlCourseDescriptionRedbook -> vCourses.vCourseDescriptionRedbook, 'sqlCreditHours -> vCourses.vCreditHours, 'sqlPrerequisites -> vCourses.vPrerequisites, 'sqlCorequisites -> vCourses.vCorequisites, 'sqlDisqualifiers -> vCourses.vDisqualifiers, 'sqlCourseStrategy -> vCourses.vCourseStrategy, 'sqlCriteriaForPassing -> vCourses.vCriteriaForPassing, 'sqlAdminInstructions -> vCourses.vAdminInstructions, 'sqlDepartmentID -> vCourses.vDepartmentID, 'sqlCourseWebsite -> vCourses.vCourseWebsite, 'sqlCourseDescriptionWebsite -> vCourses.vCourseDescriptionWebsite).executeUpdate()
 
   }
 

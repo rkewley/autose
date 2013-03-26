@@ -16,19 +16,19 @@ object SqlCourseOfferings {
 	get[String]("ClassHour") ~
 	get[Long]("Section") ~
 	get[String]("Location") ~
-	get[String]("InstructorEmail") map { case
+	get[Long]("Instructor") map { case
     vidCourseOfferings ~
 		vCourse ~
 		vClassHour ~
 		vSection ~
 		vLocation ~
-		vInstructorEmail =>
+		vInstructor =>
     MdlCourseOfferings(vidCourseOfferings,
 		vCourse,
 		vClassHour,
 		vSection,
 		vLocation,
-		vInstructorEmail)
+		vInstructor)
     }
   }
 
@@ -52,11 +52,11 @@ object SqlCourseOfferings {
     }
 
 	def insert(vCourseOfferings: MdlCourseOfferings) = DB.withConnection { implicit c =>
-  		SQL("INSERT INTO `CourseOfferings` (`Course`, `ClassHour`, `Section`, `Location`, `InstructorEmail`) VALUES ({sqlCourse}, {sqlClassHour}, {sqlSection}, {sqlLocation}, {sqlInstructorEmail})").on('sqlCourse -> vCourseOfferings.vCourse, 'sqlClassHour -> vCourseOfferings.vClassHour, 'sqlSection -> vCourseOfferings.vSection, 'sqlLocation -> vCourseOfferings.vLocation, 'sqlInstructorEmail -> vCourseOfferings.vInstructorEmail).executeInsert()
+  		SQL("INSERT INTO `CourseOfferings` (`Course`, `ClassHour`, `Section`, `Location`, `Instructor`) VALUES ({sqlCourse}, {sqlClassHour}, {sqlSection}, {sqlLocation}, {sqlInstructor})").on('sqlCourse -> vCourseOfferings.vCourse, 'sqlClassHour -> vCourseOfferings.vClassHour, 'sqlSection -> vCourseOfferings.vSection, 'sqlLocation -> vCourseOfferings.vLocation, 'sqlInstructor -> vCourseOfferings.vInstructor).executeInsert()
 	}
 
 	def update(vCourseOfferings: MdlCourseOfferings) = DB.withConnection { implicit c =>
-  		SQL("UPDATE `CourseOfferings` SET `Course` = {sqlCourse}, `ClassHour` = {sqlClassHour}, `Section` = {sqlSection}, `Location` = {sqlLocation}, `InstructorEmail` = {sqlInstructorEmail} WHERE `idCourseOfferings` = {sqlidCourseOfferings}").on('sqlidCourseOfferings -> vCourseOfferings.vidCourseOfferings, 'sqlCourse -> vCourseOfferings.vCourse, 'sqlClassHour -> vCourseOfferings.vClassHour, 'sqlSection -> vCourseOfferings.vSection, 'sqlLocation -> vCourseOfferings.vLocation, 'sqlInstructorEmail -> vCourseOfferings.vInstructorEmail).executeUpdate()
+  		SQL("UPDATE `CourseOfferings` SET `Course` = {sqlCourse}, `ClassHour` = {sqlClassHour}, `Section` = {sqlSection}, `Location` = {sqlLocation}, `Instructor` = {sqlInstructor} WHERE `idCourseOfferings` = {sqlidCourseOfferings}").on('sqlidCourseOfferings -> vCourseOfferings.vidCourseOfferings, 'sqlCourse -> vCourseOfferings.vCourse, 'sqlClassHour -> vCourseOfferings.vClassHour, 'sqlSection -> vCourseOfferings.vSection, 'sqlLocation -> vCourseOfferings.vLocation, 'sqlInstructor -> vCourseOfferings.vInstructor).executeUpdate()
 
   }
 

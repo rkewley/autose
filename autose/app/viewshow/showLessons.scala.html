@@ -2,6 +2,7 @@
 @(vLessons: MdlLessons)
 
 @import persistence._
+@import utilities.FileGroup
 		    
 @lessonPage(vLessons.vLessonIndex) {
 
@@ -63,23 +64,65 @@
 		  	
 		  	</table>
 		  	}
-		}
-		}
+		
+		
 		
 	       
      <div>
        <a href="@routes.LessonsController.listLessons(vLessons.vidCourse)">Return to listing</a>
      </div>
 	</div>
-  @defining(SqlLessonLinks.selectWhere("Lesson = " + vLessons.vLessonIndex)) { lessonLinks =>
-    @println("Number of lesson links is " + lessonLinks.size)
-    <div class="column span-4 last">
-   		 <h4>Lesson Links and Files</h4>
-   		 @lessonLinks.map { link =>
-		  	<p><a href="@link.vLink">@link.vDescription</a></p>
-		 } 
-     </div>
-   }
+	
+	
+	<div class="column span-4 last">
+	  Files
+	  <ul id="menu">
+		@defining(FileGroup.getFileGroupsLessonLinks(lessonLinks.filter(lessonLink => lessonLink.vIsFileLiink == true))) { listLessonLinks =>
+       		@listLessonLinks.map { fileGroup =>
+
+         		@if(fileGroup.owner == "Course level file") {
+         			  <li id="label">Course level files</li>
+         			  @fileGroup.links.map { fgLink =>
+         			    <li><a href="@fgLink.href">@fgLink.description</a></li>
+         			  } 
+         		} else {
+         			  <li>< @fileGroup.owner
+         			    <ul>
+         			      @fileGroup.links.map { fgLink =>
+         			        <li><a href="@fgLink.href">@fgLink.description</a></li>
+         			      }
+         			    </ul>
+         			  </li>    
+         		}
+		 	}
+	   	}
+	  </ul>
+
+	  Links
+	  <ul id="menu">
+		@defining(FileGroup.getFileGroupsLessonLinks(lessonLinks.filter(lessonLink => lessonLink.vIsFileLiink == false))) { listLessonLinks =>
+       		@listLessonLinks.map { fileGroup =>
+
+         		@if(fileGroup.owner == "Course level file") {
+         			  <li id="label">Course level links</li>
+         			  @fileGroup.links.map { fgLink =>
+         			    <li><a href="@fgLink.href">@fgLink.description</a></li>
+         			  } 
+         		} else {
+         			  <li>< @fileGroup.owner
+         			    <ul>
+         			      @fileGroup.links.map { fgLink =>
+         			        <li><a href="@fgLink.href">@fgLink.description</a></li>
+         			      }
+         			    </ul>
+         			  </li>    
+         		}
+		 	}
+	   	}
+	  </ul>
+	</div>
+
+	}
+  }
   </div>
-  
 }

@@ -32,9 +32,9 @@
 		  	<dt>Location</dt>
 		  	<dd>@Html(vCourseOfferings.vLocation.toString)</dd>
 
-    		@defining(SqlFaculty.select(vCourseOfferings.vInstructorEmail)){pkModel =>
+    		@defining(SqlFaculty.select(vCourseOfferings.vInstructor)){pkModel =>
       		  <dt>InstructorEmail</dt>
-      		  <dd><a href="@routes.FacultyController.showFaculty(vCourseOfferings.vInstructorEmail)">@pkModel.selectIdentifier._2</a></dd>
+      		  <dd><a href="@routes.FacultyController.showFaculty(vCourseOfferings.vInstructor)">@pkModel.selectIdentifier._2</a></dd>
     		}
 	       </dl>
      <div>

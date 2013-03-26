@@ -13,9 +13,41 @@
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/src/typography.css")" type="text/css" media="screen, projection">
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/src/forms.css")" type="text/css" media="screen, projection">
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/plugins/fancy-type/fancy-type.css")" type="text/css" media="screen, projection">
-	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/sticky-footer.css")" type="text/css" media="screen, projection">
  	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/systems-theme.css")" type="text/css" media="screen, projection">
- 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/nav.css")" type="text/css" media="screen, projection">
+ 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/black-tie/jquery-ui-1.10.1.custom.css")" type="text/css" media="screen, projection">
+	<script src="@routes.Assets.at("javascripts/jquery-1.9.1.min.js")"></script>	
+	<script src="@routes.Assets.at("javascripts/jquery-ui-1.10.1.custom.js")"></script>	
+	<script type="text/javascript">
+      $(document).ready(function() {
+        $('#topmenu #menu').menu();
+        $( "#accordion" ).accordion();
+      });
+     </script>
+	
+<style type="text/css">
+	.ui-menu { overflow: hidden;}
+	.ui-menu .ui-menu { overflow: visible !important; }
+	div#topmenu > .ui-menu > li { float: left; display: block; width: auto !important;}
+	.ui-menu > li { margin: 2px 2px !important; padding: 0 0 !important; }
+	div#topmenu > .ui-menu > li { margin: 5px 5px !important; padding: 0 0 !important; }
+	div#topmenu > .ui-menu > li > a { float: left; display: block; clear: both; overflow: hidden;}
+	div#topmenu > .ui-menu .ui-menu-icon { margin-top: 0.3em !important;}
+	.ui-menu .ui-menu .ui-menu li { float: left; display: block;}
+	
+
+    #menu > li > a {
+      line-height: 1.2;
+    }
+    
+    #menu > li {
+      border: 1px solid #303030;
+      line-height: 1.2;
+    }
+    
+    #menu > li#label {
+      background-color:  	#C0C0C0;
+    }
+</style>
     	
     	<!--[if lt IE 8]><link rel="stylesheet" href="@routes.Assets.at("stylesheets/blueprint/ie.css")" type="text/css" media="screen, projection"><![endif]-->
     
@@ -56,26 +88,27 @@
 						</div>
 		  			</div>
 	    		</div>
-				<nav id="topnav">
-				  <ul>
-				    <li id="firstitem"><a href="@routes.TopicsController.listTopics">Topic Listing</a>
+				<div id="topmenu">
+				  <ul id="menu">
+				    <li><a href="@routes.TopicsController.listTopics">Topic Listing</a>
 		 			<li><a href="@routes.CoursesController.listCourses">Course Listing</a></li>
 		 			<li><a href="@routes.ReferenceController.listReference">References</a></li> 
 		 			<li><a href="@routes.FacultyController.listFaculty">Admin</a><li>
 				  </ul>
-				</nav> 
+				<div>
 				<hr>
 				<hr class="space">				
         		@content
         		<hr>
-
+			  </div>
     		</div>
     	</div>
     	</div>
+    	@*
 		<div id="footer">
 			All Systems Go!!!
 		</div>
-
+		*@
     
     </body>
 </html>

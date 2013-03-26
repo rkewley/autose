@@ -11,6 +11,8 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 import FormFieldImplicits._
+import com.googlecode.sardine._
+
 
 object TopicsController extends Base {
 
@@ -58,6 +60,15 @@ object TopicsController extends Base {
       },
       vTopics => {
         if (vTopics.validate) {
+          val directory = Globals.webDavServer + "Topics/" + vTopics.vTopic
+          val dirPath = directory.replaceAll(" ", "%20")
+          val sardine = SardineFactory.begin("seweb", "G0Systems!")
+          try {
+            if (!sardine.exists(dirPath)) {
+              sardine.createDirectory(dirPath)
+              Logger.debug("Creating directory " + dirPath)
+            }
+          }
           newEntry match {
             case 0 => SqlTopics.update(vTopics)
             case _ => SqlTopics.insert(vTopics)

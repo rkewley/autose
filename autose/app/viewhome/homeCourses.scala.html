@@ -1,6 +1,7 @@
 @(vCourses: MdlCourses)
 
 @import persistence._
+@import utilities.FileGroup
 
 @coursePage(vCourses) {
 
@@ -27,21 +28,49 @@
 	</div>
 	
 	<div class="column span-4 last">
-		<h4>Course Files</h4>
-		@defining(SqlCourseLinks.selectWhere("Course = " + vCourses.vidCourse + " AND IsFileLink = 1")) { listCourseLinks =>
-       		@listCourseLinks.map { vCourseLinks =>
-         		<p><a href="@vCourseLinks.vLink">@vCourseLinks.vDisplayDescription</a></p>
-		 	}
-	   	}
-		<hr>
-		
-		<h4>Course Links</h4>
-		@defining(SqlCourseLinks.selectWhere("Course = " + vCourses.vidCourse + " AND IsFileLink = 0")) { listCourseLinks =>
-       		@listCourseLinks.map { vCourseLinks =>
-         		<p><a href="@vCourseLinks.vLink">@vCourseLinks.vDisplayDescription</a></p>
-		 	}
-	   	}
 
+	  <ul id="menu">
+		@defining(FileGroup.getFileGroupsCourseLinks(SqlCourseLinks.selectWhere("Course = " + vCourses.vidCourse + " AND IsFileLink = 1"))) { listCourseLinks =>
+       		@listCourseLinks.map { fileGroup =>
+         		@if(fileGroup.owner == "Course level file") {
+         			  <li id="label">Course level files</li>
+         			  @fileGroup.links.map { fgLink =>
+         			    <li><a href="@fgLink.href">@fgLink.description</a></li>
+         			  } 
+         		} else {
+         			  <li>"< "@fileGroup.owner
+         			    <ul>
+         			      @fileGroup.links.map { fgLink =>
+         			        <li><a href="@fgLink.href">@fgLink.description</a></li>
+         			      }
+         			    </ul>
+         			  </li>    
+         		}
+		 	}
+	   	}
+	  </ul>
+
+		
+	  <ul id="menu">
+		@defining(FileGroup.getFileGroupsCourseLinks(SqlCourseLinks.selectWhere("Course = " + vCourses.vidCourse + " AND IsFileLink = 0"))) { listCourseLinks =>
+       		@listCourseLinks.map { fileGroup =>
+         		@if(fileGroup.owner == "Course level file") {
+         			  <li id="label">Course level links</li>
+         			  @fileGroup.links.map { fgLink =>
+         			    <li><a href="@fgLink.href">@fgLink.description</a></li>
+         			  } 
+         		} else {
+         			  <li>@fileGroup.owner
+         			    <ul>
+         			      @fileGroup.links.map { fgLink =>
+         			        <li><a href="@fgLink.href">@fgLink.description</a></li>
+         			      }
+         			    </ul>
+         			  </li>    
+         		}
+		 	}
+	   	}
+	  </ul>
 	</div>
-	
 }
+	

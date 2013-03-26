@@ -7,10 +7,10 @@
 	vClassHour : String,
 	vSection : Long,
 	vLocation : String,
-	vInstructorEmail : String
+	vInstructor : Long
     )  {
     
-      def this() = this(0, 0, "", 0, "", "")
+      def this() = this(0, 0, "", 0, "", 0)
 
   	  def validate: Boolean = true
     

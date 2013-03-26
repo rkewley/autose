@@ -30,8 +30,8 @@
 				<td>@vCourseOfferings.vSection</td>
 				<td>@vCourseOfferings.vLocation</td>
 
-    		@defining(SqlFaculty.select(vCourseOfferings.vInstructorEmail)){pkModel =>
-      		  <td><a href="@routes.FacultyController.showFaculty(vCourseOfferings.vInstructorEmail)">@pkModel.selectIdentifier._2</a></td>
+    		@defining(SqlFaculty.select(vCourseOfferings.vInstructor)){pkModel =>
+      		  <td><a href="@routes.FacultyController.showFaculty(vCourseOfferings.vInstructor)">@pkModel.selectIdentifier._2</a></td>
     		}
 
     			<td><a href="@routes.CourseOfferingsController.showCourseOfferings(vCourseOfferings.vidCourseOfferings)">Show</a></td>
@@ -47,7 +47,7 @@
       		}
 
       	</table>
-      <a href="@routes.CourseOfferingsController.createCourseOfferings">Create new CourseOfferings</a>
+      <a href="@routes.CourseOfferingsController.createCourseOfferings">Create new course offerings</a>
     </div>
   </div>
   }

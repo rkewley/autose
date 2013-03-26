@@ -43,8 +43,8 @@
             @textarea(field = f("fDisplayDescription"), args = 'rows -> 2, 'cols -> 100, '_label-> "Display description for your file")
         	@*@inputText(f("fDisplayDescription"), '_label -> "Display Description")*@
         	
-        	@{val selectvFaculty = SqlFaculty.all.map(vFaculty => vFaculty.selectIdentifier).toSeq
-            select(field = f("fFacultyEmail"), options = selectvFaculty, args = '_label-> "Faculty associated with this file, or a course level file")}
+        	@{val selectvFaculty = FacultyController.getFacultyListForCourse(course)
+            select(field = f("fFaculty"), options = selectvFaculty, args = '_label-> "Faculty associated with this file, or a course level file")}
 
 
        		<fieldset style="margin-top: 10px;">

@@ -6,17 +6,16 @@
 @main("Systems Net", course.vCourseIDNumber) {
 
 	<div class="column span-4 colborder">
-		<nav id="leftnav">
-		  <ul>
+
+		  <ul id="menu">
 			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse)">Course Home</a></li>
 			<li><a href="@routes.LessonsController.listLessons(course.vidCourse)">Syllabus</a></li>
 			<li><a href="@routes.LessonsController.showLessons(lesson.vLessonIndex)">Lesson @lesson.vLessonNumber Home</a></li>
 			<li><a href="@routes.LessonTopicObjectivesController.listLessonTopicObjectives(lesson.vLessonIndex)">Knowledge and Skills</a></li>
 			<li><a href="@routes.LessonLinksController.listLessonLinks(lesson.vLessonIndex)">Lesson Links and Files</a></li>
 		  </ul>
-		</nav>
-	</div>
 
+	</div>
 	<div>
 		@content
 	</div>

@@ -10,6 +10,7 @@ import play.Logger
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
+import com.googlecode.sardine._
 //import FormFieldImplicits._
 
 object CoursesController extends Base {
@@ -21,9 +22,9 @@ object CoursesController extends Base {
 	"fAcademicYear" -> of[Long],
 	"fAcademicTerm" -> of[Long],
 	"fCourseName" -> text,
-	"fCourseDirectorEmail" -> text,
-	"fProgramDirectorEmail" -> text,
-	"fCourseDescriptionRedbook" -> text, 
+	"fCourseDirector" -> of[Long],
+	"fProgramDirector" -> of[Long],
+	"fCourseDescriptionRedbook" -> text,
 	"fCreditHours" -> of[Double],
 	"fPrerequisites" -> text,
 	"fCorequisites" -> text,
@@ -63,6 +64,35 @@ object CoursesController extends Base {
     Ok(viewforms.html.formCourses(formCourses.fill(new MdlCourses()), 1))
   }
 
+  def createCourseDirectoryStructure(vCourses: MdlCourses) {
+    val directory = Globals.webDavServer + "Courses/AT" + String.valueOf(vCourses.vAcademicYear).substring(2) + "-" +
+      String.valueOf(vCourses.vAcademicTerm) + "/" + vCourses.vCourseIDNumber
+    val dirPath = directory.replaceAll(" ", "%20")
+    val sardine = SardineFactory.begin("seweb", "G0Systems!")
+    try {
+      if (!sardine.exists(dirPath)) {
+        Logger.debug("Creating directory " + dirPath)
+        sardine.createDirectory(dirPath)
+
+        sardine.createDirectory(dirPath + "/CourseFiles")
+        sardine.createDirectory(dirPath + "/CoursePhotos")
+        sardine.createDirectory(dirPath + "/Lessons")
+        def createLessonDirectory(i: Int) {
+          if (i <= 40) {
+            val lessonPath = i match {
+              case j if j <= 9 => "0" + String.valueOf(i)
+              case _ => String.valueOf(i)
+            }
+            sardine.createDirectory(dirPath + "/Lessons/Lesson" + lessonPath)
+            createLessonDirectory(i+1)
+          }
+        }
+        createLessonDirectory(1)
+      }
+    }
+
+  }
+
   def saveCourses(newEntry: Int) = Action { implicit request =>
   	formCourses.bindFromRequest.fold(
   	  form => {
@@ -72,6 +102,7 @@ object CoursesController extends Base {
       },
       vCourses => {
         if (vCourses.validate) {
+          createCourseDirectoryStructure(vCourses)
           newEntry match {
             case 0 => SqlCourses.update(vCourses)
             case _ => SqlCourses.insert(vCourses)

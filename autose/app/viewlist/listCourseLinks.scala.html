@@ -33,7 +33,12 @@
     		}
 				<td><a href="@vCourseLinks.vLink">@vCourseLinks.vDisplayDescription</td>
 				<td>@vCourseLinks.vIsFileLink</td>
-    	    	<td>@vCourseLinks.vFacultyEmail</td>
+    	    	<td>
+    	    	@{vCourseLinks.vFaculty match {
+    	    	  case -1 => "Course level file"
+    	    	  case _  => SqlFaculty.select(vCourseLinks.vFaculty).selectIdentifier._2
+    	    	}}
+    	    	</td>
     			<td><a href="@routes.CourseLinksController.showCourseLinks(vCourseLinks.vidCourseLinks)">Show</a></td>
     			<td><a href="@routes.CourseLinksController.editCourseLinks(vCourseLinks.vidCourseLinks)">Edit</a></td>
     	  		<td>

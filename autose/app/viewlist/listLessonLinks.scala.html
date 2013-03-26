@@ -44,7 +44,12 @@
     	        <p>@SqlTopicObjectives.shortenedTopicNameFor(SqlTopicObjectives.select(llto.vTopicObjective), 100)</p>
     	      }
     	    </td>
-    	    <td>@vLessonLinks.vFacultyEmail</td>
+    	    <td>
+    	    	@{vLessonLinks.vFaculty match {
+    	    	  case -1 => "Course level file"
+    	    	  case _  => SqlFaculty.select(vLessonLinks.vFaculty).selectIdentifier._2
+    	    	}}
+    	    </td>
     	    <td><a href="@routes.LessonLinksController.showLessonLinks(vLessonLinks.vLessonLinkNumber)">Show</a></td>
     	    <td><a href="@routes.LessonLinksController.editLessonLinks(vLessonLinks.vLessonLinkNumber)">Edit</a></td>
     	    <td><a href="@routes.LessonLinkTopicObjectivesController.listLessonLinkTopicObjectives(vLessonLinks.vLessonLinkNumber)">Modify links to topics</a></td>

@@ -1,0 +1,38 @@
+@(vCourses: MdlCourses)
+
+@import persistence._
+<script>
+
+</script>
+@coursePage(vCourses) {
+<script type="text/javascript">
+$(document).ready(function() {
+  $(  "#accordion"  ).accordion({ collapsible: true });
+  $(  "#accordion"  ).accordion( {active: false} );
+ });
+</script>
+  @println("Running Query from showCourseTopics")
+  @defining(SqlCourseTopics.selectWhere("idCourse = " + vCourses.vidCourse)) { courseTopics =>
+	<div class="column span-14 colborder">
+	  <h3>Course Topics for @vCourses.vCourseIDNumber</h3>
+	  <div id="accordion">
+		@courseTopics.map(_.vTopic).distinct.map { courseTopic =>
+		  @defining(courseTopics.filter(_.vTopic == courseTopic)) { currentTopic =>
+		    <h3>@courseTopic</h3>
+		    <div>
+		    @currentTopic.map(_.vLessonIndex).distinct.map { lessonIndex =>
+		      
+		      <h4><a href="@routes.LessonsController.showLessons(lessonIndex)">Lesson @currentTopic.filter(_.vLessonIndex == lessonIndex).map(topic => topic.vLessonNumber.toString + " - " + topic.vLessonName ).head</a></h4>
+		      <ul>
+		        @currentTopic.filter(_.vLessonIndex == lessonIndex).map { lessonTopic =>
+		          <li>@lessonTopic.vObjective</li>
+		        }
+		      </ul>
+		    }
+		    </div>
+		  }
+		}
+	  </div>	  
+	</div>
+  }
+}

@@ -1,0 +1,31 @@
+
+@(vidFaculty: Long)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+<div class="column span-20 last">
+    <fieldset>
+	@form(action = routes.FacultyController.postNewFacultyPicture(vidFaculty), 'enctype -> "multipart/form-data") {
+
+
+        	<p>Select picture file to upload</p>
+        	<input type="file" name="facultyPictureFile" size="40">
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.FacultyController.listFaculty">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }

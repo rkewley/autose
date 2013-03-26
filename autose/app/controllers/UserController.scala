@@ -29,7 +29,7 @@ object UserController extends Base {
     Ok(viewlist.html.listUser(SqlUser.all))
   }
 
-   def editUser(id: String) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editUser(id: String) = compositeAction(Administrator) { user => implicit template => implicit request =>
     Ok(viewforms.html.formUser(formUser.fill(SqlUser.select(id)), 0))
   }
 
@@ -37,12 +37,12 @@ object UserController extends Base {
     Ok(viewshow.html.showUser(SqlUser.select(id)))
   }
 
-   def deleteUser(id: String) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteUser(id: String) = compositeAction(Administrator) { user => implicit template => implicit request =>
     SqlUser.delete(id)
     Ok(viewlist.html.listUser(SqlUser.all))
   }
 
-  def createUser = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createUser = compositeAction(Administrator) { user => implicit template => implicit request =>
     Ok(viewforms.html.formUser(formUser.fill(new MdlUser()), 1))
   }
 

@@ -24,9 +24,7 @@
                 <input type="hidden" name="@fCourse.name" id="@fCourse.id" value="@fCourse.value">
 			}
 
-            @defining(f("fIsFileLink")) { fIsFileLink =>
-                <input type="hidden" name="@fIsFileLink.name" id="@fIsFileLink.id" value="false">
-			}
+			@checkbox(field = f("fIsFileLink"), '_label -> "Is this link a file?")
 
             @textarea(field = f("fLink"), args = 'rows -> 2, 'cols -> 100, '_label-> "Link")
             <p>Enter the full url link to your link above.  It must start with "http://"</p>
@@ -36,8 +34,8 @@
             @textarea(field = f("fDisplayDescription"), args = 'rows -> 2, 'cols -> 100, '_label-> "Display description for your link")
         	@*@inputText(f("fDisplayDescription"), '_label -> "Display Description")*@
 
-        	@{val selectvFaculty = FacultyController.getFacultyListForCourse(course).toSeq
-            select(field = f("fFacultyEmail"), options = selectvFaculty, args = '_label-> "Faculty associated with this file, or a course level file")}
+        	@{val selectvFaculty = FacultyController.getFacultyListForCourse(course)
+            select(field = f("fFaculty"), options = selectvFaculty, args = '_label-> "Faculty associated with this file, or a course level file")}
 
        		<fieldset style="margin-top: 10px;">
           		<input type="submit" value="Submit" />

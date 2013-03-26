@@ -1,0 +1,52 @@
+
+@(listCourseTopics: List[MdlCourseTopics])
+    
+    @import persistence._
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>CourseTopics Listing</h3>
+		  <table>
+			<tr>
+				<th>CourseIDNumber</th>
+				<th>idCourse</th>
+				<th>LessonNumber</th>
+				<th>LessonIndex</th>
+				<th>Topic</th>
+				<th>TopicIndex</th>
+				<th>Objective</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listCourseTopics.map { vCourseTopics =>
+    			
+    		<tr>
+				<td>@vCourseTopics.vCourseIDNumber</td>
+				<td>@vCourseTopics.vidCourse</td>
+				<td>@vCourseTopics.vLessonNumber</td>
+				<td>@vCourseTopics.vLessonIndex</td>
+				<td>@vCourseTopics.vTopic</td>
+				<td>@vCourseTopics.vTopicsIndex</td>
+				<td>@vCourseTopics.vObjective</td>
+
+    			<td></td>
+    			<td></td>
+    	  		<td></td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+    </div>
+  </div>
+  }

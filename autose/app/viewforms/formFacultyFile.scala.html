@@ -14,37 +14,35 @@
 
 <div class="column span-20 last">
     <fieldset>
-    @helper.form(routes.FacultyController.saveFaculty(newEntry)) {
+	@form(action = routes.FacultyController.postFaculty(newEntry), 'enctype -> "multipart/form-data") {
 
-     		
+
+		  
             @defining(f("fidFaculty")) { fidFaculty =>
                 <input type="hidden" name="@fidFaculty.name" id="@fidFaculty.id" value="@fidFaculty.value">
-			
-
-        	  @inputText(f("fLastName"), '_label -> "LastName")
-
-        	  @inputText(f("fFirstName"), '_label -> "First Name")
-
-        	  @inputText(f("fTitle"), '_label -> "Title")
-  
-        	  @inputText(f("fOfficeNumber"), '_label -> "Office Number")
-
-        	  @inputText(f("fOfficePhone"), '_label -> "Office Phone")
-
-        	  @inputText(f("fBranchofService"), '_label -> "Branch of Service")
-
-        	  @inputText(f("fEmail"), '_label -> "Email")
-        	
-        	  @defining(f("fFacultyPhotoFile")) { fFacultyPhotoFile =>
-                <input type="hidden" name="@fFacultyPhotoFile.name" id="@fFacultyPhotoFile.id" value="@fFacultyPhotoFile.value">
-			
-
-		        <div class=photo>
-		  	      <p><img src="@fFacultyPhotoFile.value.get" alt="Smiley face" height="150"></p>
-		  	      <p><a href="@routes.FacultyController.newFacultyPhoto(fidFaculty.value.get.toInt)">Upload new photo</a></p>
-		        </div>
-			  }
 			}
+
+
+        	@inputText(f("fLastName"), '_label -> "LastName")
+
+        	@inputText(f("fFirstName"), '_label -> "First Name")
+
+        	@inputText(f("fTitle"), '_label -> "Title")
+
+        	@inputText(f("fOfficeNumber"), '_label -> "Office Number")
+
+        	@inputText(f("fOfficePhone"), '_label -> "Office Phone")
+
+        	@inputText(f("fBranchofService"), '_label -> "Branch of Service")
+
+        	@inputText(f("fEmail"), '_label -> "Email")
+        	
+        	@defining(f("fFacultyPhotoFile")) { fFacultyPhotoFile =>
+                <input type="hidden" name="@fFacultyPhotoFile.name" id="@fFacultyPhotoFile.id" value="@fFacultyPhotoFile.value">
+			}
+        	
+        	<p>Select picture file to upload</p>
+        	<input type="file" name="facultyPictureFile" size="40">
 
             @textarea(field = f("fBiography"), args = 'rows -> 2, 'cols -> 100, '_label-> "Biography")
 

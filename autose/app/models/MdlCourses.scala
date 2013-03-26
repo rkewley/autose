@@ -7,8 +7,8 @@
 	vAcademicYear : Long,
 	vAcademicTerm : Long,
 	vCourseName : String,
-	vCourseDirectorEmail : String,
-	vProgramDirectorEmail : String,
+	vCourseDirector : Long,
+	vProgramDirector : Long,
 	vCourseDescriptionRedbook : String,
 	vCreditHours : Double,
 	vPrerequisites : String,
@@ -22,7 +22,7 @@
 	vCourseDescriptionWebsite : String
     )  {
     
-      def this() = this(0, "", 0, 0, "", "", "", "", 0.0, "", "", "", "", "", "", 0, false, "")
+      def this() = this(0, "", 0, 0, "", 0, 0, "", 0.0, "", "", "", "", "", "", 0, false, "")
 
   	  def validate: Boolean = vAcademicYear >= 2012 && vAcademicYear <= 2020 && vAcademicTerm >= 1 && vAcademicTerm <= 2
     

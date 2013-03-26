@@ -34,8 +34,8 @@
 				<td>@vCourses.vAcademicTerm</td>
 				<td>@vCourses.vCourseName</td>
 
-    		@defining(SqlFaculty.select(vCourses.vCourseDirectorEmail)){pkModel =>
-      		  <td><a href="@routes.FacultyController.showFaculty(vCourses.vCourseDirectorEmail)">@pkModel.selectIdentifier._2</a></td>
+    		@defining(SqlFaculty.select(vCourses.vCourseDirector)){pkModel =>
+      		  <td><a href="@routes.FacultyController.showFaculty(vCourses.vCourseDirector)">@pkModel.selectIdentifier._2</a></td>
     		}
 
     		@defining(SqlDepartments.select(vCourses.vDepartmentID)){pkModel =>

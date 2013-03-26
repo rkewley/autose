@@ -1,0 +1,48 @@
+
+@(f: Form[MdlTopicPicture], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+@defining(f("fTopic").value.get.toLong) { topic =>   
+@topicPage(SqlTopics.select(topic)) {
+
+    
+<div class="column span-18 last">
+    <fieldset>
+		@form(action = routes.TopicPictureController.postTopicPicture(newEntry), 'enctype -> "multipart/form-data") {
+
+		  
+            @defining(f("fidTopicPicture")) { fidTopicPicture =>
+                <input type="hidden" name="@fidTopicPicture.name" id="@fidTopicPicture.id" value="@fidTopicPicture.value">
+			}
+			
+    		@defining(f("fTopic")) { fTopic =>
+                <input type="hidden" name="@fTopic.name" id="@fTopic.id" value="@fTopic.value">
+			}
+
+    		@defining(f("fHyperlink")) { fHyperlink =>
+                <input type="hidden" name="@fHyperlink.name" id="@fHyperlink.id" value="@fHyperlink.value">
+			}
+        	<p>Select picture file to upload</p>
+        	<input type="file" name="topicPictureFile" size="40">
+
+            @textarea(field = f("fAlternateText"), args = 'rows -> 2, 'cols -> 100, '_label-> "AlternateText")
+        	@*@inputText(f("fAlternateText"), '_label -> "AlternateText")*@
+
+            @textarea(field = f("fCaption"), args = 'rows -> 2, 'cols -> 100, '_label-> "Caption")
+        	@*@inputText(f("fCaption"), '_label -> "Caption")*@
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+      		</fieldset>
+      		
+
+              <a href="@routes.TopicPictureController.listSelectedTopicPicture(f("fTopic").value.get.toLong)">Cancel and return to topic picture listing</a>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+}

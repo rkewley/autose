@@ -7,10 +7,10 @@
 	vLink : String,
 	vDisplayDescription : String,
 	vIsFileLink : Boolean,
-	vFacultyEmail: String
+	vFaculty : Long
     )  {
     
-      def this() = this(0, 0, "", "", false, "all")
+      def this() = this(0, 0, "", "", false, -1)
 
   	  def validate: Boolean = true
     

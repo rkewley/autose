@@ -85,11 +85,12 @@
 	 
 		 <hr>
 		 
-		 <h4>Learn More</h4>
+
 		 @defining(SqlTopicLink.selectWhere("Topic=" + vTopics.vTopicsIndex)) { listTopicLink =>
-		 
+		 <ul id="menu">
+		   <li id="label">Learn More</li>
 		   @listTopicLink.map { vTopicLink =>
-			 <p><a href="@vTopicLink.vLink">@vTopicLink.vDescription</a></p>
+			 <li><a href="@vTopicLink.vLink">@vTopicLink.vDescription</a></li>
 		   }
 		 
 		 }

@@ -27,14 +27,14 @@
 		  	<dt>Course Name</dt>
 		  	<dd>@Html(vCourses.vCourseName.toString)</dd>
 
-    		@defining(SqlFaculty.select(vCourses.vCourseDirectorEmail)){pkModel =>
+    		@defining(SqlFaculty.select(vCourses.vCourseDirector)){pkModel =>
       		  <dt>Course Director</dt>
-      		  <dd><a href="@routes.FacultyController.showFaculty(vCourses.vCourseDirectorEmail)">@pkModel.selectIdentifier._2</a></dd>
+      		  <dd><a href="@routes.FacultyController.showFaculty(vCourses.vCourseDirector)">@pkModel.selectIdentifier._2</a></dd>
     		}
 
-    		@defining(SqlFaculty.select(vCourses.vProgramDirectorEmail)){pkModel =>
+    		@defining(SqlFaculty.select(vCourses.vProgramDirector)){pkModel =>
       		  <dt>Program Director</dt>
-      		  <dd><a href="@routes.FacultyController.showFaculty(vCourses.vProgramDirectorEmail)">@pkModel.selectIdentifier._2</a></dd>
+      		  <dd><a href="@routes.FacultyController.showFaculty(vCourses.vProgramDirector)">@pkModel.selectIdentifier._2</a></dd>
     		}
 
 		  	<dt>Course DescriptionRed book</dt>
