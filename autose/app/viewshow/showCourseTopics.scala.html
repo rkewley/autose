@@ -1,9 +1,7 @@
 @(vCourses: MdlCourses)
 
 @import persistence._
-<script>
 
-</script>
 @coursePage(vCourses) {
 <script type="text/javascript">
 $(document).ready(function() {
@@ -20,15 +18,24 @@ $(document).ready(function() {
 		  @defining(courseTopics.filter(_.vTopic == courseTopic)) { currentTopic =>
 		    <h3>@courseTopic</h3>
 		    <div>
-		    @currentTopic.map(_.vLessonIndex).distinct.map { lessonIndex =>
-		      
-		      <h4><a href="@routes.LessonsController.showLessons(lessonIndex)">Lesson @currentTopic.filter(_.vLessonIndex == lessonIndex).map(topic => topic.vLessonNumber.toString + " - " + topic.vLessonName ).head</a></h4>
-		      <ul>
-		        @currentTopic.filter(_.vLessonIndex == lessonIndex).map { lessonTopic =>
-		          <li>@lessonTopic.vObjective</li>
+		      <table>
+		  	    <tr>
+		  	      <th>Knowledge, Skill, or Behavior</th>
+		  	      <th>Covered During Lessons</th>
+		  	    </tr>
+		  	    @currentTopic.map(_.vObjective).distinct.map { currentObjective =>
+		  	      <tr>
+		  	        <td>@currentObjective</td>
+
+		  	        <td>
+		  	           @defining(currentTopic.filter(_.vObjective == currentObjective)) { lessonList =>
+		  	             @lessonList.tail.foldLeft[Html](CourseTopicsController.getLessonLink(lessonList.head))(CourseTopicsController.accumulateLessonLinks)
+		  	           }
+		  	        </td>
+		  	      </tr>
 		        }
-		      </ul>
-		    }
+		      </table>
+
 		    </div>
 		  }
 		}

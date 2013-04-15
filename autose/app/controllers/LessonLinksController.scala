@@ -45,6 +45,10 @@ object LessonLinksController extends Base {
    def deleteLessonLinks(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
     val vLessonLinks = SqlLessonLinks.select(id)
     SqlLessonLinks.delete(id)
+    if (vLessonLinks.vIsFileLiink) {  // if this link is a file, delete it from the server
+      val sardine = SardineFactory.begin("seweb", "G0Systems!")
+      sardine.delete(vLessonLinks.vLink)
+    }
     Redirect(routes.LessonLinksController.listLessonLinks(vLessonLinks.vLesson))
   }
 

@@ -4,7 +4,12 @@
 
 
 @topicPage(vTopics) {
-
+<script type="text/javascript">
+$(document).ready(function() {
+  $(  "#accordion"  ).accordion({ collapsible: true });
+  $(  "#accordion"  ).accordion( {active: false} );
+ });
+</script>
   @defining(SqlCourseTopics.selectWhere("TopicsIndex = " + vTopics.vTopicsIndex)) { courseTopics =>
 	<div class="column span-14 colborder">
 	  <h3>Courses Covering @vTopics.vTopic</h3>
@@ -13,15 +18,25 @@
 		  @defining(courseTopics.filter(_.vidCourse == courseId)) { currentCourse =>
 		    <h3>@currentCourse.head.vCourseIDNumber - @currentCourse.head.vCourseName</h3>
 		    <div>
-		    @currentCourse.map(_.vLessonIndex).distinct.map { lessonIndex =>
-		      
-		      <h4><a href="@routes.LessonsController.showLessons(lessonIndex)">Lesson @currentCourse.filter(_.vLessonIndex == lessonIndex).map(_.vLessonNumber).head</a></h4>
-		      <ul>
-		        @currentCourse.filter(_.vLessonIndex == lessonIndex).map { lessonTopic =>
-		          <li>@lessonTopic.vObjective</li>
+		      <table>
+		  	    <tr>
+		  	      <th>Knowledge, Skill, or Behavior</th>
+		  	      <th>Covered During Lessons</th>
+		  	    </tr>
+		  	    @currentCourse.map(_.vObjective).distinct.map { currentObjective =>
+		  	      <tr>
+		  	        <td>@currentObjective</td>
+
+		  	        <td>
+		  	           @defining(currentCourse.filter(_.vObjective == currentObjective)) { lessonList =>
+		  	             @lessonList.tail.foldLeft[Html](CourseTopicsController.getLessonLink(lessonList.head))(CourseTopicsController.accumulateLessonLinks)
+		  	           }
+		  	        </td>
+		  	      </tr>
 		        }
-		      </ul>
-		    }
+		      </table>
+		    
+
 		    </div>
 		  }
 		}
