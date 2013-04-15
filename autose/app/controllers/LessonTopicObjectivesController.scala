@@ -23,6 +23,14 @@ object LessonTopicObjectivesController extends Base {
     )(MdlLessonTopicObjectives.apply)(MdlLessonTopicObjectives.unapply)
   )
       
+  val formLessonTopicObjectivesList = Form[MdlLessonTopicObjectivesList](
+    mapping (
+	"fidLessonTopicObjectives" -> of[Long],
+	"fLesson" -> of[Long],
+	"fTopicObjectives" -> list(of[Long])
+    )(MdlLessonTopicObjectivesList.apply)(MdlLessonTopicObjectivesList.unapply)
+  )
+      
 
   def listLessonTopicObjectives(idLessons: Long) = Action {
      Ok(viewlist.html.listLessonTopicObjectives(SqlLessonTopicObjectives.selectWhere("`Lesson` = " + idLessons), idLessons))
@@ -45,6 +53,11 @@ object LessonTopicObjectivesController extends Base {
   def createLessonTopicObjectives(idLessons: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
     val vLessonTopicObjectives = new MdlLessonTopicObjectives(0, idLessons, 0)
     Ok(viewforms.html.formLessonTopicObjectives(formLessonTopicObjectives.fill(vLessonTopicObjectives), 1))
+  }
+  
+  def createLessonTopicObjectivesList(idLessons: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+    val vLessonTopicObjectivesList = new MdlLessonTopicObjectivesList(0, idLessons, List())
+    Ok(viewforms.html.formLessonTopicObjectivesList(formLessonTopicObjectivesList.fill(vLessonTopicObjectivesList)))
   }
   
   def getTopicObjectivesJson(id: Long) = Action {
@@ -75,6 +88,29 @@ object LessonTopicObjectivesController extends Base {
         }
       })
   }
+  
+  def saveLessonTopicObjectivesList = Action { implicit request =>
+  	formLessonTopicObjectivesList.bindFromRequest.fold(
+  	  form => {
+        val errorMessage = formErrorMessage(form.errors)
+        Logger.debug(errorMessage)
+        BadRequest(viewforms.html.formError(errorMessage, request.headers("REFERER")))
+      },
+      vLessonTopicObjectivesList => {
+        Logger.debug("Topic Objectives List: " + vLessonTopicObjectivesList.vTopicObjective.size + ": " + vLessonTopicObjectivesList.vTopicObjective)
+        vLessonTopicObjectivesList.getList.foreach (vLessonTopicObjectives =>
+          if (vLessonTopicObjectives.validate) {
+            SqlLessonTopicObjectives.insert(vLessonTopicObjectives)
+          } else {
+            val validationErrors = vLessonTopicObjectives.validationErrors
+            Logger.debug(validationErrors)
+            BadRequest(viewforms.html.formError(validationErrors, request.headers("REFERER")))
+          }
+        )
+        Redirect(routes.LessonTopicObjectivesController.listLessonTopicObjectives(vLessonTopicObjectivesList.vLesson))
+      })
+  }
+
     
   def formErrorMessage(errors: Seq[FormError]) = {
     def errMess(message: String, errorList: List[FormError]): String = {

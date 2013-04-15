@@ -3,28 +3,12 @@
 
     @import persistence._
 		  
-
+	<script>
+     $( document ).tooltip();
+    </script>
     
     @topicPage(vTopics) {
 	<div>
-		 @*<h4>Topic Links</h4>
-		 <p><a href="@routes.ReferenceController.listReference">References</a></p> 
-		 <p><a href="@routes.TerminalLearningObjectiveController.listSelectedTerminalLearningObjective(vTopics.vTopicsIndex)">Terminal Learning Objectives</a></p>
-		 <p><a href="@routes.TopicObjectivesController.listSelectedTopicObjectives(vTopics.vTopicsIndex)">Knowleges and Skills</a></p>
-		 <p><a href="@routes.TopicReferencesController.listSelectedTopicReferences(vTopics.vTopicsIndex)">References</a></p>
-		 <p><a href="@routes.TopicPictureController.listSelectedTopicPicture(vTopics.vTopicsIndex)">Pictures</a></p>
-		 <p><a href="@routes.TopicLinkController.listSelectedTopicLink(vTopics.vTopicsIndex)">Links</a></p>
-		 <hr>
-		 
-		 <h4>Learn More</h4>
-		 @defining(SqlTopicLink.selectWhere("Topic=" + vTopics.vTopicsIndex)) { listTopicLink =>
-		 
-		   @listTopicLink.map { vTopicLink =>
-			 <p><a href="@vTopicLink.vLink">@vTopicLink.vDescription</a></p>
-		   }
-		 
-		 }
-	  </div>*@
 
     
      <div class="column span-14 colborder">
@@ -33,9 +17,11 @@
 		 <p>@Html(vTopics.vTopicDetailedDescription.toString)</p>
 		 <hr>		
 		 
-		 <h4>@vTopics.vTopic Terminal Learning Objective</h4>
-		 <p><em>This objective is expected to be achieved by cadets upon graduation.  It will vary by program.
-		 They will learn material related to this objective and be evaluated on that material in one or more courses.</em></p>
+		 <h4>@vTopics.vTopic 
+		 <a href="#" title="This objective is expected to be achieved by cadets upon graduation.  It will vary by program.  They will learn material related to this objective and be evaluated on that material in one or more courses.">
+		   Terminal Learning Objective</a>
+		 </h4>
+		 
 		 @defining(SqlTerminalLearningObjective.selectWhere("Topic=" + vTopics.vTopicsIndex)) { listTlo =>
 		   <table>
 		     <tr>
@@ -47,7 +33,13 @@
 		 }
 		 <hr>
 		 
-		 <h4>@vTopics.vTopic Knowledge, Skills, Attitudes, and Behaviors</h4>
+		 <h4>@vTopics.vTopic 
+		   <a href="#" title="Understanding which can be applied, and is developed or learned through experience, study or investigation.">
+		     Knowledge</a>, 
+		   <a href="#" title="An effective behavior, rooted in knowledge and ability, exercised consistently and adeptly; the result of repeated application and practice.">
+		     Skills</a>, and 
+		   <a href="#" title="An observable action or reaction, what is done or said in a specific situation.">Behaviors</a>
+		 </h4>
 		 <p><em>These learning objectives are discrete testable skills that support the terminal learning objective.</em></p>
 		 @defining(SqlTopicObjectives.selectWhere("Topic=" + vTopics.vTopicsIndex)) { listTopicObjectives =>
 		   <ul>

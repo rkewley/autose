@@ -1,0 +1,62 @@
+
+@(f: Form[MdlLessonLinkTopicObjectivesList])
+
+@import helper._
+@import persistence._
+
+<script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.1.min.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
+		<script type-"text/javascript">
+		$(document).ready(function(){
+			var checkboxdiv = $('#topicCheckBoxList')
+			$("#topicSelect").change(function() {
+				var topicIndex = $("#topicSelect").val();
+				getNewCheckboxes('/getTopicObjectivesJson/' + topicIndex, checkboxdiv, 'fTopicObjectives');
+			});
+		});
+		</script> 
+
+
+
+@main("Systems Net", "Systems Body of Knowledge") {
+
+
+@defining(f("fLessonLink").value.get.toLong) { vLessonLink =>  
+<div class="column span-18 last">
+    <fieldset>
+    @helper.form(routes.LessonLinkTopicObjectivesController.saveLessonLinkTopicObjectivesList) {
+		  
+            @defining(f("fidLessonLinkTopicObjective")) { fidLessonLinkTopicObjective =>
+                <input type="hidden" name="@fidLessonLinkTopicObjective.name" id="@fidLessonLinkTopicObjective.id" value="@fidLessonLinkTopicObjective.value">
+			}
+
+
+            @defining(f("fLessonLink")) { fLessonLink =>
+                <input type="hidden" name="@fLessonLink.name" id="@fLessonLink.id" value="@fLessonLink.value">
+			}
+    
+			<p>First select the topic for the knowledge and skills associated with this link.</p>
+			@defining(SqlTopics.all.sortWith((v1: MdlTopics, v2: MdlTopics) => v1.vTopic < v2.vTopic)) { topicList =>
+			  <select id="topicSelect">
+			    <option value=""></option>
+			  @topicList.map { topic =>
+			    <option value="@topic.vTopicsIndex">@topic.vTopic</option>
+			  }
+			  </select>
+			}
+				
+			<div id="topicCheckBoxList">
+			</div>                        
+    		<a href="@routes.TopicsController.listTopics">Create new knowledge and skills</a>
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.LessonLinkTopicObjectivesController.listLessonLinkTopicObjectives(vLessonLink)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }
+  

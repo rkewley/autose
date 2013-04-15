@@ -1,0 +1,42 @@
+
+@(f: Form[MdlLessonDate], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.LessonDateController.saveLessonDate(newEntry)) {
+
+		  
+            @defining(f("fidLessonDate")) { fidLessonDate =>
+                <input type="hidden" name="@fidLessonDate.name" id="@fidLessonDate.id" value="@fidLessonDate.value">
+			}
+
+            @inputText(f("fLesson"), '_label -> "Lesson")
+
+            @inputText(f("fAcademicYear"), '_label -> "AcademicYear")
+
+            @inputText(f("fAcademicTerm"), '_label -> "AcademicTerm")
+
+            @helper.inputDate(f("fDay1"), '_label -> "Day1", '_help->"")
+
+            @helper.inputDate(f("fDay2"), '_label -> "Day2", '_help->"")
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.LessonDateController.listLessonDate">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }

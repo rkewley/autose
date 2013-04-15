@@ -1,0 +1,43 @@
+
+@(vLessonDate: MdlLessonDate)
+
+    @import persistence._
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>LessonDate Information</h3>
+		  <dl>
+
+		  	<dt>idLessonDate</dt>
+		  	<dd>@Html(vLessonDate.vidLessonDate.toString)</dd>
+
+		  	<dt>Lesson</dt>
+		  	<dd>@Html(vLessonDate.vLesson.toString)</dd>
+
+		  	<dt>AcademicYear</dt>
+		  	<dd>@Html(vLessonDate.vAcademicYear.toString)</dd>
+
+		  	<dt>AcademicTerm</dt>
+		  	<dd>@Html(vLessonDate.vAcademicTerm.toString)</dd>
+
+		  	<dt>Day1</dt>
+		  	<dd>@Html(vLessonDate.vDay1.toString)</dd>
+
+		  	<dt>Day2</dt>
+		  	<dd>@Html(vLessonDate.vDay2.toString)</dd>
+	       </dl>
+     <div>
+       <a href="@routes.LessonDateController.listLessonDate">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

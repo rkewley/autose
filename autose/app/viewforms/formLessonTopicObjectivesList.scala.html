@@ -1,5 +1,5 @@
 
-@(f: Form[MdlLessonTopicObjectives], newEntry: Int)
+@(f: Form[MdlLessonTopicObjectivesList])
 
 @import helper._
 @import persistence._
@@ -8,22 +8,20 @@
 <script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
 		<script type-"text/javascript">
 		$(document).ready(function(){
-			var selector = $('#fTopicObjective')
-			selector.attr("disabled", "disabled");
+			var checkboxdiv = $('#topicCheckBoxList')
 			$("#topicSelect").change(function() {
 				var topicIndex = $("#topicSelect").val();
-				getNewOptions('/getTopicObjectivesJson/' + topicIndex, selector);
-				selector.removeAttr("disabled");
+				getNewCheckboxes('/getTopicObjectivesJson/' + topicIndex, checkboxdiv, 'fTopicObjectives');
 			});
 		});
 		</script> 
-@main("Systems Net", "Systems Body of Knowledge") {
+
 
 @defining(f("fLesson").value.get.toLong) { vLesson =>  
 @lessonPage(vLesson) {
 <div class="column span-18 last">
     <fieldset>  
-    @helper.form(routes.LessonTopicObjectivesController.saveLessonTopicObjectives(newEntry)) {
+    @helper.form(routes.LessonTopicObjectivesController.saveLessonTopicObjectivesList) {
   
             @defining(f("fidLessonTopicObjectives")) { fidLessonTopicObjectives =>
                 <input type="hidden" name="@fidLessonTopicObjectives.name" id="@fidLessonTopicObjectives.id" value="@fidLessonTopicObjectives.value">
@@ -44,7 +42,8 @@
 			  </select>
 			}
 				
-    		@select(field = f("fTopicObjective"), options = Nil, args = '_label-> "Knowledge and Skills", '_help-> "Select the knowledge or skill you would like to link to this lesson.  If it is not listed above, you may create it using the link below.")
+			<div id="topicCheckBoxList">
+			</div>                        
                         
     		<a href="@routes.TopicsController.listTopics">Create new knowledge or skills</a>
 
@@ -56,6 +55,5 @@
 	  	</fieldset></div>
     </div>
   </div>
-  }
   }
   }

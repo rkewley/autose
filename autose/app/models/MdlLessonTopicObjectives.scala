@@ -17,4 +17,15 @@
     
       def compare(a: MdlLessonTopicObjectives, b: MdlLessonTopicObjectives) = a.vidLessonTopicObjectives.compareTo(b.vidLessonTopicObjectives)
 }
+
+ case class MdlLessonTopicObjectivesList (
+ 	vidLessonTopicObjectives : Long,
+	vLesson : Long,
+	vTopicObjective : List[Long]
+    ) {
     
+    def getList = {
+      vTopicObjective.map(topicObjective => 
+        new MdlLessonTopicObjectives(vidLessonTopicObjectives, vLesson, topicObjective))
+    }
+ }

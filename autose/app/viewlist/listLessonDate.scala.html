@@ -1,0 +1,53 @@
+
+@(listLessonDate: List[MdlLessonDate])
+    
+    @import persistence._
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>LessonDate Listing</h3>
+		  <table>
+			<tr>
+				<th>Lesson</th>
+				<th>AcademicYear</th>
+				<th>AcademicTerm</th>
+				<th>Day1</th>
+				<th>Day2</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listLessonDate.map { vLessonDate =>
+    			
+    		<tr>
+				<td>@vLessonDate.vLesson</td>
+				<td>@vLessonDate.vAcademicYear</td>
+				<td>@vLessonDate.vAcademicTerm</td>
+				<td>@vLessonDate.vDay1</td>
+				<td>@vLessonDate.vDay2</td>
+
+    			<td><a href="@routes.LessonDateController.showLessonDate(vLessonDate.vidLessonDate)">Show</a></td>
+    			<td><a href="@routes.LessonDateController.editLessonDate(vLessonDate.vidLessonDate)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.LessonDateController.deleteLessonDate(vLessonDate.vidLessonDate)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.LessonDateController.createLessonDate">Create new LessonDate</a>
+    </div>
+  </div>
+  }

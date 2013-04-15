@@ -52,6 +52,6 @@ object SqlTerminalLearningObjective {
 	def update(vTerminalLearningObjective: MdlTerminalLearningObjective) = DB.withConnection { implicit c =>
   		SQL("UPDATE `TerminalLearningObjective` SET `TerminalLearningObjective` = {sqlTerminalLearningObjective}, `Topic` = {sqlTopic}, `Program` = {sqlProgram} WHERE `idTerminalLearningObjective` = {sqlidTerminalLearningObjective}").on('sqlidTerminalLearningObjective -> vTerminalLearningObjective.vidTerminalLearningObjective, 'sqlTerminalLearningObjective -> vTerminalLearningObjective.vTerminalLearningObjective, 'sqlTopic -> vTerminalLearningObjective.vTopic, 'sqlProgram -> vTerminalLearningObjective.vProgram).executeUpdate()
 
-  }
+  } 
 
 }
