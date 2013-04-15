@@ -164,18 +164,21 @@ POST 	/postLessonFile/:newEntry			controllers.LessonLinksController.postLessonFi
 GET     /listLessonLinkTopicObjectives/:idLessonLinks		controllers.LessonLinkTopicObjectivesController.listLessonLinkTopicObjectives(idLessonLinks: Long)
 GET		/showLessonLinkTopicObjectives/:id					controllers.LessonLinkTopicObjectivesController.showLessonLinkTopicObjectives(id: Long)
 GET 	/editLessonLinkTopicObjectives/:id					controllers.LessonLinkTopicObjectivesController.editLessonLinkTopicObjectives(id: Long)
-GET 	/createLessonLinkTopicObjectives/:idLessonLinks		controllers.LessonLinkTopicObjectivesController.createLessonLinkTopicObjectives(idLessonLinks: Long)
+GET 	/createLessonLinkTopicObjectives/:idLessonLinks		controllers.LessonLinkTopicObjectivesController.createLessonLinkTopicObjectivesList(idLessonLinks: Long)
 POST	/deleteLessonLinkTopicObjectives/:id				controllers.LessonLinkTopicObjectivesController.deleteLessonLinkTopicObjectives(id: Long)
 POST 	/saveLessonLinkTopicObjectives/:newEntry			controllers.LessonLinkTopicObjectivesController.saveLessonLinkTopicObjectives(newEntry: Int)
+POST 	/saveLessonLinkTopicObjectivesList					controllers.LessonLinkTopicObjectivesController.saveLessonLinkTopicObjectivesList
 
 # LessonTopicObjectives Routes
-GET     /listLessonTopicObjectives/:idLessons	controllers.LessonTopicObjectivesController.listLessonTopicObjectives(idLessons: Long)
-GET		/showLessonTopicObjectives/:id			controllers.LessonTopicObjectivesController.showLessonTopicObjectives(id: Long)
-GET 	/editLessonTopicObjectives/:id			controllers.LessonTopicObjectivesController.editLessonTopicObjectives(id: Long)
-GET 	/createLessonTopicObjectives/:idLessons	controllers.LessonTopicObjectivesController.createLessonTopicObjectives(idLessons: Long)
-GET 	/getTopicObjectivesJson/:id				controllers.LessonTopicObjectivesController.getTopicObjectivesJson(id: Long)
-POST	/deleteLessonTopicObjectives/:id		controllers.LessonTopicObjectivesController.deleteLessonTopicObjectives(id: Long)
-POST 	/saveLessonTopicObjectives/:newEntry	controllers.LessonTopicObjectivesController.saveLessonTopicObjectives(newEntry: Int)
+GET     /listLessonTopicObjectives/:idLessons	  			controllers.LessonTopicObjectivesController.listLessonTopicObjectives(idLessons: Long)
+GET		/showLessonTopicObjectives/:id						controllers.LessonTopicObjectivesController.showLessonTopicObjectives(id: Long)
+GET 	/editLessonTopicObjectives/:id						controllers.LessonTopicObjectivesController.editLessonTopicObjectives(id: Long)
+GET 	/createLessonTopicObjectives/:idLessons				controllers.LessonTopicObjectivesController.createLessonTopicObjectives(idLessons: Long)
+GET 	/createLessonTopicObjectivesList/:idLessons			controllers.LessonTopicObjectivesController.createLessonTopicObjectivesList(idLessons: Long)
+GET 	/getTopicObjectivesJson/:id							controllers.LessonTopicObjectivesController.getTopicObjectivesJson(id: Long)
+POST	/deleteLessonTopicObjectives/:id					controllers.LessonTopicObjectivesController.deleteLessonTopicObjectives(id: Long)
+POST 	/saveLessonTopicObjectives/:newEntry				controllers.LessonTopicObjectivesController.saveLessonTopicObjectives(newEntry: Int)
+POST 	/saveLessonTopicObjectivesList						controllers.LessonTopicObjectivesController.saveLessonTopicObjectivesList
 
 # Lessons Routes
 GET     /listLessons/:idCourses					controllers.LessonsController.listLessons(idCourses: Long)
@@ -197,3 +200,11 @@ POST 	/saveCourseOfferings/:newEntry			controllers.CourseOfferingsController.sav
 GET     /listCourseTopics						controllers.CourseTopicsController.listCourseTopics
 GET		/showCourseTopics/:courseId				controllers.CourseTopicsController.showCourseTopics(courseId: Long)
 GET		/showTopicsCourses/:topicId				controllers.CourseTopicsController.showTopicsCourses(topicId: Long)
+
+# LessonDate Routes
+GET     /listLessonDate						controllers.LessonDateController.listLessonDate
+GET		/showLessonDate/:id					controllers.LessonDateController.showLessonDate(id: Long)
+GET 	/editLessonDate/:id					controllers.LessonDateController.editLessonDate(id: Long)
+GET 	/createLessonDate					controllers.LessonDateController.createLessonDate
+POST	/deleteLessonDate/:id				controllers.LessonDateController.deleteLessonDate(id: Long)
+POST 	/saveLessonDate/:newEntry			controllers.LessonDateController.saveLessonDate(newEntry: Int)

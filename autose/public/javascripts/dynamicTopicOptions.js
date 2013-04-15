@@ -15,4 +15,17 @@
 			}
 
 
+			function getNewCheckboxes(url, checkboxdiv, chckBoxGroupName) {
+			  $.getJSON(url,
+          		function(data) {
+              	  // data is a JSON list, so we can iterate over it
+              	  var iterator = 0;
+              	  checkboxdiv.empty();
+              	  $.each(data, function(key, val) {
+              	    var cbString = '<input type = "checkbox" name="' + chckBoxGroupName + '[' + iterator + ']" value="' + key + '" />' + val + '<br />'
+					checkboxdiv.append(cbString);              
+					iterator = iterator + 1;
+          	      });
+       		  });
+			}
 
