@@ -5,10 +5,10 @@
  	vidTerminalLearningObjective : Long,
 	vTerminalLearningObjective : String,
 	vTopic : Long,
-	vProgram : String
+	vProgram : Long
     )  {
     
-      def this() = this(0, "", 0, "")
+      def this() = this(0, "", 0, 0)
 
   	  def validate: Boolean = true
     

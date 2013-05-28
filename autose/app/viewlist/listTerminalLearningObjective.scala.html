@@ -2,6 +2,7 @@
 @(listTerminalLearningObjective: List[MdlTerminalLearningObjective], topic: Long)
     
     @import persistence._
+    @import slick._
     
     
     
@@ -30,7 +31,7 @@
       		  <td><a href="@routes.TopicsController.showTopics(vTerminalLearningObjective.vTopic)">@pkModel.selectIdentifier._2</a></td>
     		}
 
-    		@defining(SqlPrograms.select(vTerminalLearningObjective.vProgram)){pkModel =>
+    		@defining(AppDB.dal.Programs.select(vTerminalLearningObjective.vProgram).get){pkModel =>
       		  <td><a href="@routes.ProgramsController.showPrograms(vTerminalLearningObjective.vProgram)">@pkModel.selectIdentifier._2</a></td>
     		}
 

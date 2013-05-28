@@ -19,7 +19,7 @@ object TerminalLearningObjectiveController extends Base {
 	"fidTerminalLearningObjective" -> of[Long],
 	"fTerminalLearningObjective" -> text,
 	"fTopic" -> of[Long],
-	"fProgram" -> text
+	"fProgram" -> of[Long]
     )(MdlTerminalLearningObjective.apply)(MdlTerminalLearningObjective.unapply)
   )
       
@@ -47,7 +47,7 @@ object TerminalLearningObjectiveController extends Base {
   }
 
   def createTerminalLearningObjective(topicId: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    val vTerminalLearningObjective = new MdlTerminalLearningObjective(0, "", topicId, "")
+    val vTerminalLearningObjective = new MdlTerminalLearningObjective(0, "", topicId, 0)
     Ok(viewforms.html.formTerminalLearningObjective(formTerminalLearningObjective.fill(vTerminalLearningObjective), 1))
   }
 

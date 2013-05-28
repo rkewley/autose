@@ -16,19 +16,14 @@
     <fieldset>
     @helper.form(routes.ProgramsController.savePrograms(newEntry)) {
 
-
-        @if(newEntry == 0) {
 		  
-            @defining(f("fProgram")) { fProgram =>
-                <input type="hidden" name="@fProgram.name" id="@fProgram.id" value="@fProgram.value">
+            @defining(f("fidPrograms")) { fidPrograms =>
+                <input type="hidden" name="@fidPrograms.name" id="@fidPrograms.id" value="@fidPrograms.value">
 			}
     
-		}
-		@if(newEntry != 0) {
-     		
-        	@inputText(f("fProgram"), '_label -> "Program Identifier")
 
-     	}
+
+        	@inputText(f("fProgram"), '_label -> "Program Abbreviation")
 
         	@inputText(f("fName"), '_label -> "Name")
 

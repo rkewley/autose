@@ -2,15 +2,13 @@
 @(vTopics: MdlTopics)
 
     @import persistence._
-		  
-	<script>
-     $( document ).tooltip();
-    </script>    
-    
+
     @topicPage(vTopics) {
 	<div>
-
-    
+	
+	<script>
+     $( document ).tooltip();
+    </script>     
      <div class="column span-14 colborder">
 		 <h3>@vTopics.vTopic</h3>
 		 <p>@Html(vTopics.vTopicShortDescription.toString)</p>
@@ -18,14 +16,15 @@
 		 <hr>		
 		 
 		 <h4>@vTopics.vTopic 
-		 <a href="#" title="This objective is expected to be achieved by cadets upon graduation.  It will vary by program.  They will learn material related to this objective and be evaluated on that material in one or more courses.">
-		   Terminal Learning Objective</a>
+		 <a href="#" title="Performance indicators indicate what concrete actions the student should be able to
+			perform as a result of participation in the program.">
+		   Performance Indicators</a>
 		 </h4>
 		 
 		 @defining(SqlTerminalLearningObjective.selectWhere("Topic=" + vTopics.vTopicsIndex)) { listTlo =>
 		   <table>
 		     <tr>
-		       <th>Program</th><th>Terminal Learning Objective</th>
+		       <th>Program</th><th>Performance Indicator</th>
 		     @listTlo.map { vTlo =>
 			   <tr><td>@vTlo.vProgram</td><td> @vTlo.vTerminalLearningObjective</td></tr>
 		     }

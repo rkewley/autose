@@ -1,8 +1,7 @@
 
 @(listPrograms: List[MdlPrograms])
     
-    @import persistence._
-    
+@import persistence._    
     
     @main("Systems Net", "Systems Body of Knowledge") {
 	<div>
@@ -31,16 +30,21 @@
 				<td>@vPrograms.vProgram</td>
 				<td>@vPrograms.vName</td>
 				<td>@vPrograms.vSlogan</td>
-				<td>@vPrograms.vProgramDirector</td>
+
+				
+		    @defining(SqlFaculty.select(vPrograms.vProgramDirector)){pkModel =>
+      		  <td><a href="@routes.FacultyController.showFaculty(vPrograms.vProgramDirector)">@pkModel.selectIdentifier._2</a></td>
+    		}
+				
 
     		@defining(SqlDepartments.select(vPrograms.vDepartment)){pkModel =>
       		  <td><a href="@routes.DepartmentsController.showDepartments(vPrograms.vDepartment)">@pkModel.selectIdentifier._2</a></td>
     		}
 
-    			<td><a href="@routes.ProgramsController.showPrograms(vPrograms.vProgram)">Show</a></td>
-    			<td><a href="@routes.ProgramsController.editPrograms(vPrograms.vProgram)">Edit</a></td>
+    			<td><a href="@routes.ProgramsController.showPrograms(vPrograms.vidPrograms.get)">Show</a></td>
+    			<td><a href="@routes.ProgramsController.editPrograms(vPrograms.vidPrograms.get)">Edit</a></td>
     	  		<td>
-    	  			<form action="@routes.ProgramsController.deletePrograms(vPrograms.vProgram)" method="POST">
+    	  			<form action="@routes.ProgramsController.deletePrograms(vPrograms.vidPrograms.get)" method="POST">
     	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
     	  			</form>
     	  		</td>

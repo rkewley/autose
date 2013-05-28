@@ -14,7 +14,7 @@ object SqlTerminalLearningObjective {
     get[Long]("idTerminalLearningObjective") ~
 	get[String]("TerminalLearningObjective") ~
 	get[Long]("Topic") ~
-	get[String]("Program") map { case
+	get[Long]("Program") map { case
     vidTerminalLearningObjective ~
 		vTerminalLearningObjective ~
 		vTopic ~

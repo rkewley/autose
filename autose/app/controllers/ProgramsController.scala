@@ -5,42 +5,57 @@ import play.api._
 import play.api.mvc._
 import play.api.data._
 import models._
-import persistence._
+import slick._
 import play.Logger
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 import FormFieldImplicits._
+import scala.slick.driver.ExtendedProfile
+import scala.slick.lifted.Query
 
 object ProgramsController extends Base {
 
   val formPrograms = Form[MdlPrograms](
     mapping (
+    "fidPrograms" -> optional(of[Long]),
 	"fProgram" -> text,
 	"fName" -> text,
 	"fSlogan" -> text,
 	"fInformation" -> text,
-	"fProgramDirector" -> text,
+	"fProgramDirector" -> of[Long],
 	"fDepartment" -> of[Long]
-    )(MdlPrograms.apply)(MdlPrograms.unapply)
+    )(MdlPrograms.apply)(MdlPrograms.unapply) 
   )
       
 
   def listPrograms = Action {
-    Ok(viewlist.html.listPrograms(SqlPrograms.all))
+    Ok(viewlist.html.listPrograms(AppDB.dal.Programs.all))
   }
 
-   def editPrograms(id: String) = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    Ok(viewforms.html.formPrograms(formPrograms.fill(SqlPrograms.select(id)), 0))
+   def editPrograms(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+      AppDB.dal.Programs.select(id) match {
+        case vPrograms: Some[MdlPrograms] =>
+          Ok(viewforms.html.formPrograms(formPrograms.fill(vPrograms.get), 0))
+        case None =>
+          BadRequest(viewforms.html.formError("Programs with key " + id + " not found in database", request.headers("REFERER")))
+      }
+    
   }
 
-   def showPrograms(id: String) = Action {
-    Ok(viewshow.html.showPrograms(SqlPrograms.select(id)))
+   def showPrograms(id: Long) = Action { implicit request =>
+	   AppDB.dal.Programs.select(id) match {
+        case vPrograms: Some[MdlPrograms] =>
+          Ok(viewshow.html.showPrograms(vPrograms.get))
+        case None =>
+          BadRequest(viewforms.html.formError("Programs with key " + id + " not found in database", request.headers("REFERER")))
+      }
   }
+        
 
-   def deletePrograms(id: String) = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    SqlPrograms.delete(id)
-    Ok(viewlist.html.listPrograms(SqlPrograms.all))
+   def deletePrograms(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+    AppDB.dal.Programs.delete(id)
+    Ok(viewlist.html.listPrograms(AppDB.dal.Programs.all))
   }
 
   def createPrograms = compositeAction(NormalUser) { user => implicit template => implicit request =>
@@ -57,8 +72,8 @@ object ProgramsController extends Base {
       vPrograms => {
         if (vPrograms.validate) {
           newEntry match {
-            case 0 => SqlPrograms.update(vPrograms)
-            case _ => SqlPrograms.insert(vPrograms)
+            case 0 => AppDB.dal.Programs.update(vPrograms)
+            case _ => AppDB.dal.Programs.insert(vPrograms)
           }
           Redirect(routes.ProgramsController.listPrograms)
         } else {

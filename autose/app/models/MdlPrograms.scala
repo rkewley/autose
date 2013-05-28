@@ -2,22 +2,23 @@
  package models
     
  case class MdlPrograms (
+    vidPrograms : Option[Long],
  	vProgram : String,
 	vName : String,
 	vSlogan : String,
 	vInformation : String,
-	vProgramDirector : String,
+	vProgramDirector : Long,
 	vDepartment : Long
     )  {
     
-      def this() = this("", "", "", "", "", 0)
+      def this() = this(Some(0), "", "", "", "", 0, 0)
 
   	  def validate: Boolean = true
     
 	  def validationErrors: String = ""
     
-      def selectIdentifier: (String, String) = vProgram.toString -> vProgram.toString
+      def selectIdentifier: (String, String) = vidPrograms.toString -> vProgram.toString
     
-      def compare(a: MdlPrograms, b: MdlPrograms) = a.vProgram.compareTo(b.vProgram)
+      def compare(a: MdlPrograms, b: MdlPrograms) = a.vidPrograms.get.compareTo(b.vidPrograms.get)
 }
     
