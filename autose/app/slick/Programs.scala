@@ -8,7 +8,7 @@ trait ProgramsComponent  {
 	  
 	import profile.simple._
 
-	object Programs extends Table[MdlPrograms]("Programs") {
+	object Programs extends Table[MdlPrograms]("Programs") with Crud[MdlPrograms, Long]  {
 	  def vidPrograms = column[Long]("idPrograms", O.PrimaryKey)
 	  def vProgram = column[String]("Program")
 	  def vName = column[String]("Name")

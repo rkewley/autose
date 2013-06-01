@@ -9,9 +9,11 @@
 	vInformation : String,
 	vProgramDirector : Long,
 	vDepartment : Long
-    )  {
+    ) extends Mdl[Long] {
     
       def this() = this(Some(0), "", "", "", "", 0, 0)
+      
+      def primaryKey: Option[Long] = vidPrograms
 
   	  def validate: Boolean = true
     
