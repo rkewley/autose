@@ -94,12 +94,12 @@ POST 	/saveDepartments/:newEntry				controllers.DepartmentsController.saveDepart
 
 
 # Programs Routes
-GET     /listPrograms							controllers.ProgramsController.listPrograms
-GET		/showPrograms/:id						controllers.ProgramsController.showPrograms(id: Long)
-GET 	/editPrograms/:id						controllers.ProgramsController.editPrograms(id: Long)
-GET 	/createPrograms							controllers.ProgramsController.createPrograms
-POST	/deletePrograms/:id						controllers.ProgramsController.deletePrograms(id: Long)
-POST 	/savePrograms/:newEntry					controllers.ProgramsController.savePrograms(newEntry: Int)
+GET     /listPrograms							controllers.ProgramsController.list
+GET		/showPrograms/:id						controllers.ProgramsController.show(id: Long)
+GET 	/editPrograms/:id						controllers.ProgramsController.edit(id: Long)
+GET 	/createPrograms							controllers.ProgramsController.create
+POST	/deletePrograms/:id						controllers.ProgramsController.delete(id: Long)
+POST 	/savePrograms/:newEntry					controllers.ProgramsController.save(newEntry: Int)
 
 
 # TerminalLearningObjective Routes

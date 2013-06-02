@@ -1,10 +1,11 @@
 package slick
+import models.Mdl
 
-trait Crud[Mdl, K] {
-  def all: List[Mdl]
-  def select(id: K): Option[Mdl]
-  def delete(id: K): Mdl
-  def insert(item: Mdl)
-  def update(item: Mdl)
-  def selectWhere(sql: String)
+trait Crud[A <: Mdl[K], K] {
+  def all: List[A]
+  def select(id: K): Option[A]
+  def delete(id: K)
+  def insert(item: A)
+  def update(item: A)
+  //def selectWhere(sql: String)
 }

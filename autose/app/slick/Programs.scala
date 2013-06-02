@@ -2,6 +2,7 @@ package slick
 
 
 import models.MdlPrograms
+import models.Mdl
 
 trait ProgramsComponent  {
 	this: Profile =>
@@ -17,7 +18,7 @@ trait ProgramsComponent  {
 	  def vProgramDirector = column[Long]("ProgramDirector")
 	  def vDepartment = column[Long]("Department")
 	  
-	  def * = vidPrograms.? ~ vProgram ~ vName ~ vSlogan ~ vInformation ~ vProgramDirector ~ vDepartment <> (MdlPrograms, MdlPrograms.unapply _)
+	  def * = vidPrograms.? ~ vProgram ~ vName ~ vSlogan ~ vInformation ~ vProgramDirector ~ vDepartment <> (MdlPrograms.apply _, MdlPrograms.unapply _)
 	  def forInsert = vProgram ~ vName ~ vSlogan ~ vInformation ~ vProgramDirector ~ vDepartment <> ({t => MdlPrograms(None, t._1, t._2, t._3, t._4, t._5, t._6)}, {(vPrograms: MdlPrograms) => Some(vPrograms.vProgram, vPrograms.vName, vPrograms.vSlogan, vPrograms.vInformation, vPrograms.vProgramDirector, vPrograms.vDepartment)})
 
 	  def all = {
@@ -45,6 +46,7 @@ trait ProgramsComponent  {
 	  }
 	  
 	  def insert(vPrograms: MdlPrograms) {
+	    println("Inserting " + vPrograms.toString)
 	    AppDB.database.withSession { implicit session: Session =>
 	      Programs.forInsert insert MdlPrograms(None, vPrograms.vProgram, vPrograms.vName, vPrograms.vSlogan, vPrograms.vInformation, vPrograms.vProgramDirector, vPrograms.vDepartment)
 	    }

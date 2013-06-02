@@ -7,27 +7,24 @@ import models._
 import play.api.mvc._
 
 
-trait ControllerTrait[K, D]  {
+trait ControllerTrait[K, D <: Mdl[K]]  {
 	this: Base =>
-
-	type displayType = Mdl[K] => Html
-	type formType = (Form[D], Int) => Html
 	
 	def form: Form[D]
-	def listFunction(list: List[Mdl[K]]): Html
-	def showFunction: displayType
-	def editFunction: formType
-	def createFunction: displayType
-	def crud: Crud[Mdl[K], K]
-	def newItem: Mdl[K]
+	def listFunction(list: List[D]): Html
+	def showFunction(item: D): Html
+	def editFunction(aForm: Form[D]): Html
+	def createFunction(aForm: Form[D]): Html
+	def crud: slick.Crud[D, K]
+	def newItem: D
 
-	def list(dataList: List[Mdl[K]]) = {
-	  Ok(listFunction(dataList))
+	def list = Action {
+	  Ok(listFunction(crud.all))
 	}
 	
     def show(id: K) = Action { implicit request =>
 	  crud.select(id) match {
-        case item: Some[Mdl[K]] =>
+        case item: Some[D] =>
           Ok(showFunction(item.get))
         case None =>
           badRequest("Programs with key " + id + " not found in database", request)
@@ -37,8 +34,8 @@ trait ControllerTrait[K, D]  {
 	
 	def edit(id: K) = compositeAction(NormalUser) {user => implicit template => implicit request =>
       crud.select(id) match {
-        case item: Some[Mdl[K]] =>
-          Ok(editFunction(form.fill(item.get.asInstanceOf[D]), 0))
+        case item: Some[D] =>
+          Ok(editFunction(form.fill(item.get)))
         case None =>
           badRequest("Item with key " + id + " not found in database", request)
       }    
@@ -50,7 +47,7 @@ trait ControllerTrait[K, D]  {
   }
 
   def create = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    Ok(editFunction(form.fill(newItem.asInstanceOf[D]), 1))
+    Ok(createFunction(form.fill(newItem)))
   }
 
   def save(newEntry: Int) = Action { implicit request =>
@@ -61,13 +58,18 @@ trait ControllerTrait[K, D]  {
         BadRequest(viewforms.html.formError(errorMessage, request.headers("REFERER")))
       },
       formItem => {
-        val item = formItem.asInstanceOf[Mdl[K]]
+        val item = formItem
         if (item.validate) {
+          println("Inserting or updating item")
           newEntry match {
-            case 0 => crud.update(item)
-            case _ => crud.insert(item)
+            case 0 => 
+              println("updating item")
+              crud.update(item)
+            case _ => 
+              println("inserting item")
+              crud.insert(item)
           }
-          Redirect(routes.ProgramsController.listPrograms)
+          Ok(listFunction(crud.all))
         } else {
           val validationErrors = item.validationErrors
           Logger.debug(validationErrors)

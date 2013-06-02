@@ -26,7 +26,7 @@
 
     		@defining(AppDB.dal.Programs.select(vTerminalLearningObjective.vProgram).get){pkModel =>
       		  <dt>Program</dt>
-      		  <dd><a href="@routes.ProgramsController.showPrograms(vTerminalLearningObjective.vProgram)">@pkModel.selectIdentifier._2</a></dd>
+      		  <dd><a href="@routes.ProgramsController.show(vTerminalLearningObjective.vProgram)">@pkModel.selectIdentifier._2</a></dd>
     		}
 	       </dl>
      <div>

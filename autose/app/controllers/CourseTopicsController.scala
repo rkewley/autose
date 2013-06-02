@@ -31,7 +31,7 @@ object CourseTopicsController extends Base {
   }
   
   def commaSeparateHtml(html1:Html, html2: Html): Html = {
-    html1 + Html(", ") + html2
+    html1 += Html(", ") += html2
   }
   
   def accumulateLessonLinks(accumulatedHtml: Html, lessonTopic: MdlCourseTopics): Html = {

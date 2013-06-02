@@ -1,8 +1,8 @@
 package models
 
-abstract class Mdl[K] {
+trait Mdl[K] {
   
-  def primaryKey: K
+  def primaryKey: Option[K]
  
   def validate: Boolean
     
@@ -10,8 +10,5 @@ abstract class Mdl[K] {
     
   def selectIdentifier: (String, String)
     
-  def compare(a: Mdl[K], b: Mdl[K]): Int
-  
-  def test = "Test"
 
 }

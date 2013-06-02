@@ -21,6 +21,18 @@
     
       def selectIdentifier: (String, String) = vidPrograms.toString -> vProgram.toString
     
-      def compare(a: MdlPrograms, b: MdlPrograms) = a.vidPrograms.get.compareTo(b.vidPrograms.get)
+      def compare(a: MdlPrograms, b: MdlPrograms): Int = {
+        return a.vProgram.compareTo(b.vProgram)
+      }
+      
+      override def toString = "MdlPrograms: \n" +
+        "idPrograms = " + vidPrograms.get + "\n" +
+        "Program = " + vProgram + "\n" +
+        "Name = " + vName + "\n" +
+        "Slogan = " + vSlogan + "\n" +
+        "Information = " + vInformation + "\n" +
+        "ProgramDirector = " + vProgramDirector + "\n" +
+        "Department = " + vDepartment + "\n"
+
 }
     
