@@ -5,14 +5,12 @@ import play.api.templates._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
-import models.MdlPrograms
-import models.Mdl
+import models._
 import views._
-
 
 //import play.api.mvc._
 
-object ProgramsController extends ControllerTrait[Long, MdlPrograms] with Base {
+object ProgramsController extends ControllerTrait[Long, MdlPrograms, Long] with Base {
   
   
   override def form = Form[MdlPrograms](
@@ -31,15 +29,15 @@ object ProgramsController extends ControllerTrait[Long, MdlPrograms] with Base {
 	  views.html.viewlist.listPrograms(listMdlPrograms)
  
 	override def showFunction(vMdlPrograms: MdlPrograms): Html = 
-	  viewshow.html.showPrograms(vMdlPrograms)
+	  views.html.viewshow.showPrograms(vMdlPrograms)
 	
 	override def editFunction(mdlProgramsForm: Form[MdlPrograms]): Html = 
-	  viewforms.html.formPrograms(mdlProgramsForm, 0)
+	  views.html.viewforms.formPrograms(mdlProgramsForm, 0)
 	
 	override def createFunction(mdlProgramsForm: Form[MdlPrograms]): Html = 
-	  viewforms.html.formPrograms(mdlProgramsForm, 1)
+	  views.html.viewforms.formPrograms(mdlProgramsForm, 1)
 	  
 	def crud = slick.AppDB.dal.Programs
-	def newItem = new MdlPrograms
+	def newItem(fkId: Long) = new MdlPrograms
 
 }

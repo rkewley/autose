@@ -19,8 +19,16 @@ trait ProgramsComponent  {
 	  def vDepartment = column[Long]("Department")
 	  
 	  def * = vidPrograms.? ~ vProgram ~ vName ~ vSlogan ~ vInformation ~ vProgramDirector ~ vDepartment <> (MdlPrograms.apply _, MdlPrograms.unapply _)
-	  def forInsert = vProgram ~ vName ~ vSlogan ~ vInformation ~ vProgramDirector ~ vDepartment <> ({t => MdlPrograms(None, t._1, t._2, t._3, t._4, t._5, t._6)}, {(vPrograms: MdlPrograms) => Some(vPrograms.vProgram, vPrograms.vName, vPrograms.vSlogan, vPrograms.vInformation, vPrograms.vProgramDirector, vPrograms.vDepartment)})
-
+	  def forInsert = vProgram ~ vName ~ vSlogan ~ vInformation ~ vProgramDirector ~ vDepartment <> 
+	  ({t => MdlPrograms(None, t._1, t._2, t._3, t._4, t._5, t._6)}, 
+	      {(vPrograms: MdlPrograms) => Some(vPrograms.vProgram, vPrograms.vName, vPrograms.vSlogan, vPrograms.vInformation, vPrograms.vProgramDirector, vPrograms.vDepartment)})
+	  
+	  def allQuery = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      Query(Programs)
+	    }
+	  }
+	  
 	  def all = {
 	    AppDB.database.withSession { implicit session: Session =>
 	      val q = Query(Programs)
@@ -61,5 +69,4 @@ trait ProgramsComponent  {
 	  }
 	  
 	}
-
 }

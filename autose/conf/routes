@@ -94,10 +94,10 @@ POST 	/saveDepartments/:newEntry				controllers.DepartmentsController.saveDepart
 
 
 # Programs Routes
-GET     /listPrograms							controllers.ProgramsController.list
+GET     /listPrograms/:id							controllers.ProgramsController.list(id: Long)
 GET		/showPrograms/:id						controllers.ProgramsController.show(id: Long)
 GET 	/editPrograms/:id						controllers.ProgramsController.edit(id: Long)
-GET 	/createPrograms							controllers.ProgramsController.create
+GET 	/createPrograms/:id						controllers.ProgramsController.create(id: Long)
 POST	/deletePrograms/:id						controllers.ProgramsController.delete(id: Long)
 POST 	/savePrograms/:newEntry					controllers.ProgramsController.save(newEntry: Int)
 
@@ -208,3 +208,11 @@ GET 	/editLessonDate/:id					controllers.LessonDateController.editLessonDate(id:
 GET 	/createLessonDate					controllers.LessonDateController.createLessonDate
 POST	/deleteLessonDate/:id				controllers.LessonDateController.deleteLessonDate(id: Long)
 POST 	/saveLessonDate/:newEntry			controllers.LessonDateController.saveLessonDate(newEntry: Int)
+
+# ProgramOutcomes Routes
+GET     /listProgramOutcomes/:idPrograms						controllers.ProgramOutcomesController.list(idPrograms: Long)
+GET		/showProgramOutcomes/:id					controllers.ProgramOutcomesController.show(id: Long)
+GET 	/editProgramOutcomes/:id					controllers.ProgramOutcomesController.edit(id: Long)
+GET 	/createProgramOutcomes/:idPrograms					controllers.ProgramOutcomesController.create(idPrograms: Long)
+POST	/deleteProgramOutcomes/:id				controllers.ProgramOutcomesController.delete(id: Long)
+POST 	/saveProgramOutcomes/:newEntry			controllers.ProgramOutcomesController.save(newEntry: Int)

@@ -7,7 +7,7 @@ import models._
 import play.api.mvc._
 
 
-trait ControllerTrait[K, D <: Mdl[K]]  {
+trait ControllerTrait[K, D <: Mdl[K], FFK]  {
 	this: Base =>
 	
 	def form: Form[D]
@@ -16,10 +16,12 @@ trait ControllerTrait[K, D <: Mdl[K]]  {
 	def editFunction(aForm: Form[D]): Html
 	def createFunction(aForm: Form[D]): Html
 	def crud: slick.Crud[D, K]
-	def newItem: D
+	def newItem(fkId: FFK): D
+	def getAll(item: D):List[D] = crud.all
+	def getAll(ffk: FFK):List[D] = crud.all
 
-	def list = Action {
-	  Ok(listFunction(crud.all))
+	def list(id: FFK) = Action {
+	  Ok(listFunction(getAll(id)))
 	}
 	
     def show(id: K) = Action { implicit request =>
@@ -37,17 +39,22 @@ trait ControllerTrait[K, D <: Mdl[K]]  {
         case item: Some[D] =>
           Ok(editFunction(form.fill(item.get)))
         case None =>
-          badRequest("Item with key " + id + " not found in database", request)
+          badRequest("Item with key " + id + " not found in database. No delete performed.", request)
       }    
     }
 	
    def delete(id: K) = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    crud.delete(id)
-    Ok(listFunction(crud.all))
+	  crud.select(id) match {
+        case item: Some[D] =>
+          crud.delete(id)
+          Ok(listFunction(getAll(item.get)))
+        case None =>
+          badRequest("Programs with key " + id + " not found in database", request)
+      }
   }
 
-  def create = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    Ok(createFunction(form.fill(newItem)))
+  def create(id: FFK) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+    Ok(createFunction(form.fill(newItem(id))))
   }
 
   def save(newEntry: Int) = Action { implicit request =>
@@ -69,7 +76,7 @@ trait ControllerTrait[K, D <: Mdl[K]]  {
               println("inserting item")
               crud.insert(item)
           }
-          Ok(listFunction(crud.all))
+          Ok(listFunction(getAll(item)))
         } else {
           val validationErrors = item.validationErrors
           Logger.debug(validationErrors)

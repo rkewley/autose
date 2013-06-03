@@ -1,0 +1,52 @@
+
+@(f: Form[MdlPrograms], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.ProgramsController.save(newEntry)) {
+
+		  
+            @defining(f("fidPrograms")) { fidPrograms =>
+                <input type="hidden" name="@fidPrograms.name" id="@fidPrograms.id" value="@fidPrograms.value">
+			}
+    
+
+
+        	@inputText(f("fProgram"), '_label -> "Program Abbreviation")
+
+        	@inputText(f("fName"), '_label -> "Name")
+
+            @textarea(field = f("fSlogan"), args = 'rows -> 2, 'cols -> 100, '_label-> "Slogan")
+        	@*@inputText(f("fSlogan"), '_label -> "Slogan")*@
+
+            @textarea(field = f("fInformation"), args = 'rows -> 2, 'cols -> 100, '_label-> "Information")
+        	@*@inputText(f("fInformation"), '_label -> "Information")*@
+
+            @{val selectvFaculty = SqlFaculty.all.map(vFaculty => vFaculty.selectIdentifier).toSeq
+            select(field = f("fProgramDirector"), options = selectvFaculty, args = '_label-> "Program Director")}
+    		<a href="@routes.FacultyController.createFaculty">Create new Faculty</a>
+
+            @{val selectvDepartments = SqlDepartments.all.map(vDepartments => vDepartments.selectIdentifier).toSeq
+            select(field = f("fDepartment"), options = selectvDepartments, args = '_label-> "Department")}
+    		<a href="@routes.DepartmentsController.createDepartments">Create new Departments</a>
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.ProgramsController.list(0)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }

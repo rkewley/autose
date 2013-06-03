@@ -1,0 +1,36 @@
+
+@(vProgramOutcomes: MdlProgramOutcomes)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>ProgramOutcomes Information</h3>
+		  <dl>
+
+		  	<dt>ProgramOutcomeNumber</dt>
+		  	<dd>@Html(vProgramOutcomes.vProgramOutcomeNumber.toString)</dd>
+
+    		@defining(AppDB.dal.Programs.select(vProgramOutcomes.vProgram).get){pkModel =>
+      		  <dt>Program</dt>
+      		  <dd><a href="@routes.ProgramsController.show(vProgramOutcomes.vProgram)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+		  	<dt>ProgramOutcome</dt>
+		  	<dd>@Html(vProgramOutcomes.vProgramOutcome.toString)</dd>
+	       </dl>
+     <div>
+       <a href="@routes.ProgramOutcomesController.list(vProgramOutcomes.vProgram)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }
