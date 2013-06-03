@@ -11,7 +11,8 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
 	this: Base =>
 	
 	def form: Form[D]
-	def listFunction(list: List[D]): Html
+	def listFunction(ffk: FFK): Html
+	def listFunction(item: D): Html
 	def showFunction(item: D): Html
 	def editFunction(aForm: Form[D]): Html
 	def createFunction(aForm: Form[D]): Html
@@ -21,7 +22,7 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
 	def getAll(ffk: FFK):List[D] = crud.all
 
 	def list(id: FFK) = Action {
-	  Ok(listFunction(getAll(id)))
+	  Ok(listFunction(id))
 	}
 	
     def show(id: K) = Action { implicit request =>
@@ -47,7 +48,7 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
 	  crud.select(id) match {
         case item: Some[D] =>
           crud.delete(id)
-          Ok(listFunction(getAll(item.get)))
+          Ok(listFunction(item.get))
         case None =>
           badRequest("Programs with key " + id + " not found in database", request)
       }
@@ -76,7 +77,7 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
               println("inserting item")
               crud.insert(item)
           }
-          Ok(listFunction(getAll(item)))
+          Ok(listFunction(item))
         } else {
           val validationErrors = item.validationErrors
           Logger.debug(validationErrors)

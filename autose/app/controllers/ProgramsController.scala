@@ -25,8 +25,11 @@ object ProgramsController extends ControllerTrait[Long, MdlPrograms, Long] with 
     )(MdlPrograms.apply)(MdlPrograms.unapply) 
   )
   
-	override def listFunction(listMdlPrograms: List[MdlPrograms]): Html = 
-	  views.html.viewlist.listPrograms(listMdlPrograms)
+	override def listFunction(ffk: Long): Html = 
+	  views.html.viewlist.listPrograms(getAll(ffk))
+ 
+	override def listFunction(item: MdlPrograms): Html = 
+	  views.html.viewlist.listPrograms(getAll(item))
  
 	override def showFunction(vMdlPrograms: MdlPrograms): Html = 
 	  views.html.viewshow.showPrograms(vMdlPrograms)

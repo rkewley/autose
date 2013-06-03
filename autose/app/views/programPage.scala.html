@@ -1,0 +1,18 @@
+@(vPrograms: MdlPrograms)(content: Html)
+
+@main("Systems Net", vPrograms.vName) {
+
+	<div class="column span-4 colborder">
+		   <ul id="menu">
+		 	<li><a href="@routes.ProgramsController.show(vPrograms.vidPrograms.get)">Program Home</a></li>
+		 	<li><a href="@routes.ProgramOutcomesController.list(vPrograms.vidPrograms.get)">TLOs</a></li>
+		   </ul>
+
+	</div>
+
+	<div>
+		@content
+	</div>
+	
+	
+}

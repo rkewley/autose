@@ -9,7 +9,7 @@ trait ProgramOutcomesComponent  {
 	  
 	import profile.simple._
 
-	object ProgramOutcomes extends Table[MdlProgramOutcomes]("Programs") with Crud[MdlProgramOutcomes, Long]  {
+	object ProgramOutcomes extends Table[MdlProgramOutcomes]("ProgramOutcomes") with Crud[MdlProgramOutcomes, Long]  {
 
       def vProgramOutcomeNumber = column[Long]("ProgramOutcomeNumber", O.PrimaryKey)
       def vProgram = column[Long]("Program")

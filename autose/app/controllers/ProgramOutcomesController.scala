@@ -22,12 +22,12 @@ object ProgramOutcomesController extends ControllerTrait[Long, MdlProgramOutcome
   )
       
 
-	override def listFunction(listMdlProgramOutcomes: List[MdlProgramOutcomes]): Html = {
-	  val idPrograms = listMdlProgramOutcomes.headOption match {
-	  	case Some(vMdlProgramOutcomes) => vMdlProgramOutcomes.vProgram
-	  	case None => 0
-  	  }
-	  views.html.viewlist.listProgramOutcomes(listMdlProgramOutcomes, 0)
+	override def listFunction(ffk: Long): Html = {
+	  views.html.viewlist.listProgramOutcomes(getAll(ffk), ffk)
+  	}
+ 
+	override def listFunction(item: MdlProgramOutcomes): Html = {
+	  views.html.viewlist.listProgramOutcomes(getAll(item), item.vProgram)
   	}
  
 	override def showFunction(vProgramOutcomes: MdlProgramOutcomes): Html = 
@@ -42,7 +42,10 @@ object ProgramOutcomesController extends ControllerTrait[Long, MdlProgramOutcome
 	def crud = slick.AppDB.dal.ProgramOutcomes
 
 
-    def newItem(fkId: Long): MdlProgramOutcomes = new MdlProgramOutcomes(Some(0), fkId, "")
+    def newItem(fkId: Long): MdlProgramOutcomes = {
+	  println("Creating a new ProgramOutcome with Program index: " + fkId)
+	  new MdlProgramOutcomes(Some(0), fkId, "")
+	}
     override def getAll(fkId: Long): List[MdlProgramOutcomes] = AppDB.database.withSession { implicit session: Session =>
 	    AppDB.dal.ProgramOutcomes.allQuery.filter(po => po.vProgram === fkId).elements.toList
 	}
