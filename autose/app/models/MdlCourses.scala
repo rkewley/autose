@@ -4,7 +4,7 @@
  case class MdlCourses (
  	vidCourse : Long,
 	vCourseIDNumber : String,
-	vAcademicYear : Long,
+	tempAcademicYear : Long,
 	vAcademicTerm : Long,
 	vCourseName : String,
 	vCourseDirector : Long,
@@ -21,6 +21,11 @@
 	vCourseWebsite : Boolean,
 	vCourseDescriptionWebsite : String
     )  {
+   
+      val vAcademicYear: Long = tempAcademicYear match {
+        case t if t >= 12 && t <= 20 => tempAcademicYear + 2000
+        case _ => tempAcademicYear
+      }
     
       def this() = this(0, "", 0, 0, "", 0, 0, "", 0.0, "", "", "", "", "", "", 0, false, "")
 

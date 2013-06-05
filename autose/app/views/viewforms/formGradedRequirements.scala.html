@@ -1,0 +1,53 @@
+
+@(f: Form[MdlGradedRequirements], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fCourse").value.get.toLong) { vCourse =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.GradedRequirementsController.save(newEntry)) {
+		  
+            @defining(f("fGradedEventIndex")) { fGradedEventIndex =>
+                <input type="hidden" name="@fGradedEventIndex.name" id="@fGradedEventIndex.id" value="@fGradedEventIndex.value">
+			}
+
+
+            @defining(f("fCourse")) { fCourse =>
+                <input type="hidden" name="@fCourse.name" id="@fCourse.id" value="@fCourse.value">
+			}
+    
+            @*@textarea(field = f("fGradedEventName"), args = 'rows -> 2, 'cols -> 100, '_label-> "Graded Event Name")*@
+        	@inputText(f("fGradedEventName"), '_label -> "GradedEventName")
+
+            @textarea(field = f("fEventDescription"), args = 'rows -> 2, 'cols -> 100, '_label-> "Event Description")
+        	@*@inputText(f("fEventDescription"), '_label -> "EventDescription")*@
+
+            @textarea(field = f("fTypeOfEvent"), args = 'rows -> 2, 'cols -> 100, '_label-> "Type of Event")
+        	@*@inputText(f("fTypeOfEvent"), '_label -> "TypeOfEvent")*@
+
+            @inputText(f("fPoints"), '_label -> "Points")
+
+            @inputText(f("fLessonassigned"), '_label -> "Lessonassigned")
+
+            @inputText(f("fLessoncompleted"), '_label -> "Lessoncompleted")
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.GradedRequirementsController.list(vCourse)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

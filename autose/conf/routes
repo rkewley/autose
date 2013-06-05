@@ -216,3 +216,12 @@ GET 	/editProgramOutcomes/:id					controllers.ProgramOutcomesController.edit(id:
 GET 	/createProgramOutcomes/:idPrograms					controllers.ProgramOutcomesController.create(idPrograms: Long)
 POST	/deleteProgramOutcomes/:id				controllers.ProgramOutcomesController.delete(id: Long)
 POST 	/saveProgramOutcomes/:newEntry			controllers.ProgramOutcomesController.save(newEntry: Int)
+
+# GradedRequirements Routes
+GET     /listGradedRequirements/:idCourses						controllers.GradedRequirementsController.list(idCourses: Long)
+GET		/showGradedRequirements/:id					controllers.GradedRequirementsController.show(id: Long)
+GET 	/editGradedRequirements/:id					controllers.GradedRequirementsController.edit(id: Long)
+GET 	/createGradedRequirements/:idCourses					controllers.GradedRequirementsController.create(idCourses: Long)
+POST	/deleteGradedRequirements/:id				controllers.GradedRequirementsController.delete(id: Long)
+POST 	/saveGradedRequirements/:newEntry			controllers.GradedRequirementsController.save(newEntry: Int)
+

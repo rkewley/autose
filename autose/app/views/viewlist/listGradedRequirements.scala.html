@@ -1,0 +1,60 @@
+
+@(listGradedRequirements: List[MdlGradedRequirements], idCourses: Long)
+    
+    @import persistence._
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>GradedRequirements Listing</h3>
+		  <table>
+			<tr>
+				<th>Course</th>
+				<th>Graded Event Name</th>
+				<th>Event Description</th>
+				<th>Type of Event</th>
+				<th>Points</th>
+				<th>Lesson Assigned</th>
+				<th>Lesson Completed</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listGradedRequirements.map { vGradedRequirements =>
+    			
+    		<tr>
+
+    		@defining(SqlCourses.select(vGradedRequirements.vCourse)){pkModel =>
+      		  <td><a href="@routes.CoursesController.showCourses(vGradedRequirements.vCourse)">@pkModel.selectIdentifier._2</a></td>
+    		}
+				<td>@vGradedRequirements.vGradedEventName</td>
+				<td>@vGradedRequirements.vEventDescription</td>
+				<td>@vGradedRequirements.vTypeOfEvent</td>
+				<td>@vGradedRequirements.vPoints</td>
+				<td>@vGradedRequirements.vLessonassigned</td>
+				<td>@vGradedRequirements.vLessoncompleted</td>
+
+    			<td><a href="@routes.GradedRequirementsController.show(vGradedRequirements.vGradedEventIndex.get)">Show</a></td>
+    			<td><a href="@routes.GradedRequirementsController.edit(vGradedRequirements.vGradedEventIndex.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.GradedRequirementsController.delete(vGradedRequirements.vGradedEventIndex.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.GradedRequirementsController.create(idCourses)">Create new GradedRequirements</a>
+    </div>
+  </div>
+  }

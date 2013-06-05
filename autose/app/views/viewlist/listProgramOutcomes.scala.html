@@ -4,20 +4,20 @@
     @import slick.AppDB
     
     
-    @main("Systems Net", "Systems Body of Knowledge") {
+    @programPage(AppDB.dal.Programs.select(idPrograms).get) {
+
 	<div>
 	  <div class="column span-4">
 		 
 	  </div>
 
     
-    <div class="column span-20 last">
-		  <h3>ProgramOutcomes Listing</h3>
+    <div class="column span-18 last">
+		  <h3>Student Learning Outcomes</h3>
 		  <table>
 			<tr>
-				<th>ProgramOutcomeNumber</th>
 				<th>Program</th>
-				<th>ProgramOutcome</th>
+				<th>Program Outcome</th>
 				<th>Show</th>
 				<th>Edit</th>
 				<th>Delete</th>
@@ -26,7 +26,6 @@
             @listProgramOutcomes.map { vProgramOutcomes =>
     			
     		<tr>
-				<td>@vProgramOutcomes.vProgramOutcomeNumber</td>
 
     		@defining(AppDB.dal.Programs.select(vProgramOutcomes.vProgram).get){pkModel =>
       		  <td><a href="@routes.ProgramsController.show(vProgramOutcomes.vProgram)">@pkModel.selectIdentifier._2</a></td>
@@ -46,7 +45,7 @@
       		}
 
       	</table>
-      <a href="@routes.ProgramOutcomesController.create(idPrograms)">Create new ProgramOutcomes</a>
+      <a href="@routes.ProgramOutcomesController.create(idPrograms)">Create new student learning outcomes</a>
     </div>
   </div>
   }
