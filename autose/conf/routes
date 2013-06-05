@@ -225,3 +225,4 @@ GET 	/createGradedRequirements/:idCourses					controllers.GradedRequirementsCont
 POST	/deleteGradedRequirements/:id				controllers.GradedRequirementsController.delete(id: Long)
 POST 	/saveGradedRequirements/:newEntry			controllers.GradedRequirementsController.save(newEntry: Int)
 
+

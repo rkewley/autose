@@ -1,6 +1,7 @@
 
 @(vGradedRequirements: MdlGradedRequirements)
 
+    @import slick.AppDB
     @import persistence._
 		  
     
@@ -29,8 +30,10 @@
 		  	<dt>EventDescription</dt>
 		  	<dd>@Html(vGradedRequirements.vEventDescription.toString)</dd>
 
-		  	<dt>TypeOfEvent</dt>
-		  	<dd>@Html(vGradedRequirements.vTypeOfEvent.toString)</dd>
+    		@defining(AppDB.dal.EventType.select(vGradedRequirements.vTypeOfEvent).get){pkModel =>
+      		  <dt>TypeOfEvent</dt>
+      		  <dd>@pkModel.selectIdentifier._2</dd>
+    		}
 
 		  	<dt>Points</dt>
 		  	<dd>@Html(vGradedRequirements.vPoints.toString)</dd>

@@ -15,7 +15,7 @@ trait GradedRequirementsComponent  {
       def vCourse = column[Long]("Course")
       def vGradedEventName = column[String]("GradedEventName")
       def vEventDescription = column[String]("EventDescription")
-      def vTypeOfEvent = column[String]("TypeOfEvent")
+      def vTypeOfEvent = column[Long]("TypeOfEvent")
       def vPoints = column[Double]("Points")
       def vLessonassigned = column[Long]("Lessonassigned")
       def vLessoncompleted = column[Long]("Lessoncompleted")

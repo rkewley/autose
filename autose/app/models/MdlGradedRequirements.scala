@@ -6,13 +6,13 @@
 	vCourse : Long,
 	vGradedEventName : String,
 	vEventDescription : String,
-	vTypeOfEvent : String,
+	vTypeOfEvent : Long,
 	vPoints : Double,
 	vLessonassigned : Long,
 	vLessoncompleted : Long
     ) extends Mdl[Long] {
     
-      def this() = this(Option(0), 0, "", "", "", 0.0, 0, 0)
+      def this() = this(Option(0), 0, "", "", 0, 0.0, 0, 0)
 
   	  def validate: Boolean = true
     

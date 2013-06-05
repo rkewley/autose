@@ -19,7 +19,7 @@ object GradedRequirementsController extends ControllerTrait[Long, MdlGradedRequi
 	"fCourse" -> of[Long],
 	"fGradedEventName" -> text,
 	"fEventDescription" -> text,
-	"fTypeOfEvent" -> text,
+	"fTypeOfEvent" -> of[Long],
 	"fPoints" -> of[Double],
 	"fLessonassigned" -> of[Long],
 	"fLessoncompleted" -> of[Long]
@@ -45,7 +45,7 @@ object GradedRequirementsController extends ControllerTrait[Long, MdlGradedRequi
 	def crud = slick.AppDB.dal.GradedRequirements
 
 
-    def newItem(fkId: Long): MdlGradedRequirements = new MdlGradedRequirements(Option(0), fkId, "", "", "", 0.0, 0, 0)
+    def newItem(fkId: Long): MdlGradedRequirements = new MdlGradedRequirements(Option(0), fkId, "", "", 0, 0.0, 0, 0)
     
     override def getAll(fkId: Long): List[MdlGradedRequirements] = AppDB.database.withSession { implicit session: Session =>
       AppDB.dal.GradedRequirements.allQuery.filter(v1GradedRequirements => v1GradedRequirements.vCourse === fkId).elements.toList

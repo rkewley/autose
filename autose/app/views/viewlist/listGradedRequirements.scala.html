@@ -1,18 +1,19 @@
 
 @(listGradedRequirements: List[MdlGradedRequirements], idCourses: Long)
     
+    @import slick.AppDB
     @import persistence._
     
     
-    @main("Systems Net", "Systems Body of Knowledge") {
+    @coursePage(SqlCourses.select(idCourses)) {
 	<div>
 	  <div class="column span-4">
 		 
 	  </div>
 
     
-    <div class="column span-20 last">
-		  <h3>GradedRequirements Listing</h3>
+    <div class="column span-18 last">
+		  <h3>Graded Events Listing</h3>
 		  <table>
 			<tr>
 				<th>Course</th>
@@ -36,7 +37,10 @@
     		}
 				<td>@vGradedRequirements.vGradedEventName</td>
 				<td>@vGradedRequirements.vEventDescription</td>
-				<td>@vGradedRequirements.vTypeOfEvent</td>
+
+    		@defining(AppDB.dal.EventType.select(vGradedRequirements.vTypeOfEvent).get){pkModel =>
+      		  <td>@pkModel.selectIdentifier._2</td>
+    		}
 				<td>@vGradedRequirements.vPoints</td>
 				<td>@vGradedRequirements.vLessonassigned</td>
 				<td>@vGradedRequirements.vLessoncompleted</td>
@@ -54,7 +58,7 @@
       		}
 
       	</table>
-      <a href="@routes.GradedRequirementsController.create(idCourses)">Create new GradedRequirements</a>
+      <a href="@routes.GradedRequirementsController.create(idCourses)">Create new graded events</a>
     </div>
   </div>
   }
