@@ -1,0 +1,48 @@
+
+@(listKSASubGradedEvent: List[MdlKSASubGradedEvent], idSubGradedEvent: Long)
+    
+    @import slick.AppDB
+    @import persistence._
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>Knowledge and Skills for @AppDB.dal.SubGradedEvent.select(idSubGradedEvent).get.vDescription</h3>
+		  <table>
+			<tr>
+				<th>KSA</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listKSASubGradedEvent.map { vKSASubGradedEvent =>
+    			
+    		<tr>
+
+    		@defining(SqlTopicObjectives.select(vKSASubGradedEvent.vKSA)){pkModel =>
+      		  <td><a href="@routes.TopicObjectivesController.showTopicObjectives(vKSASubGradedEvent.vKSA)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    			<td><a href="@routes.KSASubGradedEventController.show(vKSASubGradedEvent.vidKSASubGradedEvent.get)">Show</a></td>
+    			<td><a href="@routes.KSASubGradedEventController.edit(vKSASubGradedEvent.vidKSASubGradedEvent.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.KSASubGradedEventController.delete(vKSASubGradedEvent.vidKSASubGradedEvent.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+      		}
+
+      	</table>
+      <a href="@routes.KSASubGradedEventController.create(idSubGradedEvent)">Link new knowledge and skills to sub event</a>
+    </div>
+  </div>
+  }

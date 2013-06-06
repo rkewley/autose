@@ -1,0 +1,54 @@
+
+@(listSubGradedEvent: List[MdlSubGradedEvent], idGradedRequirements: Long)
+    
+    @import slick.AppDB
+    
+    
+    @gradedEventPage(idGradedRequirements) {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-18 last">
+		  <h3>Sub Event</h3>
+		  <table>
+			<tr>
+				<th>GradedEvent</th>
+				<th>Description</th>
+				<th>Points</th>
+				<th>Link to Knowledge and Skills</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listSubGradedEvent.map { vSubGradedEvent =>
+    			
+    		<tr>
+
+    		@defining(AppDB.dal.GradedRequirements.select(vSubGradedEvent.vGradedEvent).get){pkModel =>
+      		  <td><a href="@routes.GradedRequirementsController.show(vSubGradedEvent.vGradedEvent)">@pkModel.selectIdentifier._2</a></td>
+    		}
+				<td>@vSubGradedEvent.vDescription</td>
+				<td>@vSubGradedEvent.vPoints</td>
+				<td><a href="@routes.KSASubGradedEventController.list(vSubGradedEvent.vidSubGradedEvent.get)">Link to Knowledge and Skills</a></td>
+
+    			<td><a href="@routes.SubGradedEventController.show(vSubGradedEvent.vidSubGradedEvent.get)">Show</a></td>
+    			<td><a href="@routes.SubGradedEventController.edit(vSubGradedEvent.vidSubGradedEvent.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.SubGradedEventController.delete(vSubGradedEvent.vidSubGradedEvent.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.SubGradedEventController.create(idGradedRequirements)">Create new sub event</a>
+    </div>
+  </div>
+  }

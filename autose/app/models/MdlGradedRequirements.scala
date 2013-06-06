@@ -18,7 +18,7 @@
     
 	  def validationErrors: String = ""
     
-      def selectIdentifier: (String, String) = vGradedEventIndex.get.toString -> vGradedEventIndex.get.toString
+      def selectIdentifier: (String, String) = vGradedEventIndex.get.toString -> vGradedEventName
     
       def compare(a: MdlGradedRequirements, b: MdlGradedRequirements) = a.vGradedEventIndex.get.compareTo(b.vGradedEventIndex.get)
         

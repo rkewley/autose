@@ -19,27 +19,18 @@
     @helper.form(routes.GradedRequirementsController.save(newEntry)) {
 
 
-        @if(newEntry == 0) {
 		  
             @defining(f("fGradedEventIndex")) { fGradedEventIndex =>
                 <input type="hidden" name="@fGradedEventIndex.name" id="@fGradedEventIndex.id" value="@fGradedEventIndex.value">
 			}
-    
-		}
-		@if(newEntry != 0) {
-     		
-            @defining(f("fGradedEventIndex")) { fGradedEventIndex =>
-                <input type="hidden" name="@fGradedEventIndex.name" id="@fGradedEventIndex.id" value="@fGradedEventIndex.value">
-			}
-    
-     	}
+
 
             @defining(f("fCourse")) { fCourse =>
                 <input type="hidden" name="@fCourse.name" id="@fCourse.id" value="@fCourse.value">
 			}
     
-            @textarea(field = f("fGradedEventName"), args = 'rows -> 2, 'cols -> 100, '_label-> "GradedEventName")
-        	@*@inputText(f("fGradedEventName"), '_label -> "GradedEventName")*@
+
+        	@inputText(f("fGradedEventName"), '_label -> "GradedEventName")
 
             @textarea(field = f("fEventDescription"), args = 'rows -> 2, 'cols -> 100, '_label-> "EventDescription")
         	@*@inputText(f("fEventDescription"), '_label -> "EventDescription")*@

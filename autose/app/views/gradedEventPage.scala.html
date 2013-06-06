@@ -1,0 +1,25 @@
+@(idGradedRequirement: Long)(content: Html)
+@import persistence._
+@import slick.AppDB
+
+@defining(AppDB.dal.GradedRequirements.select(idGradedRequirement).get) { gradedRequirement =>
+@defining(SqlCourses.select(gradedRequirement.vCourse)) { course =>
+@main("Systems Net", course.vCourseIDNumber) {
+
+	<div class="column span-4 colborder">
+
+		  <ul id="menu">
+			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse)">Course Home</a></li>
+			<li><a href="@routes.LessonsController.listLessons(course.vidCourse)">Syllabus</a></li>
+			<li><a href="@routes.GradedRequirementsController.list(course.vidCourse)">Graded Events</a></li>
+			<li><a href="@routes.SubGradedEventController.list(idGradedRequirement)">Sub Events</a></li>
+			<li><a href="@routes.KSAGradedEventController.list(idGradedRequirement)">Link to Knowledge and Skills</a></li>
+		  </ul>
+
+	</div>
+	<div>
+		@content
+	</div>
+    }
+  }	
+}

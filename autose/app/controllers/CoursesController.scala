@@ -11,7 +11,6 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 import com.googlecode.sardine._
-//import FormFieldImplicits._
 
 object CoursesController extends Base {
 

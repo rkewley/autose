@@ -10,7 +10,6 @@ import play.Logger
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
-import FormFieldImplicits._
 
 object LessonsController extends Base {
 

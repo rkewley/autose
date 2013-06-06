@@ -1,0 +1,54 @@
+
+@(f: Form[MdlSubGradedEvent], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fGradedEvent").value.get.toLong) { vGradedEvent =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.SubGradedEventController.save(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidSubGradedEvent")) { fidSubGradedEvent =>
+                <input type="hidden" name="@fidSubGradedEvent.name" id="@fidSubGradedEvent.id" value="@fidSubGradedEvent.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidSubGradedEvent")) { fidSubGradedEvent =>
+                <input type="hidden" name="@fidSubGradedEvent.name" id="@fidSubGradedEvent.id" value="@fidSubGradedEvent.value">
+			}
+    
+     	}
+
+            @defining(f("fGradedEvent")) { fGradedEvent =>
+                <input type="hidden" name="@fGradedEvent.name" id="@fGradedEvent.id" value="@fGradedEvent.value">
+			}
+    
+            @textarea(field = f("fDescription"), args = 'rows -> 2, 'cols -> 100, '_label-> "Description")
+        	@*@inputText(f("fDescription"), '_label -> "Description")*@
+
+            @inputText(f("fPoints"), '_label -> "Points")
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.SubGradedEventController.list(vGradedEvent)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

@@ -23,7 +23,6 @@
 				<th>Points</th>
 				<th>Lesson Assigned</th>
 				<th>Lesson Completed</th>
-				<th>Show</th>
 				<th>Edit</th>
 				<th>Delete</th>
 			</tr>
@@ -35,7 +34,7 @@
     		@defining(SqlCourses.select(vGradedRequirements.vCourse)){pkModel =>
       		  <td><a href="@routes.CoursesController.showCourses(vGradedRequirements.vCourse)">@pkModel.selectIdentifier._2</a></td>
     		}
-				<td>@vGradedRequirements.vGradedEventName</td>
+				<td><a href="@routes.GradedRequirementsController.show(vGradedRequirements.vGradedEventIndex.get)">@vGradedRequirements.vGradedEventName</a></td>
 				<td>@vGradedRequirements.vEventDescription</td>
 
     		@defining(AppDB.dal.EventType.select(vGradedRequirements.vTypeOfEvent).get){pkModel =>
@@ -45,8 +44,7 @@
 				<td>@vGradedRequirements.vLessonassigned</td>
 				<td>@vGradedRequirements.vLessoncompleted</td>
 
-    			<td><a href="@routes.GradedRequirementsController.show(vGradedRequirements.vGradedEventIndex.get)">Show</a></td>
-    			<td><a href="@routes.GradedRequirementsController.edit(vGradedRequirements.vGradedEventIndex.get)">Edit</a></td>
+     			<td><a href="@routes.GradedRequirementsController.edit(vGradedRequirements.vGradedEventIndex.get)">Edit</a></td>
     	  		<td>
     	  			<form action="@routes.GradedRequirementsController.delete(vGradedRequirements.vGradedEventIndex.get)" method="POST">
     	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">

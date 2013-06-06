@@ -225,4 +225,28 @@ GET 	/createGradedRequirements/:idCourses					controllers.GradedRequirementsCont
 POST	/deleteGradedRequirements/:id				controllers.GradedRequirementsController.delete(id: Long)
 POST 	/saveGradedRequirements/:newEntry			controllers.GradedRequirementsController.save(newEntry: Int)
 
+# SubGradedEvent Routes
+GET     /listSubGradedEvent/:idGradedRequirements						controllers.SubGradedEventController.list(idGradedRequirements: Long)
+GET		/showSubGradedEvent/:id					controllers.SubGradedEventController.show(id: Long)
+GET 	/editSubGradedEvent/:id					controllers.SubGradedEventController.edit(id: Long)
+GET 	/createSubGradedEvent/:idGradedRequirements					controllers.SubGradedEventController.create(idGradedRequirements: Long)
+POST	/deleteSubGradedEvent/:id				controllers.SubGradedEventController.delete(id: Long)
+POST 	/saveSubGradedEvent/:newEntry			controllers.SubGradedEventController.save(newEntry: Int)
 
+# KSAGradedEvent Routes
+GET     /listKSAGradedEvent/:idGradedRequirements						controllers.KSAGradedEventController.list(idGradedRequirements: Long)
+GET		/showKSAGradedEvent/:id					controllers.KSAGradedEventController.show(id: Long)
+GET 	/editKSAGradedEvent/:id					controllers.KSAGradedEventController.edit(id: Long)
+GET 	/createKSAGradedEvent/:idGradedRequirements					controllers.KSAGradedEventController.create(idGradedRequirements: Long)
+POST	/deleteKSAGradedEvent/:id				controllers.KSAGradedEventController.delete(id: Long)
+POST 	/saveKSAGradedEvent/:newEntry			controllers.KSAGradedEventController.save(newEntry: Int)
+POST 	/saveKSAGradedEventList/			controllers.KSAGradedEventController.saveList
+
+# KSASubGradedEvent Routes
+GET     /listKSASubGradedEvent/:idSubGradedEvent						controllers.KSASubGradedEventController.list(idSubGradedEvent: Long)
+GET		/showKSASubGradedEvent/:id					controllers.KSASubGradedEventController.show(id: Long)
+GET 	/editKSASubGradedEvent/:id					controllers.KSASubGradedEventController.edit(id: Long)
+GET 	/createKSASubGradedEvent/:idSubGradedEvent					controllers.KSASubGradedEventController.create(idSubGradedEvent: Long)
+POST	/deleteKSASubGradedEvent/:id				controllers.KSASubGradedEventController.delete(id: Long)
+POST 	/saveKSASubGradedEvent/:newEntry			controllers.KSASubGradedEventController.save(newEntry: Int)
+POST 	/saveKSASubGradedEventList					controllers.KSASubGradedEventController.saveList

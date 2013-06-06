@@ -1,0 +1,62 @@
+
+@(f: Form[MdlKSAGradedEvent], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+<script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.1.min.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
+		<script type-"text/javascript">
+		$(document).ready(function(){
+			var checkboxdiv = $('#ksaCheckBoxList')
+			$("#topicSelect").change(function() {
+				var topicIndex = $("#topicSelect").val();
+				getNewCheckboxes('/getTopicObjectivesJson/' + topicIndex, checkboxdiv, 'fKSA');
+			});
+		});
+		</script> 
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fGradedEvent").value.get.toLong) { vGradedEvent =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.KSAGradedEventController.saveList) {
+
+		  
+            @defining(f("fidKSAGradedEvent")) { fidKSAGradedEvent =>
+                <input type="hidden" name="@fidKSAGradedEvent.name" id="@fidKSAGradedEvent.id" value="@fidKSAGradedEvent.value">
+			}
+			
+			<p>First select the topic for the knowledge and skills you will link to this graded event.</p>
+			@defining(SqlTopics.all.sortWith((v1: MdlTopics, v2: MdlTopics) => v1.vTopic < v2.vTopic)) { topicList =>
+			  <select id="topicSelect">
+			    <option value=""></option>
+			  @topicList.map { topic =>
+			    <option value="@topic.vTopicsIndex">@topic.vTopic</option>
+			  }
+			  </select>
+			}
+				
+			<div id="ksaCheckBoxList">
+			</div>                        
+
+            @defining(f("fGradedEvent")) { fGradedEvent =>
+                <input type="hidden" name="@fGradedEvent.name" id="@fGradedEvent.id" value="@fGradedEvent.value">
+			}
+    
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.KSAGradedEventController.list(vGradedEvent)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

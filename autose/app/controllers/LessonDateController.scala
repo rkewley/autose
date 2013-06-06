@@ -12,7 +12,6 @@ import play.api.data.Forms._
 import play.api.data.format.Formats._
 import java.util.Date
 import AnormExtension._
-import FormFieldImplicits._
 
 object LessonDateController extends Base {
 

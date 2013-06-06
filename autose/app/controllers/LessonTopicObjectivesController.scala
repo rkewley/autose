@@ -11,7 +11,6 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.libs.json._
 import play.api.data.format.Formats._
-import FormFieldImplicits._
 
 object LessonTopicObjectivesController extends Base {
 
@@ -30,7 +29,6 @@ object LessonTopicObjectivesController extends Base {
 	"fTopicObjectives" -> list(of[Long])
     )(MdlLessonTopicObjectivesList.apply)(MdlLessonTopicObjectivesList.unapply)
   )
-      
 
   def listLessonTopicObjectives(idLessons: Long) = Action {
      Ok(viewlist.html.listLessonTopicObjectives(SqlLessonTopicObjectives.selectWhere("`Lesson` = " + idLessons), idLessons))

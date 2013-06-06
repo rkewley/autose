@@ -11,7 +11,6 @@ import play.Logger
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
-import FormFieldImplicits._
 import jp.t2v.lab.play2.auth._
 
 object UserController extends Base {
