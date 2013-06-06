@@ -17,7 +17,7 @@
 				<th>Performance Indicator</th>
 				<th>Topic</th>
 				<th>Program</th>
-				<th>Show</th>
+				<th>Link to Knowledge and Skills</th>
 				<th>Edit</th>
 				<th>Delete</th>
 			</tr>
@@ -34,8 +34,7 @@
     		@defining(AppDB.dal.Programs.select(vTerminalLearningObjective.vProgram).get){pkModel =>
       		  <td><a href="@routes.ProgramsController.show(vTerminalLearningObjective.vProgram)">@pkModel.selectIdentifier._2</a></td>
     		}
-
-    			<td><a href="@routes.TerminalLearningObjectiveController.showTerminalLearningObjective(vTerminalLearningObjective.vidTerminalLearningObjective)">Show</a></td>
+				<td><a href="@routes.KSAPerfIndicatorController.list(vTerminalLearningObjective.vidTerminalLearningObjective)">Link to Knowledge and Skills</a></td>
     			<td><a href="@routes.TerminalLearningObjectiveController.editTerminalLearningObjective(vTerminalLearningObjective.vidTerminalLearningObjective)">Edit</a></td>
     	  		<td>
     	  			<form action="@routes.TerminalLearningObjectiveController.deleteTerminalLearningObjective(vTerminalLearningObjective.vidTerminalLearningObjective)" method="POST">

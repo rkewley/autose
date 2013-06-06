@@ -4,6 +4,8 @@
 @import helper._
 @import persistence._
 
+<script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.1.min.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
 
     @main("Systems Net", "Systems Body of Knowledge") {
 	<div>
@@ -16,34 +18,39 @@
     <fieldset>
     @helper.form(routes.KSAPerfIndicatorController.save(newEntry)) {
 
-
-        @if(newEntry == 0) {
 		  
             @defining(f("fidKSAPerfIndicator")) { fidKSAPerfIndicator =>
                 <input type="hidden" name="@fidKSAPerfIndicator.name" id="@fidKSAPerfIndicator.id" value="@fidKSAPerfIndicator.value">
 			}
-    
-		}
-		@if(newEntry != 0) {
-     		
-            @defining(f("fidKSAPerfIndicator")) { fidKSAPerfIndicator =>
-                <input type="hidden" name="@fidKSAPerfIndicator.name" id="@fidKSAPerfIndicator.id" value="@fidKSAPerfIndicator.value">
+
+            @defining(f("fPerformanceIndicator")) { fPerformanceIndicator =>
+                <input type="hidden" name="@fPerformanceIndicator.name" id="@fPerformanceIndicator.id" value="@fPerformanceIndicator.value">
+                
+		  <h4>
+		  	<p>@SqlTerminalLearningObjective.select(fPerformanceIndicator.value.get.toLong).vTerminalLearningObjective</p>
+		  </h4>
+			
+			<p>Select the knowledge and skill below to link them to this performance indicator.</p>
+			@defining(SqlTerminalLearningObjective.select(fPerformanceIndicator.value.get.toLong).vTopic) { topicId =>
+		      <script type-"text/javascript">
+				$(document).ready(function(){
+					var checkboxdiv = $('#ksaCheckBoxList')
+					var topicIndex = @topicId;
+					getNewCheckboxes('/getTopicObjectivesJson/' + topicIndex, checkboxdiv, 'fKSA');
+
+				});
+			  </script>
+
 			}
-    
-     	}
+				
+			<div id="ksaCheckBoxList">
+			</div>                        
 
-            @{val selectvTopicObjectives = SqlTopicObjectives.all.map(vTopicObjectives => vTopicObjectives.selectIdentifier).toSeq
-            select(field = f("fKSA"), options = selectvTopicObjectives, args = '_label-> "KSA")}
-    		<a href="@routes.TopicObjectivesController.createTopicObjectives">Create new TopicObjectives</a>
-
-            @{val selectvTerminalLearningObjective = SqlTerminalLearningObjective.all.map(vTerminalLearningObjective => vTerminalLearningObjective.selectIdentifier).toSeq
-            select(field = f("fPerformanceIndicator"), options = selectvTerminalLearningObjective, args = '_label-> "PerformanceIndicator")}
-    		<a href="@routes.TerminalLearningObjectiveController.createTerminalLearningObjective">Create new TerminalLearningObjective</a>
-
-       		<fieldset style="margin-top: 10px;">
+       		  <fieldset style="margin-top: 10px;">
           		<input type="submit" value="Submit" />
-          		<a href="@routes.KSAPerfIndicatorController.listKSAPerfIndicator(0)">Cancel and return to listing</a>
-      		</fieldset>
+          		<a href="@routes.KSAPerfIndicatorController.list(fPerformanceIndicator.value.get.toLong)">Cancel and return to listing</a>
+      		  </fieldset>
+      		}
         }
 	  	</fieldset></div>
     </div>

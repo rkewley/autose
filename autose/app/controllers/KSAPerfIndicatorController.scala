@@ -23,10 +23,10 @@ object KSAPerfIndicatorController extends ControllerTrait[Long, MdlKSAPerfIndica
       
 
 	override def listFunction(ffk: Long): Html = 
-	  views.html.viewlist.listKSAPerfIndicator(getAll(ffk))
+	  views.html.viewlist.listKSAPerfIndicator(getAll(ffk), ffk)
  
 	override def listFunction(item: MdlKSAPerfIndicator): Html = 
-	  views.html.viewlist.listKSAPerfIndicator(getAll(item))
+	  views.html.viewlist.listKSAPerfIndicator(getAll(item), item.vPerformanceIndicator)
  
 	override def showFunction(vKSAPerfIndicator: MdlKSAPerfIndicator): Html = 
 	  views.html.viewshow.showKSAPerfIndicator(vKSAPerfIndicator)
@@ -40,5 +40,13 @@ object KSAPerfIndicatorController extends ControllerTrait[Long, MdlKSAPerfIndica
 	def crud = slick.AppDB.dal.KSAPerfIndicator
 
 
-	def newItem(fkId: Long) = new MdlKSAPerfIndicator
+    def newItem(fkId: Long): MdlKSAPerfIndicator = new MdlKSAPerfIndicator(Option(0), 0, fkId)
+    
+    override def getAll(fkId: Long): List[MdlKSAPerfIndicator] = AppDB.database.withSession { implicit session: Session =>
+      AppDB.dal.KSAPerfIndicator.allQuery.filter(v1KSAPerfIndicator => v1KSAPerfIndicator.vPerformanceIndicator === fkId).elements.toList
+    }
+    
+    override def getAll(vKSAPerfIndicator: MdlKSAPerfIndicator): List[MdlKSAPerfIndicator] = AppDB.database.withSession { implicit session: Session =>
+      AppDB.dal.KSAPerfIndicator.allQuery.filter(v1KSAPerfIndicator => v1KSAPerfIndicator.vPerformanceIndicator === vKSAPerfIndicator.vPerformanceIndicator).elements.toList
+    }
   }

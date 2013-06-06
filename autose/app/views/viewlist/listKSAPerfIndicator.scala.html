@@ -1,7 +1,8 @@
 
-@(listKSAPerfIndicator: List[MdlKSAPerfIndicator])
+@(listKSAPerfIndicator: List[MdlKSAPerfIndicator], idTerminalLearningObjective: Long)
     
     @import slick.AppDB
+    @import persistence._
     
     
     @main("Systems Net", "Systems Body of Knowledge") {
@@ -12,10 +13,12 @@
 
     
     <div class="column span-20 last">
-		  <h3>KSAPerfIndicator Listing</h3>
+		  <h4>
+		  	<p>Knowledge and skills linked to:</p> 
+		  	<p>@SqlTerminalLearningObjective.select(idTerminalLearningObjective).vTerminalLearningObjective</p>
+		  </h4>
 		  <table>
 			<tr>
-				<th>idKSAPerfIndicator</th>
 				<th>KSA</th>
 				<th>PerformanceIndicator</th>
 				<th>Show</th>
@@ -26,14 +29,13 @@
             @listKSAPerfIndicator.map { vKSAPerfIndicator =>
     			
     		<tr>
-				<td>@vKSAPerfIndicator.vidKSAPerfIndicator</td>
 
-    		@defining(AppDB.dal.TopicObjectives.select(vKSAPerfIndicator.vKSA).get){pkModel =>
-      		  <td><a href="@routes.TopicObjectivesController.show(vKSAPerfIndicator.vKSA)">@pkModel.selectIdentifier._2</a></td>
+    		@defining(SqlTopicObjectives.select(vKSAPerfIndicator.vKSA)){pkModel =>
+      		  <td><a href="@routes.TopicObjectivesController.showTopicObjectives(vKSAPerfIndicator.vKSA)">@pkModel.selectIdentifier._2</a></td>
     		}
 
-    		@defining(AppDB.dal.TerminalLearningObjective.select(vKSAPerfIndicator.vPerformanceIndicator).get){pkModel =>
-      		  <td><a href="@routes.TerminalLearningObjectiveController.show(vKSAPerfIndicator.vPerformanceIndicator)">@pkModel.selectIdentifier._2</a></td>
+    		@defining(SqlTerminalLearningObjective.select(vKSAPerfIndicator.vPerformanceIndicator)){pkModel =>
+      		  <td><a href="@routes.TerminalLearningObjectiveController.showTerminalLearningObjective(vKSAPerfIndicator.vPerformanceIndicator)">@pkModel.selectIdentifier._2</a></td>
     		}
 
     			<td><a href="@routes.KSAPerfIndicatorController.show(vKSAPerfIndicator.vidKSAPerfIndicator.get)">Show</a></td>
@@ -49,7 +51,7 @@
       		}
 
       	</table>
-      <a href="@routes.KSAPerfIndicatorController.createKSAPerfIndicator(0)">Create new KSAPerfIndicator</a>
+      <a href="@routes.KSAPerfIndicatorController.create(idTerminalLearningObjective)">Link new knowledge and skills to this performance indicator</a>
     </div>
   </div>
   }

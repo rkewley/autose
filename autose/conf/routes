@@ -258,3 +258,12 @@ GET 	/editKSASubGradedEvent/:id					controllers.KSASubGradedEventController.edit
 GET 	/createKSASubGradedEvent/:idSubGradedEvent					controllers.KSASubGradedEventController.create(idSubGradedEvent: Long)
 POST	/deleteKSASubGradedEvent/:id				controllers.KSASubGradedEventController.delete(id: Long)
 POST 	/saveKSASubGradedEvent/:newEntry			controllers.KSASubGradedEventController.save(newEntry: Int)
+
+
+# KSAPerfIndicator Routes
+GET     /listKSAPerfIndicator/:idTerminalLearningObjective						controllers.KSAPerfIndicatorController.list(idTerminalLearningObjective: Long)
+GET		/showKSAPerfIndicator/:id					controllers.KSAPerfIndicatorController.show(id: Long)
+GET 	/editKSAPerfIndicator/:id					controllers.KSAPerfIndicatorController.edit(id: Long)
+GET 	/createKSAPerfIndicator/:idTerminalLearningObjective					controllers.KSAPerfIndicatorController.create(idTerminalLearningObjective: Long)
+POST	/deleteKSAPerfIndicator/:id				controllers.KSAPerfIndicatorController.delete(id: Long)
+POST 	/saveKSAPerfIndicator/:newEntry			controllers.KSAPerfIndicatorController.save(newEntry: Int)

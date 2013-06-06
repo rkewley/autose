@@ -2,6 +2,7 @@
 @(vKSAPerfIndicator: MdlKSAPerfIndicator)
 
     @import slick.AppDB
+    @import persistence._
 		  
     
     @main("Systems Net", "Systems Body of Knowledge") {
@@ -18,18 +19,18 @@
 		  	<dt>idKSAPerfIndicator</dt>
 		  	<dd>@Html(vKSAPerfIndicator.vidKSAPerfIndicator.toString)</dd>
 
-    		@defining(AppDB.dal.TopicObjectives.select(vKSAPerfIndicator.vKSA).get){pkModel =>
+    		@defining(SqlTopicObjectives.select(vKSAPerfIndicator.vKSA)){pkModel =>
       		  <dt>KSA</dt>
-      		  <dd><a href="@routes.TopicObjectivesController.show(vKSAPerfIndicator.vKSA)">@pkModel.selectIdentifier._2</a></dd>
+      		  <dd><a href="@routes.TopicObjectivesController.showTopicObjectives(vKSAPerfIndicator.vKSA)">@pkModel.selectIdentifier._2</a></dd>
     		}
 
-    		@defining(AppDB.dal.TerminalLearningObjective.select(vKSAPerfIndicator.vPerformanceIndicator).get){pkModel =>
+    		@defining(SqlTerminalLearningObjective.select(vKSAPerfIndicator.vPerformanceIndicator)){pkModel =>
       		  <dt>PerformanceIndicator</dt>
-      		  <dd><a href="@routes.TerminalLearningObjectiveController.show(vKSAPerfIndicator.vPerformanceIndicator)">@pkModel.selectIdentifier._2</a></dd>
+      		  <dd><a href="@routes.TerminalLearningObjectiveController.showTerminalLearningObjective(vKSAPerfIndicator.vPerformanceIndicator)">@pkModel.selectIdentifier._2</a></dd>
     		}
 	       </dl>
      <div>
-       <a href="@routes.KSAPerfIndicatorController.list(0)">Return to listing</a>
+       <a href="@routes.KSAPerfIndicatorController.list(vKSAPerfIndicator.vPerformanceIndicator)">Return to listing</a>
      </div>
 	</div>
    <div class="column span-4 last">
