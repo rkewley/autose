@@ -1,0 +1,55 @@
+
+@(listKSAPerfIndicator: List[MdlKSAPerfIndicator])
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>KSAPerfIndicator Listing</h3>
+		  <table>
+			<tr>
+				<th>idKSAPerfIndicator</th>
+				<th>KSA</th>
+				<th>PerformanceIndicator</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listKSAPerfIndicator.map { vKSAPerfIndicator =>
+    			
+    		<tr>
+				<td>@vKSAPerfIndicator.vidKSAPerfIndicator</td>
+
+    		@defining(AppDB.dal.TopicObjectives.select(vKSAPerfIndicator.vKSA).get){pkModel =>
+      		  <td><a href="@routes.TopicObjectivesController.show(vKSAPerfIndicator.vKSA)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    		@defining(AppDB.dal.TerminalLearningObjective.select(vKSAPerfIndicator.vPerformanceIndicator).get){pkModel =>
+      		  <td><a href="@routes.TerminalLearningObjectiveController.show(vKSAPerfIndicator.vPerformanceIndicator)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    			<td><a href="@routes.KSAPerfIndicatorController.show(vKSAPerfIndicator.vidKSAPerfIndicator.get)">Show</a></td>
+    			<td><a href="@routes.KSAPerfIndicatorController.edit(vKSAPerfIndicator.vidKSAPerfIndicator.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.KSAPerfIndicatorController.delete(vKSAPerfIndicator.vidKSAPerfIndicator.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.KSAPerfIndicatorController.createKSAPerfIndicator(0)">Create new KSAPerfIndicator</a>
+    </div>
+  </div>
+  }

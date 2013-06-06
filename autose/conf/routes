@@ -250,3 +250,11 @@ GET 	/createKSASubGradedEvent/:idSubGradedEvent					controllers.KSASubGradedEven
 POST	/deleteKSASubGradedEvent/:id				controllers.KSASubGradedEventController.delete(id: Long)
 POST 	/saveKSASubGradedEvent/:newEntry			controllers.KSASubGradedEventController.save(newEntry: Int)
 POST 	/saveKSASubGradedEventList					controllers.KSASubGradedEventController.saveList
+
+# KSASubGradedEvent Routes
+GET     /listKSASubGradedEvent/:idSubGradedEvent						controllers.KSASubGradedEventController.list(idSubGradedEvent: Long)
+GET		/showKSASubGradedEvent/:id					controllers.KSASubGradedEventController.show(id: Long)
+GET 	/editKSASubGradedEvent/:id					controllers.KSASubGradedEventController.edit(id: Long)
+GET 	/createKSASubGradedEvent/:idSubGradedEvent					controllers.KSASubGradedEventController.create(idSubGradedEvent: Long)
+POST	/deleteKSASubGradedEvent/:id				controllers.KSASubGradedEventController.delete(id: Long)
+POST 	/saveKSASubGradedEvent/:newEntry			controllers.KSASubGradedEventController.save(newEntry: Int)

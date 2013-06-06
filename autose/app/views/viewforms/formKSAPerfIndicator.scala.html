@@ -1,0 +1,51 @@
+
+@(f: Form[MdlKSAPerfIndicator], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.KSAPerfIndicatorController.save(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidKSAPerfIndicator")) { fidKSAPerfIndicator =>
+                <input type="hidden" name="@fidKSAPerfIndicator.name" id="@fidKSAPerfIndicator.id" value="@fidKSAPerfIndicator.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidKSAPerfIndicator")) { fidKSAPerfIndicator =>
+                <input type="hidden" name="@fidKSAPerfIndicator.name" id="@fidKSAPerfIndicator.id" value="@fidKSAPerfIndicator.value">
+			}
+    
+     	}
+
+            @{val selectvTopicObjectives = SqlTopicObjectives.all.map(vTopicObjectives => vTopicObjectives.selectIdentifier).toSeq
+            select(field = f("fKSA"), options = selectvTopicObjectives, args = '_label-> "KSA")}
+    		<a href="@routes.TopicObjectivesController.createTopicObjectives">Create new TopicObjectives</a>
+
+            @{val selectvTerminalLearningObjective = SqlTerminalLearningObjective.all.map(vTerminalLearningObjective => vTerminalLearningObjective.selectIdentifier).toSeq
+            select(field = f("fPerformanceIndicator"), options = selectvTerminalLearningObjective, args = '_label-> "PerformanceIndicator")}
+    		<a href="@routes.TerminalLearningObjectiveController.createTerminalLearningObjective">Create new TerminalLearningObjective</a>
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.KSAPerfIndicatorController.listKSAPerfIndicator(0)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
