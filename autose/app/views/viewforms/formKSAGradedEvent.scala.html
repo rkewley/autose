@@ -6,15 +6,6 @@
 
 <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.1.min.js")"></script>
 <script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
-		<script type-"text/javascript">
-		$(document).ready(function(){
-			var checkboxdiv = $('#ksaCheckBoxList')
-			$("#topicSelect").change(function() {
-				var topicIndex = $("#topicSelect").val();
-				getNewCheckboxes('/getTopicObjectivesJson/' + topicIndex, checkboxdiv, 'fKSA');
-			});
-		});
-		</script> 
 
     @main("Systems Net", "Systems Body of Knowledge") {
 	<div>
@@ -24,6 +15,18 @@
 
 
 @defining(f("fGradedEvent").value.get.toLong) { vGradedEvent =>  
+
+		<script type-"text/javascript">
+		$(document).ready(function(){
+			var checkboxdiv = $('#ksaCheckBoxList')
+			$("#topicSelect").change(function() {
+				var topicIndex = $("#topicSelect").val();
+				var gradedEventIndex = @vGradedEvent
+				getNewCheckboxes('/getGradedEventKSAJsonByTopic/' + gradedEventIndex + '/' + topicIndex, checkboxdiv, 'fKSA');
+			});
+		});
+		</script> 
+
 <div class="column span-20 last">
     <fieldset>
     @helper.form(routes.KSAGradedEventController.saveList) {

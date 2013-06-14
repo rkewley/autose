@@ -1,5 +1,10 @@
     
  package models
+ 
+ import play.api.data.Forms._
+ import play.api.data._
+ import play.api.data.format.Formats._
+
     
  case class MdlKSAPerfIndicator (
  	vidKSAPerfIndicator : Option[Long],
@@ -19,4 +24,26 @@
         
       def primaryKey = vidKSAPerfIndicator
 }
+
+object MdlKSAPerfIndicatorList {
+  val formList = Form[MdlKSAPerfIndicatorList](
+    mapping (
+	"fidKSAPerfIndicator" -> optional(of[Long]),
+	"fKSA" -> list(of[Long]),
+	"fPerformanceIndicator" -> of[Long]
+    )(MdlKSAPerfIndicatorList.apply)(MdlKSAPerfIndicatorList.unapply)
+  )    
+  }
+ 
+ case class MdlKSAPerfIndicatorList (
+ 	vidKSAPerfIndicator : Option[Long],
+	vKSA : List[Long],
+	vPerformanceIndicator : Long
+    ) {
     
+    def getList = {
+      vKSA.map(ksa => 
+        new MdlKSAPerfIndicator(vidKSAPerfIndicator, ksa, vPerformanceIndicator))
+    }
+ }
+ 

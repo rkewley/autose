@@ -36,6 +36,13 @@ trait KSASubGradedEventComponent  {
 	      val q = Query(KSASubGradedEvent)
 	      q.filter(p => p.vidKSASubGradedEvent === pk)
 	  }
+	  
+      def selectBySubGradedEvent(idSubGradedEvent: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val q = Query(KSASubGradedEvent)
+	      q.filter(p => p.vSubGradedEvent === idSubGradedEvent).elements.toList	      
+	    }
+      }	  
 
       def select(pk: Long) = {
 	    AppDB.database.withSession { implicit session: Session =>

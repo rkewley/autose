@@ -16,7 +16,7 @@
 
 <div class="column span-20 last">
     <fieldset>
-    @helper.form(routes.KSAPerfIndicatorController.save(newEntry)) {
+    @helper.form(routes.KSAPerfIndicatorController.saveList) {
 
 		  
             @defining(f("fidKSAPerfIndicator")) { fidKSAPerfIndicator =>
@@ -36,7 +36,8 @@
 				$(document).ready(function(){
 					var checkboxdiv = $('#ksaCheckBoxList')
 					var topicIndex = @topicId;
-					getNewCheckboxes('/getTopicObjectivesJson/' + topicIndex, checkboxdiv, 'fKSA');
+					var performanceIndicator = @fPerformanceIndicator.value.get.toLong
+					getNewCheckboxes('/getKSAJsonByTopic/' + performanceIndicator + '/' + topicIndex, checkboxdiv, 'fKSA');
 
 				});
 			  </script>

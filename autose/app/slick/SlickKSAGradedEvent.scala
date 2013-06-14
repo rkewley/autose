@@ -42,6 +42,13 @@ trait KSAGradedEventComponent  {
 	      selectQuery(pk).elements.toList.headOption
 	    }
 	  }
+      
+      def selectByGradedEvent(idGradedEvent: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val q = Query(KSAGradedEvent)
+	      q.filter(p => p.vGradedEvent === idGradedEvent).elements.toList	      
+	    }
+      }
 	  
 	  def delete(pk: Long) {
 	    AppDB.database.withSession { implicit session: Session =>

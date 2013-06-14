@@ -10,6 +10,8 @@ class DAL(override val profile: ExtendedProfile) extends ProgramsComponent
 	with KSAGradedEventComponent
 	with KSASubGradedEventComponent
 	with KSAPerfIndicatorComponent
+	with PerfIndProgramOutcomesComponent
+	with PerformanceIndicatorComponent
 	with Profile {
  
   import profile.simple._

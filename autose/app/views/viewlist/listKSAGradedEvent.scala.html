@@ -16,7 +16,6 @@
 		  <h3>Knowledge and Skills Listing for @AppDB.dal.GradedRequirements.select(idGradedRequirements).get.vGradedEventName</h3>
 		  <table>
 			<tr>
-				<th>idKSAGradedEvent</th>
 				<th>KSA</th>
 				<th>GradedEvent</th>
 				<th>Show</th>
@@ -27,7 +26,6 @@
             @listKSAGradedEvent.map { vKSAGradedEvent =>
     			
     		<tr>
-				<td>@vKSAGradedEvent.vidKSAGradedEvent</td>
 
     		@defining(SqlTopicObjectives.select(vKSAGradedEvent.vKSA)){pkModel =>
       		  <td><a href="@routes.TopicObjectivesController.showTopicObjectives(vKSAGradedEvent.vKSA)">@pkModel.selectIdentifier._2</a></td>

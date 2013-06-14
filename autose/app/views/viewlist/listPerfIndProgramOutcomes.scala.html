@@ -1,0 +1,47 @@
+
+@(listPerfIndProgramOutcomes: List[MdlPerfIndProgramOutcomes], idProgramOutcomes: Long)
+    
+    @import slick.AppDB
+    @import persistence._
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h4>Performance Indicator Listing for Program Outcome:</h4>
+		  @AppDB.dal.ProgramOutcomes.select(idProgramOutcomes).get.vProgramOutcome
+		  </h4>
+		  <table>
+			<tr>
+				<th>Performance Indicator</th>
+				<th>Delete</th>
+			</tr>
+
+            @listPerfIndProgramOutcomes.map { vPerfIndProgramOutcomes =>
+    			
+    		<tr>
+
+    		@defining(SqlTerminalLearningObjective.select(vPerfIndProgramOutcomes.vPerformanceIndicator)){pkModel =>
+      		  <td><a href="@routes.TerminalLearningObjectiveController.showTerminalLearningObjective(vPerfIndProgramOutcomes.vPerformanceIndicator)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    	  		<td>
+    	  			<form action="@routes.PerfIndProgramOutcomesController.delete(vPerfIndProgramOutcomes.vidPerfIndProgramOutcomes.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.PerfIndProgramOutcomesController.create(idProgramOutcomes)">Link new performance indicators to this program outcome</a>
+    </div>
+  </div>
+  }

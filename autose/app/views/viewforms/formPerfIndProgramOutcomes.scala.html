@@ -1,0 +1,58 @@
+
+@(f: Form[MdlPerfIndProgramOutcomes], newEntry: Int)
+
+@import helper._
+@import persistence._
+@import slick.AppDB
+
+<script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.1.min.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fProgramOutcome").value.get.toLong) { vProgramOutcome =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.PerfIndProgramOutcomesController.saveList) {
+    
+            @defining(f("fProgramOutcome")) { fProgramOutcome =>
+                <input type="hidden" name="@fProgramOutcome.name" id="@fProgramOutcome.id" value="@fProgramOutcome.value">
+ 
+
+              @defining(f("fidPerfIndProgramOutcomes")) { fidPerfIndProgramOutcomes =>
+                <input type="hidden" name="@fidPerfIndProgramOutcomes.name" id="@fidPerfIndProgramOutcomes.id" value="@fidPerfIndProgramOutcomes.value">
+			  }
+    
+			  <p>Select the performance indicators below to link to this program outcome.</p>
+			  @defining(AppDB.dal.ProgramOutcomes.select(fProgramOutcome.value.get.toLong).get.vProgram) { programId =>
+		        <script type-"text/javascript">
+				  $(document).ready(function(){
+					var checkboxdiv = $('#piCheckBoxList')
+					var programIndex = @programId;
+					var programOutcome = @vProgramOutcome
+					getNewCheckboxes('/getPerformanceIndicatorsJsonByProgramAndOutcome/' + programIndex + '/' + programOutcome, checkboxdiv, 'fPerformanceIndicator');
+				  });
+			    </script>
+
+			  }
+				
+			  <div id="piCheckBoxList">
+			  </div>                        
+
+   			
+       		  <fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.PerfIndProgramOutcomesController.list(vProgramOutcome)">Cancel and return to listing</a>
+      		  </fieldset>
+      		}
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

@@ -165,6 +165,7 @@ GET     /listLessonLinkTopicObjectives/:idLessonLinks		controllers.LessonLinkTop
 GET		/showLessonLinkTopicObjectives/:id					controllers.LessonLinkTopicObjectivesController.showLessonLinkTopicObjectives(id: Long)
 GET 	/editLessonLinkTopicObjectives/:id					controllers.LessonLinkTopicObjectivesController.editLessonLinkTopicObjectives(id: Long)
 GET 	/createLessonLinkTopicObjectives/:idLessonLinks		controllers.LessonLinkTopicObjectivesController.createLessonLinkTopicObjectivesList(idLessonLinks: Long)
+GET 	/getLessonLinkKSAJsonByTopic/:idLessonLink/:idTopic	controllers.LessonLinkTopicObjectivesController.getLessonLinkKSAJsonByTopic(idLessonLink: Long, idTopic: Long)
 POST	/deleteLessonLinkTopicObjectives/:id				controllers.LessonLinkTopicObjectivesController.deleteLessonLinkTopicObjectives(id: Long)
 POST 	/saveLessonLinkTopicObjectives/:newEntry			controllers.LessonLinkTopicObjectivesController.saveLessonLinkTopicObjectives(newEntry: Int)
 POST 	/saveLessonLinkTopicObjectivesList					controllers.LessonLinkTopicObjectivesController.saveLessonLinkTopicObjectivesList
@@ -176,6 +177,7 @@ GET 	/editLessonTopicObjectives/:id						controllers.LessonTopicObjectivesContro
 GET 	/createLessonTopicObjectives/:idLessons				controllers.LessonTopicObjectivesController.createLessonTopicObjectives(idLessons: Long)
 GET 	/createLessonTopicObjectivesList/:idLessons			controllers.LessonTopicObjectivesController.createLessonTopicObjectivesList(idLessons: Long)
 GET 	/getTopicObjectivesJson/:id							controllers.LessonTopicObjectivesController.getTopicObjectivesJson(id: Long)
+GET 	/getLessonKSAJsonByTopic/:idLesson/:idTopic			controllers.LessonTopicObjectivesController.getLessonKSAJsonByTopic(idLesson: Long, idTopic: Long)
 POST	/deleteLessonTopicObjectives/:id					controllers.LessonTopicObjectivesController.deleteLessonTopicObjectives(id: Long)
 POST 	/saveLessonTopicObjectives/:newEntry				controllers.LessonTopicObjectivesController.saveLessonTopicObjectives(newEntry: Int)
 POST 	/saveLessonTopicObjectivesList						controllers.LessonTopicObjectivesController.saveLessonTopicObjectivesList
@@ -238,6 +240,7 @@ GET     /listKSAGradedEvent/:idGradedRequirements						controllers.KSAGradedEven
 GET		/showKSAGradedEvent/:id					controllers.KSAGradedEventController.show(id: Long)
 GET 	/editKSAGradedEvent/:id					controllers.KSAGradedEventController.edit(id: Long)
 GET 	/createKSAGradedEvent/:idGradedRequirements					controllers.KSAGradedEventController.create(idGradedRequirements: Long)
+GET 	/getGradedEventKSAJsonByTopic/:idGradedEvent/:idTopic	controllers.KSAGradedEventController.getGradedEventKSAJsonByTopic(idGradedEvent: Long, idTopic: Long)
 POST	/deleteKSAGradedEvent/:id				controllers.KSAGradedEventController.delete(id: Long)
 POST 	/saveKSAGradedEvent/:newEntry			controllers.KSAGradedEventController.save(newEntry: Int)
 POST 	/saveKSAGradedEventList/			controllers.KSAGradedEventController.saveList
@@ -247,17 +250,10 @@ GET     /listKSASubGradedEvent/:idSubGradedEvent						controllers.KSASubGradedEv
 GET		/showKSASubGradedEvent/:id					controllers.KSASubGradedEventController.show(id: Long)
 GET 	/editKSASubGradedEvent/:id					controllers.KSASubGradedEventController.edit(id: Long)
 GET 	/createKSASubGradedEvent/:idSubGradedEvent					controllers.KSASubGradedEventController.create(idSubGradedEvent: Long)
+GET 	/getSubGradedEventKSAJsonByTopic/:idSubGradedEvent/:idTopic	controllers.KSASubGradedEventController.getSubGradedEventKSAJsonByTopic(idSubGradedEvent: Long, idTopic: Long)
 POST	/deleteKSASubGradedEvent/:id				controllers.KSASubGradedEventController.delete(id: Long)
 POST 	/saveKSASubGradedEvent/:newEntry			controllers.KSASubGradedEventController.save(newEntry: Int)
 POST 	/saveKSASubGradedEventList					controllers.KSASubGradedEventController.saveList
-
-# KSASubGradedEvent Routes
-GET     /listKSASubGradedEvent/:idSubGradedEvent						controllers.KSASubGradedEventController.list(idSubGradedEvent: Long)
-GET		/showKSASubGradedEvent/:id					controllers.KSASubGradedEventController.show(id: Long)
-GET 	/editKSASubGradedEvent/:id					controllers.KSASubGradedEventController.edit(id: Long)
-GET 	/createKSASubGradedEvent/:idSubGradedEvent					controllers.KSASubGradedEventController.create(idSubGradedEvent: Long)
-POST	/deleteKSASubGradedEvent/:id				controllers.KSASubGradedEventController.delete(id: Long)
-POST 	/saveKSASubGradedEvent/:newEntry			controllers.KSASubGradedEventController.save(newEntry: Int)
 
 
 # KSAPerfIndicator Routes
@@ -267,3 +263,16 @@ GET 	/editKSAPerfIndicator/:id					controllers.KSAPerfIndicatorController.edit(i
 GET 	/createKSAPerfIndicator/:idTerminalLearningObjective					controllers.KSAPerfIndicatorController.create(idTerminalLearningObjective: Long)
 POST	/deleteKSAPerfIndicator/:id				controllers.KSAPerfIndicatorController.delete(id: Long)
 POST 	/saveKSAPerfIndicator/:newEntry			controllers.KSAPerfIndicatorController.save(newEntry: Int)
+POST 	/saveKSAPerfIndicatorList					controllers.KSAPerfIndicatorController.saveList
+GET    /getKSAJsonByTopic/:idPerfIndicator/:idTopic		controllers.KSAPerfIndicatorController.getKSAJsonByTopic(idPerfIndicator: Long, idTopic: Long)
+
+
+# PerfIndProgramOutcomes Routes
+GET     /listPerfIndProgramOutcomes/:idProgramOutcomes						controllers.PerfIndProgramOutcomesController.list(idProgramOutcomes: Long)
+GET		/showPerfIndProgramOutcomes/:id					controllers.PerfIndProgramOutcomesController.show(id: Long)
+GET 	/editPerfIndProgramOutcomes/:id					controllers.PerfIndProgramOutcomesController.edit(id: Long)
+GET 	/createPerfIndProgramOutcomes/:idProgramOutcomes					controllers.PerfIndProgramOutcomesController.create(idProgramOutcomes: Long)
+POST	/deletePerfIndProgramOutcomes/:id				controllers.PerfIndProgramOutcomesController.delete(id: Long)
+POST 	/savePerfIndProgramOutcomes/:newEntry			controllers.PerfIndProgramOutcomesController.save(newEntry: Int)
+POST 	/savePerfIndProgramOutcomesList			controllers.PerfIndProgramOutcomesController.saveList
+GET    /getPerformanceIndicatorsJsonByProgramAndOutcome/:idProgram/:idProgramOutcome		controllers.PerfIndProgramOutcomesController.getPerformanceIndicatorsJsonByProgramAndOutcome(idProgram: Long, idProgramOutcome: Long)

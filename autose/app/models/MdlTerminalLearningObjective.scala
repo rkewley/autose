@@ -14,7 +14,7 @@
     
 	  def validationErrors: String = ""
     
-      def selectIdentifier: (String, String) = vidTerminalLearningObjective.toString -> vidTerminalLearningObjective.toString
+      def selectIdentifier: (String, String) = vidTerminalLearningObjective.toString -> vTerminalLearningObjective
     
       def compare(a: MdlTerminalLearningObjective, b: MdlTerminalLearningObjective) = a.vidTerminalLearningObjective.compareTo(b.vidTerminalLearningObjective)
 }

@@ -20,9 +20,7 @@
 		  <table>
 			<tr>
 				<th>KSA</th>
-				<th>PerformanceIndicator</th>
 				<th>Show</th>
-				<th>Edit</th>
 				<th>Delete</th>
 			</tr>
 
@@ -34,12 +32,7 @@
       		  <td><a href="@routes.TopicObjectivesController.showTopicObjectives(vKSAPerfIndicator.vKSA)">@pkModel.selectIdentifier._2</a></td>
     		}
 
-    		@defining(SqlTerminalLearningObjective.select(vKSAPerfIndicator.vPerformanceIndicator)){pkModel =>
-      		  <td><a href="@routes.TerminalLearningObjectiveController.showTerminalLearningObjective(vKSAPerfIndicator.vPerformanceIndicator)">@pkModel.selectIdentifier._2</a></td>
-    		}
-
     			<td><a href="@routes.KSAPerfIndicatorController.show(vKSAPerfIndicator.vidKSAPerfIndicator.get)">Show</a></td>
-    			<td><a href="@routes.KSAPerfIndicatorController.edit(vKSAPerfIndicator.vidKSAPerfIndicator.get)">Edit</a></td>
     	  		<td>
     	  			<form action="@routes.KSAPerfIndicatorController.delete(vKSAPerfIndicator.vidKSAPerfIndicator.get)" method="POST">
     	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">

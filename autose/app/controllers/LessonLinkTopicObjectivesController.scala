@@ -10,6 +10,7 @@ import play.Logger
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
+import play.api.libs.json._
 
 object LessonLinkTopicObjectivesController extends Base {
 
@@ -57,6 +58,16 @@ object LessonLinkTopicObjectivesController extends Base {
     val vLessonLinkTopicObjectivesList = new MdlLessonLinkTopicObjectivesList(0, idLessonLinks, List())
     Ok(viewforms.html.formLessonLinkTopicObjectivesList(formLessonLinkTopicObjectivesList.fill(vLessonLinkTopicObjectivesList)))
   }
+  
+	def getLessonLinkKSAJsonByTopic(idLessonLink: Long, idTopic: Long) = Action {
+	    val currentlyAssociated = SqlLessonLinkTopicObjectives.selectWhere("LessonLink = " + idLessonLink).map(_.vTopicObjective)
+	    println(currentlyAssociated.toString)
+	    val ksa1 = SqlTopicObjectives.selectWhere("Topic = " + idTopic)
+	    val ksa = ksa1.filter(ksa => !currentlyAssociated.contains(ksa.vTopicObjectiveNumber))
+	    val resultJson = JsObject(ksa.map(ksa =>
+	        ksa.vTopicObjectiveNumber.toString -> JsString(ksa.vObjective)))
+	    Ok(resultJson)
+	}
 
   def saveLessonLinkTopicObjectives(newEntry: Int) = Action { implicit request =>
   	formLessonLinkTopicObjectives.bindFromRequest.fold(

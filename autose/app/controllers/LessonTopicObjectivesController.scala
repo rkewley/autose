@@ -64,7 +64,18 @@ object LessonTopicObjectivesController extends Base {
           topicObjective.vTopicObjectiveNumber.toString -> JsString(topicObjective.vObjective)))
     Ok(resultJson)
   }
-
+  
+	def getLessonKSAJsonByTopic(idLesson: Long, idTopic: Long) = Action {
+	    val currentlyAssociated = SqlLessonTopicObjectives.selectWhere("Lesson = " + idLesson).map(_.vTopicObjective)
+	    println(currentlyAssociated.toString)
+	    val ksa1 = SqlTopicObjectives.selectWhere("Topic = " + idTopic)
+	    val ksa = ksa1.filter(ksa => !currentlyAssociated.contains(ksa.vTopicObjectiveNumber))
+	    val resultJson = JsObject(ksa.map(ksa =>
+	        ksa.vTopicObjectiveNumber.toString -> JsString(ksa.vObjective)))
+	    Ok(resultJson)
+	}
+  
+  
   def saveLessonTopicObjectives(newEntry: Int) = Action { implicit request =>
   	formLessonTopicObjectives.bindFromRequest.fold(
   	  form => {

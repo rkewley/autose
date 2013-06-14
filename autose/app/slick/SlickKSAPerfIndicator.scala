@@ -42,6 +42,13 @@ trait KSAPerfIndicatorComponent  {
 	      selectQuery(pk).elements.toList.headOption
 	    }
 	  }
+      
+      def selectByPerfIndicator(perfIndicator: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val q = Query(KSAPerfIndicator)
+	      q.filter(p => p.vPerformanceIndicator === perfIndicator).elements.toList  
+	    }
+      }      
 	  
 	  def delete(pk: Long) {
 	    AppDB.database.withSession { implicit session: Session =>

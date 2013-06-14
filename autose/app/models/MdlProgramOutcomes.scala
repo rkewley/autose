@@ -13,7 +13,7 @@
     
 	  def validationErrors: String = ""
     
-      def selectIdentifier: (String, String) = vProgramOutcomeNumber.get.toString -> vProgramOutcomeNumber.get.toString
+      def selectIdentifier: (String, String) = vProgramOutcomeNumber.get.toString -> vProgramOutcome
     
       def compare(a: MdlProgramOutcomes, b: MdlProgramOutcomes) = a.vProgramOutcomeNumber.get.compareTo(b.vProgramOutcomeNumber.get)
         

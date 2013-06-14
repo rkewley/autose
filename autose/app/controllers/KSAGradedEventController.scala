@@ -11,6 +11,7 @@ import play.api.libs.json._
 import models._
 import views._
 import slick.AppDB
+import persistence._
 import scala.slick.driver.MySQLDriver.simple._
 
 object KSAGradedEventController extends ControllerTrait[Long, MdlKSAGradedEvent, Long] with Base {
@@ -50,6 +51,16 @@ object KSAGradedEventController extends ControllerTrait[Long, MdlKSAGradedEvent,
     override def getAll(vKSAGradedEvent: MdlKSAGradedEvent): List[MdlKSAGradedEvent] = AppDB.database.withSession { implicit session: scala.slick.driver.MySQLDriver.simple.Session =>
       AppDB.dal.KSAGradedEvent.allQuery.filter(v1KSAGradedEvent => v1KSAGradedEvent.vGradedEvent === vKSAGradedEvent.vGradedEvent).elements.toList
     }
+    
+	def getGradedEventKSAJsonByTopic(idGradedEvent: Long, idTopic: Long) = Action {
+	    val currentlyAssociated = AppDB.dal.KSAGradedEvent.selectByGradedEvent(idGradedEvent).map(_.vKSA)
+	    println(currentlyAssociated.toString)
+	    val ksa1 = SqlTopicObjectives.selectWhere("Topic = " + idTopic)
+	    val ksa = ksa1.filter(ksa => !currentlyAssociated.contains(ksa.vTopicObjectiveNumber))
+	    val resultJson = JsObject(ksa.map(ksa =>
+	        ksa.vTopicObjectiveNumber.toString -> JsString(ksa.vObjective)))
+	    Ok(resultJson)
+	}
     
   def saveList = Action { implicit request =>
   	MdlKSAGradedEventList.formList.bindFromRequest.fold(

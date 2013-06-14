@@ -8,6 +8,8 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 import models._
+import persistence._
+import play.api.libs.json._
 import views._
 import slick.AppDB
 import scala.slick.driver.MySQLDriver.simple._
@@ -38,6 +40,16 @@ object KSASubGradedEventController extends ControllerTrait[Long, MdlKSASubGraded
 	override def createFunction(mdlKSASubGradedEventForm: Form[MdlKSASubGradedEvent]): Html = 
 	  views.html.viewforms.formKSASubGradedEvent(mdlKSASubGradedEventForm, 1)
 	  
+	def getSubGradedEventKSAJsonByTopic(idSubGradedEvent: Long, idTopic: Long) = Action {
+	    val currentlyAssociated = AppDB.dal.KSASubGradedEvent.selectBySubGradedEvent(idSubGradedEvent).map(_.vKSA)
+	    println(currentlyAssociated.toString)
+	    val ksa1 = SqlTopicObjectives.selectWhere("Topic = " + idTopic)
+	    val ksa = ksa1.filter(ksa => !currentlyAssociated.contains(ksa.vTopicObjectiveNumber))
+	    val resultJson = JsObject(ksa.map(ksa =>
+	        ksa.vTopicObjectiveNumber.toString -> JsString(ksa.vObjective)))
+	    Ok(resultJson)
+	}
+    
 	def crud = slick.AppDB.dal.KSASubGradedEvent
 
 

@@ -1,0 +1,39 @@
+
+@(vPerfIndProgramOutcomes: MdlPerfIndProgramOutcomes)
+
+    @import slick.AppDB
+    @import persistence._
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>PerfIndProgramOutcomes Information</h3>
+		  <dl>
+
+		  	<dt>idPerfIndProgramOutcomes</dt>
+		  	<dd>@Html(vPerfIndProgramOutcomes.vidPerfIndProgramOutcomes.toString)</dd>
+
+    		@defining(SqlTerminalLearningObjective.select(vPerfIndProgramOutcomes.vPerformanceIndicator)){pkModel =>
+      		  <dt>PerformanceIndicator</dt>
+      		  <dd><a href="@routes.TerminalLearningObjectiveController.showTerminalLearningObjective(vPerfIndProgramOutcomes.vPerformanceIndicator)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+    		@defining(AppDB.dal.ProgramOutcomes.select(vPerfIndProgramOutcomes.vProgramOutcome).get){pkModel =>
+      		  <dt>ProgramOutcome</dt>
+      		  <dd><a href="@routes.ProgramOutcomesController.show(vPerfIndProgramOutcomes.vProgramOutcome)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+	       </dl>
+     <div>
+       <a href="@routes.PerfIndProgramOutcomesController.list(vPerfIndProgramOutcomes.vProgramOutcome)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

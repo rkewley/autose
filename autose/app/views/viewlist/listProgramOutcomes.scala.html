@@ -18,7 +18,7 @@
 			<tr>
 				<th>Program</th>
 				<th>Program Outcome</th>
-				<th>Show</th>
+				<th>Link to Performance Indicators</th>
 				<th>Edit</th>
 				<th>Delete</th>
 			</tr>
@@ -32,7 +32,7 @@
     		}
 				<td>@vProgramOutcomes.vProgramOutcome</td>
 
-    			<td><a href="@routes.ProgramOutcomesController.show(vProgramOutcomes.vProgramOutcomeNumber.get)">Show</a></td>
+    			<td><a href="@routes.PerfIndProgramOutcomesController.list(vProgramOutcomes.vProgramOutcomeNumber.get)">Link to Performance Indicators</a></td>
     			<td><a href="@routes.ProgramOutcomesController.edit(vProgramOutcomes.vProgramOutcomeNumber.get)">Edit</a></td>
     	  		<td>
     	  			<form action="@routes.ProgramOutcomesController.delete(vProgramOutcomes.vProgramOutcomeNumber.get)" method="POST">
