@@ -1,0 +1,42 @@
+
+@(vGradedRequirementLinks: MdlGradedRequirementLinks)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>GradedRequirementLinks Information</h3>
+		  <dl>
+
+		  	<dt>idGradedRequirementLinks</dt>
+		  	<dd>@Html(vGradedRequirementLinks.vidGradedRequirementLinks.toString)</dd>
+
+		  	<dt>Link</dt>
+		  	<dd>@Html(vGradedRequirementLinks.vLink.toString)</dd>
+
+		  	<dt>Description</dt>
+		  	<dd>@Html(vGradedRequirementLinks.vDescription.toString)</dd>
+
+		  	<dt>IsFileLink</dt>
+		  	<dd>@Html(vGradedRequirementLinks.vIsFileLink.toString)</dd>
+
+    		@defining(AppDB.dal.GradedRequirements.select(vGradedRequirementLinks.vGradedRequirement).get){pkModel =>
+      		  <dt>GradedRequirement</dt>
+      		  <dd><a href="@routes.GradedRequirementsController.show(vGradedRequirementLinks.vGradedRequirement)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+	       </dl>
+     <div>
+       <a href="@routes.GradedRequirementLinksController.list(vGradedRequirementLinks.vGradedRequirement)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

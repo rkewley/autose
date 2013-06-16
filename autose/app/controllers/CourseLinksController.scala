@@ -66,8 +66,10 @@ object CourseLinksController extends Base {
         request.body.file("courseFile").map { courseFile =>
           if (vCourseLinks.validate) {
             val courseId = vCourseLinks.vCourse
-            val courseIdNumber = SqlCourses.select(courseId).vCourseIDNumber
-            val filename = Globals.webDavServer + "Courses/" + Globals.term + "/" + courseIdNumber + "/CourseFiles/" + courseFile.filename
+            val course = SqlCourses.select(courseId)
+            val courseIdNumber = course.vCourseIDNumber
+            val term = "AT" + (course.vAcademicYear - 2000) + "-" + course.vAcademicTerm
+            val filename = Globals.webDavServer + "Courses/" + term + "/" + courseIdNumber + "/CourseFiles/" + courseFile.filename
             val path = filename.replaceAll(" ", "%20")
             Logger.debug(path)
             val contentType = courseFile.contentType

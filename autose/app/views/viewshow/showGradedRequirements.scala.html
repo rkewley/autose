@@ -6,22 +6,12 @@
 		  
     
     @gradedEventPage(vGradedRequirements.vGradedEventIndex.get) {
-	<div>
-	  <div class="column span-4">
-		 
-	  </div>
-
     
-     <div class="column span-16">
+     <div class="column span-14">
 		  <h3>@vGradedRequirements.vGradedEventName</h3>
 		  <dl>
 
-    		@defining(SqlCourses.select(vGradedRequirements.vCourse)){pkModel =>
-      		  <dt>Course</dt>
-      		  <dd><a href="@routes.CoursesController.showCourses(vGradedRequirements.vCourse)">@pkModel.selectIdentifier._2</a></dd>
-    		}
-
-		  	<dt>EventDescription</dt>
+		  	<dt>Description</dt>
 		  	<dd>@Html(vGradedRequirements.vEventDescription.toString)</dd>
 
     		@defining(AppDB.dal.EventType.select(vGradedRequirements.vTypeOfEvent).get){pkModel =>
@@ -41,8 +31,18 @@
      <div>
        <a href="@routes.GradedRequirementsController.list(vGradedRequirements.vCourse)">Return to listing</a>
      </div>
-	</div>
-   <div class="column span-4 last">
    </div>
-  </div>
+   <div class="column span-4 last">
+   
+		 @defining(AppDB.dal.GradedRequirementLinks.selectByGradedRequirement(vGradedRequirements.vGradedEventIndex.get)) { listLinks =>
+		 <ul id="menu">
+		   <li id="label">Files and links for @vGradedRequirements.vGradedEventName</li>
+		   @listLinks.map { vGradedRequirementLink =>
+			 <li><a href="@vGradedRequirementLink.vLink">@vGradedRequirementLink.vDescription</a></li>
+		   }
+		 
+		 }
+   
+   </div>
+   
   }

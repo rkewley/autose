@@ -1,0 +1,50 @@
+
+@(f: Form[MdlGradedRequirementLinks], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fGradedRequirement").value.get.toLong) { vGradedRequirement =>  
+<div class="column span-20 last">
+    <fieldset>
+    @form(action = routes.GradedRequirementLinksController.postFile(newEntry), 'enctype -> "multipart/form-data") {
+		  
+            @defining(f("fidGradedRequirementLinks")) { fidGradedRequirementLinks =>
+                <input type="hidden" name="@fidGradedRequirementLinks.name" id="@fidGradedRequirementLinks.id" value="@fidGradedRequirementLinks.value">
+			}
+
+            @defining(f("fLink")) { fLink =>
+                <input type="hidden" name="@fLink.name" id="@fLink.id" value="">
+			}
+
+            @defining(f("fIsFileLink")) { fIsFileLink =>
+                <input type="hidden" name="@fIsFileLink.name" id="@fIsFileLink.id" value="true">
+			}
+
+            @textarea(field = f("fDescription"), args = 'rows -> 2, 'cols -> 100, '_label-> "Description")
+        	@*@inputText(f("fDescription"), '_label -> "Description")*@
+        	
+        	<input type="file" name="gradedRequirementFile" size="40">
+
+            @defining(f("fGradedRequirement")) { fGradedRequirement =>
+                <input type="hidden" name="@fGradedRequirement.name" id="@fGradedRequirement.id" value="@fGradedRequirement.value">
+			}
+    
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.GradedRequirementLinksController.list(vGradedRequirement)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

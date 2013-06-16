@@ -76,6 +76,7 @@ object CoursesController extends Base {
         sardine.createDirectory(dirPath + "/CourseFiles")
         sardine.createDirectory(dirPath + "/CoursePhotos")
         sardine.createDirectory(dirPath + "/Lessons")
+        sardine.createDirectory(dirPath + "/GradedRequirementFiles")
         def createLessonDirectory(i: Int) {
           if (i <= 40) {
             val lessonPath = i match {

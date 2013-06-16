@@ -54,7 +54,7 @@ object TerminalLearningObjectiveController extends Base {
   	formTerminalLearningObjective.bindFromRequest.fold(
   	  form => {
         val errorMessage = formErrorMessage(form.errors)
-        Logger.debug(errorMessage)
+        Logger.debug("Error in form: " + errorMessage)
         BadRequest(viewforms.html.formError(errorMessage, request.headers("REFERER")))
       },
       vTerminalLearningObjective => {

@@ -276,3 +276,13 @@ POST	/deletePerfIndProgramOutcomes/:id				controllers.PerfIndProgramOutcomesCont
 POST 	/savePerfIndProgramOutcomes/:newEntry			controllers.PerfIndProgramOutcomesController.save(newEntry: Int)
 POST 	/savePerfIndProgramOutcomesList			controllers.PerfIndProgramOutcomesController.saveList
 GET    /getPerformanceIndicatorsJsonByProgramAndOutcome/:idProgram/:idProgramOutcome		controllers.PerfIndProgramOutcomesController.getPerformanceIndicatorsJsonByProgramAndOutcome(idProgram: Long, idProgramOutcome: Long)
+
+# GradedRequirementLinks Routes
+GET     /listGradedRequirementLinks/:idGradedRequirements						controllers.GradedRequirementLinksController.list(idGradedRequirements: Long)
+GET		/showGradedRequirementLinks/:id					controllers.GradedRequirementLinksController.show(id: Long)
+GET 	/editGradedRequirementLinks/:id					controllers.GradedRequirementLinksController.edit(id: Long)
+GET 	/createGradedRequirementLinks/:idGradedRequirements					controllers.GradedRequirementLinksController.create(idGradedRequirements: Long)
+GET 	/uploadGradedRequirementFile/:idGradedRequirements					controllers.GradedRequirementLinksController.uploadGradedEventFile(idGradedRequirements: Long)
+POST	/deleteGradedRequirementLinks/:id				controllers.GradedRequirementLinksController.delete(id: Long)
+POST 	/saveGradedRequirementLinks/:newEntry			controllers.GradedRequirementLinksController.save(newEntry: Int)
+POST 	/postGradedRequirementFile/:newEntry				controllers.GradedRequirementLinksController.postFile(newEntry: Int)

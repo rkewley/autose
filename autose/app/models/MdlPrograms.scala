@@ -19,7 +19,7 @@
     
 	  def validationErrors: String = ""
     
-      def selectIdentifier: (String, String) = vidPrograms.toString -> vProgram.toString
+      def selectIdentifier: (String, String) = vidPrograms.get.toString -> vProgram.toString
     
       def compare(a: MdlPrograms, b: MdlPrograms): Int = {
         return a.vProgram.compareTo(b.vProgram)

@@ -19,7 +19,6 @@
 				<th>Slogan</th>
 				<th>Program Director</th>
 				<th>Department</th>
-				<th>Show</th>
 				<th>Edit</th>
 				<th>Delete</th>
 			</tr>
@@ -28,7 +27,7 @@
     			
     		<tr>
 				<td>@vPrograms.vProgram</td>
-				<td>@vPrograms.vName</td>
+				<td><a href="@routes.ProgramsController.show(vPrograms.vidPrograms.get)">@vPrograms.vName</a></td>
 				<td>@vPrograms.vSlogan</td>
 
 				
@@ -41,7 +40,7 @@
       		  <td><a href="@routes.DepartmentsController.showDepartments(vPrograms.vDepartment)">@pkModel.selectIdentifier._2</a></td>
     		}
 
-    			<td><a href="@routes.ProgramsController.show(vPrograms.vidPrograms.get)">Show</a></td>
+    			
     			<td><a href="@routes.ProgramsController.edit(vPrograms.vidPrograms.get)">Edit</a></td>
     	  		<td>
     	  			<form action="@routes.ProgramsController.delete(vPrograms.vidPrograms.get)" method="POST">

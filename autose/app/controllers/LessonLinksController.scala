@@ -79,9 +79,10 @@ object LessonLinksController extends Base {
               case x if x < 10 => "0" + lessonNumber.toString
               case _ => lessonNumber.toString
             }
-            val courseId = vLesson.vidCourse
-            val courseIdNumber = SqlCourses.select(courseId).vCourseIDNumber
-            val filename = Globals.webDavServer + "Courses/" + Globals.term + "/" + 
+            val course = SqlCourses.select(vLesson.vidCourse)
+            val courseIdNumber = course.vCourseIDNumber
+            val term = "AT" + (course.vAcademicYear - 2000) + "-" + course.vAcademicTerm
+            val filename = Globals.webDavServer + "Courses/" + term + "/" + 
             		courseIdNumber + "/Lessons/Lesson" + lessonString + "/" + lessonFile.filename
             val path = filename.replaceAll(" ", "%20")
             Logger.debug(path)

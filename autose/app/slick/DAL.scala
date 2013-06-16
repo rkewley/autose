@@ -12,6 +12,7 @@ class DAL(override val profile: ExtendedProfile) extends ProgramsComponent
 	with KSAPerfIndicatorComponent
 	with PerfIndProgramOutcomesComponent
 	with PerformanceIndicatorComponent
+	with GradedRequirementLinksComponent
 	with Profile {
  
   import profile.simple._

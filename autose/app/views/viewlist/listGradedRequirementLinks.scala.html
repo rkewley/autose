@@ -1,0 +1,53 @@
+
+@(listGradedRequirementLinks: List[MdlGradedRequirementLinks], idGradedRequirements: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>Graded Requirement Links and Files Listing</h3>
+		  <table>
+			<tr>
+				<th>Link</th>
+				<th>IsFileLink</th>
+				<th>GradedRequirement</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listGradedRequirementLinks.map { vGradedRequirementLinks =>
+    			
+    		<tr>
+				<td><a href="@vGradedRequirementLinks.vLink">@vGradedRequirementLinks.vDescription</a></td>
+				<td>@vGradedRequirementLinks.vIsFileLink</td>
+
+    		@defining(AppDB.dal.GradedRequirements.select(vGradedRequirementLinks.vGradedRequirement).get){pkModel =>
+      		  <td><a href="@routes.GradedRequirementsController.show(vGradedRequirementLinks.vGradedRequirement)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    			<td><a href="@routes.GradedRequirementLinksController.show(vGradedRequirementLinks.vidGradedRequirementLinks.get)">Show</a></td>
+    			<td><a href="@routes.GradedRequirementLinksController.edit(vGradedRequirementLinks.vidGradedRequirementLinks.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.GradedRequirementLinksController.delete(vGradedRequirementLinks.vidGradedRequirementLinks.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <p><a href="@routes.GradedRequirementLinksController.create(idGradedRequirements)">Create new graded requirement link</a></p>
+      <p><a href="@routes.GradedRequirementLinksController.uploadGradedEventFile(idGradedRequirements)">Upload new graded requirement file</a></p>
+    </div>
+  </div>
+  }

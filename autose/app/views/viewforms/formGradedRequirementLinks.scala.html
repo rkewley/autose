@@ -1,0 +1,45 @@
+
+@(f: Form[MdlGradedRequirementLinks], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fGradedRequirement").value.get.toLong) { vGradedRequirement =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.GradedRequirementLinksController.save(newEntry)) {
+		  
+            @defining(f("fidGradedRequirementLinks")) { fidGradedRequirementLinks =>
+                <input type="hidden" name="@fidGradedRequirementLinks.name" id="@fidGradedRequirementLinks.id" value="@fidGradedRequirementLinks.value">
+			}
+
+            @textarea(field = f("fLink"), args = 'rows -> 2, 'cols -> 100, '_label-> "Link")
+        	@*@inputText(f("fLink"), '_label -> "Link")*@
+
+            @textarea(field = f("fDescription"), args = 'rows -> 2, 'cols -> 100, '_label-> "Description")
+        	@*@inputText(f("fDescription"), '_label -> "Description")*@
+
+            @helper.checkbox(f("fIsFileLink"), '_label -> "IsFileLink", '_help->"")
+
+            @defining(f("fGradedRequirement")) { fGradedRequirement =>
+                <input type="hidden" name="@fGradedRequirement.name" id="@fGradedRequirement.id" value="@fGradedRequirement.value">
+			}
+    
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.GradedRequirementLinksController.list(vGradedRequirement)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }
