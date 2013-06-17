@@ -1,0 +1,38 @@
+
+@(vPEOtoSLO: MdlPEOtoSLO)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>PEOtoSLO Information</h3>
+		  <dl>
+
+		  	<dt>idPEOtoSLO</dt>
+		  	<dd>@Html(vPEOtoSLO.vidPEOtoSLO.toString)</dd>
+
+    		@defining(AppDB.dal.ProgramEducationalObjectives.select(vPEOtoSLO.vPEO).get){pkModel =>
+      		  <dt>PEO</dt>
+      		  <dd><a href="@routes.ProgramEducationalObjectivesController.show(vPEOtoSLO.vPEO)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+    		@defining(AppDB.dal.ProgramOutcomes.select(vPEOtoSLO.vSLO).get){pkModel =>
+      		  <dt>SLO</dt>
+      		  <dd><a href="@routes.ProgramOutcomesController.show(vPEOtoSLO.vSLO)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+	       </dl>
+     <div>
+       <a href="@routes.PEOtoSLOController.list(vPEOtoSLO.vPEO)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

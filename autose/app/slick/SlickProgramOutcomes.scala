@@ -32,6 +32,13 @@ trait ProgramOutcomesComponent  {
 	    }
 	  }
 	  
+	  def selectByProgram(program: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val q = Query(ProgramOutcomes).filter(p => p.vProgram === program)
+	      q.elements.toList
+	    }
+	  }
+	  
 	  def selectQuery(pk: Long)(implicit session: Session) = {
 	      val q = Query(ProgramOutcomes)
 	      q.filter(p => p.vProgramOutcomeNumber === pk)

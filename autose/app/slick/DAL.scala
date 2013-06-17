@@ -13,6 +13,8 @@ class DAL(override val profile: ExtendedProfile) extends ProgramsComponent
 	with PerfIndProgramOutcomesComponent
 	with PerformanceIndicatorComponent
 	with GradedRequirementLinksComponent
+	with ProgramEducationalObjectivesComponent
+	with PEOtoSLOComponent
 	with Profile {
  
   import profile.simple._

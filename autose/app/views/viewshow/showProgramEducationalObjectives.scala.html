@@ -1,0 +1,36 @@
+
+@(vProgramEducationalObjectives: MdlProgramEducationalObjectives)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>ProgramEducationalObjectives Information</h3>
+		  <dl>
+
+		  	<dt>ProgObjNumber</dt>
+		  	<dd>@Html(vProgramEducationalObjectives.vProgObjNumber.toString)</dd>
+
+    		@defining(AppDB.dal.Programs.select(vProgramEducationalObjectives.vProgram).get){pkModel =>
+      		  <dt>Program</dt>
+      		  <dd><a href="@routes.ProgramsController.show(vProgramEducationalObjectives.vProgram)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+		  	<dt>ProgramEducationalObjective</dt>
+		  	<dd>@Html(vProgramEducationalObjectives.vProgramEducationalObjective.toString)</dd>
+	       </dl>
+     <div>
+       <a href="@routes.ProgramEducationalObjectivesController.list(vProgramEducationalObjectives.vProgram)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

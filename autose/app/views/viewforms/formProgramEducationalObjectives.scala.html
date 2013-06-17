@@ -1,0 +1,52 @@
+
+@(f: Form[MdlProgramEducationalObjectives], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fProgram").value.get.toLong) { vProgram =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.ProgramEducationalObjectivesController.save(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fProgObjNumber")) { fProgObjNumber =>
+                <input type="hidden" name="@fProgObjNumber.name" id="@fProgObjNumber.id" value="@fProgObjNumber.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fProgObjNumber")) { fProgObjNumber =>
+                <input type="hidden" name="@fProgObjNumber.name" id="@fProgObjNumber.id" value="@fProgObjNumber.value">
+			}
+    
+     	}
+
+            @defining(f("fProgram")) { fProgram =>
+                <input type="hidden" name="@fProgram.name" id="@fProgram.id" value="@fProgram.value">
+			}
+    
+            @textarea(field = f("fProgramEducationalObjective"), args = 'rows -> 2, 'cols -> 100, '_label-> "ProgramEducationalObjective")
+        	@*@inputText(f("fProgramEducationalObjective"), '_label -> "ProgramEducationalObjective")*@
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.ProgramEducationalObjectivesController.list(vProgram)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

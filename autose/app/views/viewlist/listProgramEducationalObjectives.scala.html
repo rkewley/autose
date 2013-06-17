@@ -1,0 +1,51 @@
+
+@(listProgramEducationalObjectives: List[MdlProgramEducationalObjectives], idPrograms: Long)
+    
+    @import slick.AppDB
+    
+    
+    @programPage(AppDB.dal.Programs.select(idPrograms).get) {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-18 last">
+		  <h3>Program Educational Objectives Listing</h3>
+		  <table>
+			<tr>
+				<th>Program</th>
+				<th>Program Educational Objective</th>
+				<th>Link to Student Learning Outcomes</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listProgramEducationalObjectives.map { vProgramEducationalObjectives =>
+    			
+    		<tr>
+
+    		@defining(AppDB.dal.Programs.select(vProgramEducationalObjectives.vProgram).get){pkModel =>
+      		  <td><a href="@routes.ProgramsController.show(vProgramEducationalObjectives.vProgram)">@pkModel.selectIdentifier._2</a></td>
+    		}
+				<td>@vProgramEducationalObjectives.vProgramEducationalObjective</td>
+				
+				<td><a href="@routes.PEOtoSLOController.list(vProgramEducationalObjectives.vProgObjNumber.get)">Link to Student Learning Outcomes</td>
+
+    			<td><a href="@routes.ProgramEducationalObjectivesController.edit(vProgramEducationalObjectives.vProgObjNumber.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.ProgramEducationalObjectivesController.delete(vProgramEducationalObjectives.vProgObjNumber.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.ProgramEducationalObjectivesController.create(idPrograms)">Create new program educational objectives</a>
+    </div>
+  </div>
+  }

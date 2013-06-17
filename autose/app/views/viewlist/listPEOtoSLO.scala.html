@@ -1,0 +1,52 @@
+
+@(listPEOtoSLO: List[MdlPEOtoSLO], idProgramEducationalObjectives: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h4>
+		    <p>Student learning outcomes linked to the following program educational objective:</p>
+		    <p>@AppDB.dal.ProgramEducationalObjectives.select(idProgramEducationalObjectives).get.vProgramEducationalObjective</p>
+		  </h4>
+		  <table>
+			<tr>
+				<th>PEO</th>
+				<th>SLO</th>
+				<th>Delete</th>
+			</tr>
+
+            @listPEOtoSLO.map { vPEOtoSLO =>
+    			
+    		<tr>
+
+    		@defining(AppDB.dal.ProgramEducationalObjectives.select(vPEOtoSLO.vPEO).get){pkModel =>
+      		  <td><a href="@routes.ProgramEducationalObjectivesController.show(vPEOtoSLO.vPEO)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    		@defining(AppDB.dal.ProgramOutcomes.select(vPEOtoSLO.vSLO).get){pkModel =>
+      		  <td><a href="@routes.ProgramOutcomesController.show(vPEOtoSLO.vSLO)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    	  		<td>
+    	  			<form action="@routes.PEOtoSLOController.delete(vPEOtoSLO.vidPEOtoSLO.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.PEOtoSLOController.create(idProgramEducationalObjectives)">Link new student learning outcomes to this program educational objective</a>
+    </div>
+  </div>
+  }

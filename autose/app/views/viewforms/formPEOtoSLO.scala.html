@@ -1,0 +1,58 @@
+
+@(f: Form[MdlPEOtoSLO], newEntry: Int)
+
+@import helper._
+@import persistence._
+@import slick.AppDB
+
+<script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.1.min.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
+
+@main("Systems Net", "Systems Body of Knowledge") {
+  <div>
+    <div class="column span-4">
+		 
+	</div>
+
+
+    @defining(f("fPEO").value.get.toLong) { vPEO =>  
+      <div class="column span-18 last">
+        <fieldset>
+          @helper.form(routes.PEOtoSLOController.saveList) {
+		  
+            @defining(f("fidPEOtoSLO")) { fidPEOtoSLO =>
+                <input type="hidden" name="@fidPEOtoSLO.name" id="@fidPEOtoSLO.id" value="@fidPEOtoSLO.value">
+			}
+
+
+            @defining(f("fPEO")) { fPEO =>
+                <input type="hidden" name="@fPEO.name" id="@fPEO.id" value="@fPEO.value">
+			}
+    
+			<p>Select the performance indicators below to link to this program outcome.</p>
+			  @defining(AppDB.dal.ProgramEducationalObjectives.select(vPEO).get.vProgram) { programId =>
+		        <script type-"text/javascript">
+				  $(document).ready(function(){
+					var checkboxdiv = $('#sloCheckBoxList')
+					var programIndex = @programId;
+					var peo = @vPEO
+					getNewCheckboxes('/getSLOJsonByPEOandProgram/' + peo + '/' + programIndex, checkboxdiv, 'fSLO');
+				  });
+			    </script>
+			  }			
+			  
+			<div id="sloCheckBoxList">
+			</div>   
+
+    		<a href="@routes.ProgramOutcomesController.create(AppDB.dal.ProgramEducationalObjectives.select(vPEO).get.vProgram)">Create new program outcome</a>
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.PEOtoSLOController.list(vPEO)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }
