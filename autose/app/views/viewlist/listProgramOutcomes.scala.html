@@ -30,7 +30,7 @@
     		@defining(AppDB.dal.Programs.select(vProgramOutcomes.vProgram).get){pkModel =>
       		  <td><a href="@routes.ProgramsController.show(vProgramOutcomes.vProgram)">@pkModel.selectIdentifier._2</a></td>
     		}
-				<td>@vProgramOutcomes.vProgramOutcome</td>
+				<td><a href="@routes.ProgramOutcomesController.show(vProgramOutcomes.vProgramOutcomeNumber.get)">@vProgramOutcomes.vProgramOutcome</a></td>
 
     			<td><a href="@routes.PerfIndProgramOutcomesController.list(vProgramOutcomes.vProgramOutcomeNumber.get)">Link to Performance Indicators</a></td>
     			<td><a href="@routes.ProgramOutcomesController.edit(vProgramOutcomes.vProgramOutcomeNumber.get)">Edit</a></td>

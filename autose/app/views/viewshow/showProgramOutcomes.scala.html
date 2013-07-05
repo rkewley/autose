@@ -1,36 +1,90 @@
 
 @(vProgramOutcomes: MdlProgramOutcomes)
 
-    @import slick.AppDB
+
+  @import slick.AppDB
 		  
+  @defining(AppDB.dal.Programs.select(vProgramOutcomes.vProgram).get) { vProgram =>
+    @programPage(AppDB.dal.Programs.select(vProgramOutcomes.vProgram).get) {
+
+	<script type="text/javascript">
+	  $(document).ready(function() {
+  		$(  "#accordion"  ).accordion({ collapsible: true });
+  		$(  "#accordion"  ).accordion( {active: false} );
+ 	  });
+	</script>
+
     
-    @main("Systems Net", "Systems Body of Knowledge") {
-	<div>
-	  <div class="column span-4">
-		 
+      <div class="column span-14">
+        <h3>Student Learning Outcome:  @vProgramOutcomes.vProgramOutcome
+        <br>Supporting Performance Indicators: </h3>
+	    <div id="accordion">
+		  @defining(AppDB.dal.PerfIndProgramOutcomes.joinPerformanceIndicatorsByProgramOutcome(vProgramOutcomes.vProgramOutcomeNumber.get)) { perfIndList =>
+	        @perfIndList.map { perfInd =>
+	          <h3>@perfInd._2</h3>
+	          <div>
+	            
+	            <table>
+	              <tr>
+		  	        <th>Knowledge, Skill, or Behavior</th>
+		  	        <th>Courses</th>
+		  	      </tr>
+		  	      
+		  	      @AppDB.dal.KSAPerfIndicator.joinKSAByPerfIndicator(perfInd._3).map { ksa =>
+		  	           	
+		  	          <tr>
+		  	            <td>@ksa._3:  @ksa._2</td>
+		  	        @AppDB.dal.KSA.buildKSATeachData(ksa._1).map { teachData =>
+		  	          <td>  
+		  	          <table>
+		  	          <tr>
+		  	            <th>Course</th>
+		  	            <th>Lessons</th>
+		  	            <th>Graded Events</th>
+		  	          </th>
+		  	          <tr>  
+		  	            <td><a href="@routes.CoursesController.homeCourses(teachData.courseIndex)">@teachData.courseNumber</a></td>
+		  	            <td>@teachData.lessons.map { lsn =>
+		  	                <a href="@routes.LessonsController.showLessons(lsn.lessonIndex)">@lsn.lessonNumber</a>
+		  	              }
+		  	            </td>
+		  	            <td>@teachData.gradedEvents.map { gradedEvent =>
+		  	              <table>
+		  	                <tr>
+		  	                  <th>Graded Event</th>
+		  	                  <th>Sub Events</th>
+		  	                </tr>
+		  	                <tr>
+		  	                  <td><a href="@routes.GradedRequirementsController.show(gradedEvent.eventIndex)">@gradedEvent.eventName</a></td>
+		  	                  <td>
+		  	                    @gradedEvent.subEvents.map { subEvent =>
+		  	                      @subEvent.description <br>
+		  	                    }
+		  	                  </td>
+		  	                </tr>  
+		  	              </table> 
+		  	            }  
+		  	            </td>
+		  	          </tr>  
+		  	          </table>  
+		  	          </td>  
+		  	          </tr>
+		  	          
+		  	        }
+		  	      }
+	                       
+	            </table>
+	          
+	          </div>
+	        }
+	      }
+	    </div>  
+        <div>
+          <a href="@routes.ProgramOutcomesController.list(vProgramOutcomes.vProgram)">Return to listing</a>
+        </div>
 	  </div>
-
-    
-     <div class="column span-16">
-		  <h3>ProgramOutcomes Information</h3>
-		  <dl>
-
-		  	<dt>ProgramOutcomeNumber</dt>
-		  	<dd>@Html(vProgramOutcomes.vProgramOutcomeNumber.toString)</dd>
-
-    		@defining(AppDB.dal.Programs.select(vProgramOutcomes.vProgram).get){pkModel =>
-      		  <dt>Program</dt>
-      		  <dd><a href="@routes.ProgramsController.show(vProgramOutcomes.vProgram)">@pkModel.selectIdentifier._2</a></dd>
-    		}
-
-		  	<dt>ProgramOutcome</dt>
-		  	<dd>@Html(vProgramOutcomes.vProgramOutcome.toString)</dd>
-	       </dl>
-     <div>
-       <a href="@routes.ProgramOutcomesController.list(vProgramOutcomes.vProgram)">Return to listing</a>
-     </div>
-	</div>
-   <div class="column span-4 last">
-   </div>
-  </div>
+	  
+      <div class="column span-4 last">
+      </div>
+    }
   }

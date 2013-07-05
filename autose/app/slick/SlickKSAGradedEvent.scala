@@ -10,7 +10,7 @@ trait KSAGradedEventComponent  {
 	import profile.simple._
 
 	object KSAGradedEvent extends Table[MdlKSAGradedEvent]("KSAGradedEvent") with Crud[MdlKSAGradedEvent, Long]  {
-
+ 
       def vidKSAGradedEvent = column[Long]("idKSAGradedEvent", O.PrimaryKey)
       def vKSA = column[Long]("KSA")
       def vGradedEvent = column[Long]("GradedEvent")
@@ -47,6 +47,29 @@ trait KSAGradedEventComponent  {
 	    AppDB.database.withSession { implicit session: Session =>
 	      val q = Query(KSAGradedEvent)
 	      q.filter(p => p.vGradedEvent === idGradedEvent).elements.toList	      
+	    }
+      }
+      
+      def joinGradedEventByKSAQuery(idKSA: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      // First pull all graded events that have sub-events associated with idKSA
+	      val subEvents = for {
+	        (subevent, ge) <- AppDB.dal.KSASubGradedEvent.joinSubGradedEventByKSAQuery(idKSA) innerJoin AppDB.dal.GradedRequirements on (_._3 === _.vGradedEventIndex)
+	      } yield (ge.vGradedEventIndex, ge.vGradedEventName, ge.vCourse)
+	      // Now pull all events associated with idKSA
+	      val events = for {
+	        (ge, ksage) <- AppDB.dal.GradedRequirements innerJoin AppDB.dal.KSAGradedEvent on (_.vGradedEventIndex === _.vGradedEvent)
+	           if ksage.vKSA === idKSA
+	      } yield (ge.vGradedEventIndex, ge.vGradedEventName, ge.vCourse)
+	      // Return the union of the two queries
+	      //subEvents.union(events)
+	      events
+	    }	    
+      }
+
+      def joinGradedEventByKSA(idKSA: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+          joinGradedEventByKSAQuery(idKSA).elements.toList
 	    }
       }
 	  

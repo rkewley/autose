@@ -3,6 +3,7 @@ package slick
 
 import models.MdlKSASubGradedEvent
 import models.Mdl
+import scala.slick.lifted._
 
 trait KSASubGradedEventComponent  {
 	this: Profile =>
@@ -49,6 +50,22 @@ trait KSASubGradedEventComponent  {
 	      selectQuery(pk).elements.toList.headOption
 	    }
 	  }
+	  
+      def joinSubGradedEventByKSAQuery(idKSA: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val result1 = for {
+	        (ge, ksage) <- AppDB.dal.SubGradedEvent innerJoin AppDB.dal.KSASubGradedEvent on (_.vidSubGradedEvent === _.vSubGradedEvent)
+	           if ksage.vKSA === idKSA
+	      } yield (ge.vidSubGradedEvent, ge.vDescription, ge.vGradedEvent)
+	      result1
+	    }	    
+      }
+
+      def joinSubGradedEventByKSA(idKSA: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+          joinSubGradedEventByKSAQuery(idKSA).elements.toList
+	    }
+      }
 	  
 	  def delete(pk: Long) {
 	    AppDB.database.withSession { implicit session: Session =>

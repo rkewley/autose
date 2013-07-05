@@ -48,7 +48,20 @@ trait KSAPerfIndicatorComponent  {
 	      val q = Query(KSAPerfIndicator)
 	      q.filter(p => p.vPerformanceIndicator === perfIndicator).elements.toList  
 	    }
-      }      
+      }
+      
+      def joinKSAByPerfIndicator(perfIndicator: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      println("Joining KSA for performance indicator: " + perfIndicator)
+	      val result = for {
+	        (ksa, piksa) <- AppDB.dal.KSA innerJoin AppDB.dal.KSAPerfIndicator on (_.vTopicObjectiveNumber === _.vKSA)
+	           if piksa.vPerformanceIndicator === perfIndicator
+	      } yield (piksa.vKSA, ksa.vObjective, ksa.vKSAB)
+	      println("There are " + result.length + " results")
+	      result.elements.toList
+	    }	    
+      }
+
 	  
 	  def delete(pk: Long) {
 	    AppDB.database.withSession { implicit session: Session =>

@@ -1,6 +1,7 @@
 
 package slick
 
+
 import models.MdlPerfIndProgramOutcomes
 import models.Mdl
 
@@ -50,6 +51,17 @@ trait PerfIndProgramOutcomesComponent  {
 	    }
       }
 	  
+      def joinPerformanceIndicatorsByProgramOutcome(programOutcome: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val result = for {
+	        (pi, pipo) <- AppDB.dal.PerformanceIndicator innerJoin AppDB.dal.PerfIndProgramOutcomes on (_.vidTerminalLearningObjective === _.vPerformanceIndicator)
+	           if pipo.vProgramOutcome === programOutcome
+	      } yield (pipo.vProgramOutcome, pi.vTerminalLearningObjective, pi.vidTerminalLearningObjective)
+	      println("Program outcome is: " + programOutcome)
+	      result.elements.toList
+	    }	    
+      }
+      
 	  def delete(pk: Long) {
 	    AppDB.database.withSession { implicit session: Session =>
 	      selectQuery(pk).delete
