@@ -1,0 +1,37 @@
+
+@(f: Form[MdlDefinitions], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.DefinitionsController.save(newEntry)) {
+
+		  
+            @defining(f("fidDefinitions")) { fidDefinitions =>
+                <input type="hidden" name="@fidDefinitions.name" id="@fidDefinitions.id" value="@fidDefinitions.value">
+			}
+    
+
+        	@inputText(f("fWord"), '_label -> "Word")
+
+            @textarea(field = f("fDefinition"), args = 'rows -> 2, 'cols -> 100, '_label-> "Definition")
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.DefinitionsController.list(0)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }

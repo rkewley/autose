@@ -3,9 +3,10 @@
 
 @import helper._
 @import persistence._
+@import slick.AppDB
 
 
-    @main("Systems Net", "Systems Body of Knowledge") {
+    @main("Systems Net", "Systems Engineering Curriculum Management Interface") {
 	<div>
 	  <div class="column span-4">
 		 
@@ -13,6 +14,7 @@
 
     
 <div class="column span-20 last">
+    <a href="#" title="@AppDB.dal.Definitions.getDefinition("Course Information Guidance")">Course Information Guidance</a> 
     <fieldset>
     @helper.form(routes.CoursesController.saveCourses(newEntry)) {
 

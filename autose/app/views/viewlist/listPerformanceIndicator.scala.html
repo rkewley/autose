@@ -1,0 +1,50 @@
+
+@(listPerformanceIndicator: List[MdlPerformanceIndicator], idProgramOutcomes: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Engineering Curriculum Management Interface") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>Performance Indicator Listing for Program Outcome: <br>@AppDB.dal.ProgramOutcomes.select(idProgramOutcomes).get.vProgramOutcome</h3>
+		  
+		  <table>
+			<tr>
+				<th>Performance Indicator</th>
+				<th>Link to KSA's</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listPerformanceIndicator.map { vPerformanceIndicator =>
+    			
+    		<tr>
+
+				<td>@vPerformanceIndicator.vPerformanceIndicator</td>
+
+    			<td><a href="@routes.KSAPerfIndicatorController.list(vPerformanceIndicator.vidPerformanceIndicator.get)">Link to KSAs</a></td>
+
+    			<td><a href="@routes.PerformanceIndicatorController.show(vPerformanceIndicator.vidPerformanceIndicator.get)">Show</a></td>
+    			<td><a href="@routes.PerformanceIndicatorController.edit(vPerformanceIndicator.vidPerformanceIndicator.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.PerformanceIndicatorController.delete(vPerformanceIndicator.vidPerformanceIndicator.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.PerformanceIndicatorController.create(idProgramOutcomes)">Create new Performance Indicator</a>
+    </div>
+  </div>
+  }

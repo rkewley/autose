@@ -2,13 +2,11 @@
 @(vTopics: MdlTopics)
 
     @import persistence._
+    @import slick.AppDB
 
     @topicPage(vTopics) {
 	<div>
 	
-	<script>
-     $( document ).tooltip();
-    </script>     
      <div class="column span-14 colborder">
 		 <h3>@vTopics.vTopic</h3>
 		 <p>@Html(vTopics.vTopicShortDescription.toString)</p>
@@ -21,23 +19,21 @@
 		   Performance Indicators</a>
 		 </h4>
 		 
-		 @defining(SqlTerminalLearningObjective.selectWhere("Topic=" + vTopics.vTopicsIndex)) { listTlo =>
+		 @defining(AppDB.dal.PerformanceIndicator.selectPerformanceIndicatorsByTopic(vTopics.vTopicsIndex)) { listTlo =>
 		   <table>
 		     <tr>
 		       <th>Program</th><th>Performance Indicator</th>
 		     @listTlo.map { vTlo =>
-			   <tr><td>@vTlo.vProgram</td><td> @vTlo.vTerminalLearningObjective</td></tr>
+			   <tr><td>@vTlo._1</td><td> @vTlo._2</td></tr>
 		     }
 		   </table>	  
 		 }
 		 <hr>
 		 
 		 <h4>@vTopics.vTopic 
-		   <a href="#" title="Understanding which can be applied, and is developed or learned through experience, study or investigation.">
-		     Knowledge</a>, 
-		   <a href="#" title="An effective behavior, rooted in knowledge and ability, exercised consistently and adeptly; the result of repeated application and practice.">
-		     Skills</a>, and 
-		   <a href="#" title="An observable action or reaction, what is done or said in a specific situation.">Behaviors</a>
+		   <a href="#" title="@AppDB.dal.Definitions.getDefinition("Knowledge").">Knowledge</a>, 
+		   <a href="#" title="@AppDB.dal.Definitions.getDefinition("Skill").">Skills</a>, and 
+		   <a href="#" title="@AppDB.dal.Definitions.getDefinition("Behavior").">Behaviors</a>
 		 </h4>
 		 <p><em>These learning objectives are discrete testable skills that support the terminal learning objective.</em></p>
 		 @defining(SqlTopicObjectives.selectWhere("Topic=" + vTopics.vTopicsIndex)) { listTopicObjectives =>

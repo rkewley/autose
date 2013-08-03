@@ -9,16 +9,15 @@ trait PerformanceIndicatorComponent  {
 	  
 	import profile.simple._
 
-	object PerformanceIndicator extends Table[MdlPerformanceIndicator]("TerminalLearningObjective") with Crud[MdlPerformanceIndicator, Long]  {
+	object PerformanceIndicator extends Table[MdlPerformanceIndicator]("PerformanceIndicator") with Crud[MdlPerformanceIndicator, Long]  {
 
-      def vidTerminalLearningObjective = column[Long]("idTerminalLearningObjective", O.PrimaryKey)
-      def vTerminalLearningObjective = column[String]("TerminalLearningObjective")
-      def vTopic = column[Long]("Topic")
-      def vProgram = column[Long]("Program")
-      def * = vidTerminalLearningObjective.? ~ vTerminalLearningObjective ~ vTopic ~ vProgram<> (MdlPerformanceIndicator.apply _, MdlPerformanceIndicator.unapply _)
-      def forInsert = vTerminalLearningObjective ~ vTopic ~ vProgram <> 
-      ({t => MdlPerformanceIndicator(None , t._1, t._2, t._3)},
-      {(vTerminalLearningObjective: MdlPerformanceIndicator) => Some(vTerminalLearningObjective.vTerminalLearningObjective, vTerminalLearningObjective.vTopic, vTerminalLearningObjective.vProgram)})
+      def vidPerformanceIndicator = column[Long]("idPerformanceIndicator", O.PrimaryKey)
+      def vPerformanceIndicator = column[String]("PerformanceIndicator")
+      def vProgramOutcome = column[Long]("ProgramOutcome")
+      def * = vidPerformanceIndicator.? ~ vPerformanceIndicator ~ vProgramOutcome<> (MdlPerformanceIndicator.apply _, MdlPerformanceIndicator.unapply _)
+      def forInsert = vPerformanceIndicator ~ vProgramOutcome <> 
+      ({t => MdlPerformanceIndicator(None , t._1, t._2)},
+      {(vPerformanceIndicator: MdlPerformanceIndicator) => Some(vPerformanceIndicator.vPerformanceIndicator, vPerformanceIndicator.vProgramOutcome)})
 
 	  def allQuery = {
 	    AppDB.database.withSession { implicit session: Session =>
@@ -35,7 +34,7 @@ trait PerformanceIndicatorComponent  {
 	  
 	  def selectQuery(pk: Long)(implicit session: Session) = {
 	      val q = Query(PerformanceIndicator)
-	      q.filter(p => p.vidTerminalLearningObjective === pk)
+	      q.filter(p => p.vidPerformanceIndicator === pk)
 	  }
 
       def select(pk: Long) = {
@@ -43,40 +42,52 @@ trait PerformanceIndicatorComponent  {
 	      selectQuery(pk).elements.toList.headOption
 	    }
 	  }
-      
-      def selectByProgram(idProgram: Long) = {
-	    AppDB.database.withSession { implicit session: Session =>
-	      val q = Query(PerformanceIndicator)
-	      q.filter(p => p.vProgram === idProgram).elements.toList
-	    }
-      }
 	  
-      def selectByTopic(idTopic: Long) = {
-	    AppDB.database.withSession { implicit session: Session =>
-	      val q = Query(PerformanceIndicator)
-	      q.filter(p => p.vTopic === idTopic).elements.toList
-	    }
-      }
-
-      def delete(pk: Long) {
+	  def delete(pk: Long) {
 	    AppDB.database.withSession { implicit session: Session =>
 	      selectQuery(pk).delete
 	    }
 	  }
 
-	  def insert(vTerminalLearningObjective: MdlPerformanceIndicator) {
+	  def insert(vPerformanceIndicator: MdlPerformanceIndicator) {
 	    AppDB.database.withSession { implicit session: Session =>
-	      PerformanceIndicator.forInsert insert MdlPerformanceIndicator(None, vTerminalLearningObjective.vTerminalLearningObjective, vTerminalLearningObjective.vTopic, vTerminalLearningObjective.vProgram)
+	      PerformanceIndicator.forInsert insert MdlPerformanceIndicator(None, vPerformanceIndicator.vPerformanceIndicator, vPerformanceIndicator.vProgramOutcome)
 
 	    }
 	  }
+	  
+	  def selectByProgramOutcome(programOutcome: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val q = Query(PerformanceIndicator)
+	      q.filter(p => p.vProgramOutcome === programOutcome).elements.toList
+	    }	    
+	  }
+	  
+      def selectPerformanceIndicatorsByTopic(topic: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val result = for {
+	        (ksa, ksapi) <- AppDB.dal.KSA innerJoin AppDB.dal.KSAPerfIndicator on (_.vTopicObjectiveNumber === _.vKSA)
+	           if ksa.vTopic === topic
+	      } yield (ksapi.vPerformanceIndicator)
+	      val result2 = for {
+	        (pi, piIndex) <- AppDB.dal.PerformanceIndicator innerJoin result on (_.vidPerformanceIndicator === _)
+	      } yield (pi.vProgramOutcome, pi.vPerformanceIndicator)
+	      val result3 = for {
+	        (pi2, po) <- result2 innerJoin AppDB.dal.ProgramOutcomes on (_._1 === _.vProgramOutcomeNumber)
+	      } yield (po.vProgram, pi2._2)
+	      val result4 = for {
+	        (pipo, pgm) <- result3 innerJoin AppDB.dal.Programs on (_._1 === _.vidPrograms)
+	      } yield (pgm.vProgram, pipo._2)
+	      result3.elements.toList.distinct
+	    }	    
+      }
     
 
-	  def update(vTerminalLearningObjective: MdlPerformanceIndicator) {
+	  def update(vPerformanceIndicator: MdlPerformanceIndicator) {
 	    AppDB.database.withSession { implicit session: Session =>
-	      val q = selectQuery(vTerminalLearningObjective.vidTerminalLearningObjective.get)
-	      val q2 = q.map(vTerminalLearningObjective => vTerminalLearningObjective.vTerminalLearningObjective ~ vTerminalLearningObjective.vTopic ~ vTerminalLearningObjective.vProgram)
-	      q2.update(vTerminalLearningObjective.vTerminalLearningObjective, vTerminalLearningObjective.vTopic, vTerminalLearningObjective.vProgram)
+	      val q = selectQuery(vPerformanceIndicator.vidPerformanceIndicator.get)
+	      val q2 = q.map(vPerformanceIndicator => vPerformanceIndicator.vPerformanceIndicator ~ vPerformanceIndicator.vProgramOutcome)
+	      q2.update(vPerformanceIndicator.vPerformanceIndicator, vPerformanceIndicator.vProgramOutcome)
 	    }
 	  }
 

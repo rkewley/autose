@@ -102,14 +102,6 @@ POST	/deletePrograms/:id						controllers.ProgramsController.delete(id: Long)
 POST 	/savePrograms/:newEntry					controllers.ProgramsController.save(newEntry: Int)
 
 
-# TerminalLearningObjective Routes
-GET     /listSelectedTerminalLearningObjective/:topcId		controllers.TerminalLearningObjectiveController.listSelectedTerminalLearningObjective(topcId: Long)
-GET		/showTerminalLearningObjective/:id					controllers.TerminalLearningObjectiveController.showTerminalLearningObjective(id: Long)
-GET 	/editTerminalLearningObjective/:id					controllers.TerminalLearningObjectiveController.editTerminalLearningObjective(id: Long)
-GET 	/createTerminalLearningObjective/:topicId			controllers.TerminalLearningObjectiveController.createTerminalLearningObjective(topicId: Long)
-POST	/deleteTerminalLearningObjective/:id				controllers.TerminalLearningObjectiveController.deleteTerminalLearningObjective(id: Long)
-POST 	/saveTerminalLearningObjective/:newEntry			controllers.TerminalLearningObjectiveController.saveTerminalLearningObjective(newEntry: Int)
-
 # TopicObjectives Routes
 GET     /listSelectedTopicObjectives/:topicId	controllers.TopicObjectivesController.listSelectedTopicObjectives(topicId: Long)
 GET		/showTopicObjectives/:id				controllers.TopicObjectivesController.showTopicObjectives(id: Long)
@@ -266,17 +258,6 @@ POST 	/saveKSAPerfIndicator/:newEntry			controllers.KSAPerfIndicatorController.s
 POST 	/saveKSAPerfIndicatorList					controllers.KSAPerfIndicatorController.saveList
 GET    /getKSAJsonByTopic/:idPerfIndicator/:idTopic		controllers.KSAPerfIndicatorController.getKSAJsonByTopic(idPerfIndicator: Long, idTopic: Long)
 
-
-# PerfIndProgramOutcomes Routes
-GET     /listPerfIndProgramOutcomes/:idProgramOutcomes						controllers.PerfIndProgramOutcomesController.list(idProgramOutcomes: Long)
-GET		/showPerfIndProgramOutcomes/:id					controllers.PerfIndProgramOutcomesController.show(id: Long)
-GET 	/editPerfIndProgramOutcomes/:id					controllers.PerfIndProgramOutcomesController.edit(id: Long)
-GET 	/createPerfIndProgramOutcomes/:idProgramOutcomes					controllers.PerfIndProgramOutcomesController.create(idProgramOutcomes: Long)
-POST	/deletePerfIndProgramOutcomes/:id				controllers.PerfIndProgramOutcomesController.delete(id: Long)
-POST 	/savePerfIndProgramOutcomes/:newEntry			controllers.PerfIndProgramOutcomesController.save(newEntry: Int)
-POST 	/savePerfIndProgramOutcomesList			controllers.PerfIndProgramOutcomesController.saveList
-GET    /getPerformanceIndicatorsJsonByProgramAndOutcome/:idProgram/:idProgramOutcome		controllers.PerfIndProgramOutcomesController.getPerformanceIndicatorsJsonByProgramAndOutcome(idProgram: Long, idProgramOutcome: Long)
-
 # GradedRequirementLinks Routes
 GET     /listGradedRequirementLinks/:idGradedRequirements						controllers.GradedRequirementLinksController.list(idGradedRequirements: Long)
 GET		/showGradedRequirementLinks/:id					controllers.GradedRequirementLinksController.show(id: Long)
@@ -305,3 +286,19 @@ GET    /getSLOJsonByPEOandProgram/:idPEO/:idProgram		controllers.PEOtoSLOControl
 POST	/deletePEOtoSLO/:id				controllers.PEOtoSLOController.delete(id: Long)
 POST 	/savePEOtoSLO/:newEntry			controllers.PEOtoSLOController.save(newEntry: Int)
 POST 	/savePEOtoSLOList					controllers.PEOtoSLOController.saveList
+
+# PerformanceIndicator Routes
+GET     /listPerformanceIndicator/:idProgramOutcomes						controllers.PerformanceIndicatorController.list(idProgramOutcomes: Long)
+GET		/showPerformanceIndicator/:id					controllers.PerformanceIndicatorController.show(id: Long)
+GET 	/editPerformanceIndicator/:id					controllers.PerformanceIndicatorController.edit(id: Long)
+GET 	/createPerformanceIndicator/:idProgramOutcomes					controllers.PerformanceIndicatorController.create(idProgramOutcomes: Long)
+POST	/deletePerformanceIndicator/:id				controllers.PerformanceIndicatorController.delete(id: Long)
+POST 	/savePerformanceIndicator/:newEntry			controllers.PerformanceIndicatorController.save(newEntry: Int)
+
+# Definitions Routes
+GET     /listDefinitions/:id						controllers.DefinitionsController.list(id: Long)
+GET		/showDefinitions/:id					controllers.DefinitionsController.show(id: Long)
+GET 	/editDefinitions/:id					controllers.DefinitionsController.edit(id: Long)
+GET 	/createDefinitions/:id					controllers.DefinitionsController.create(id: Long)
+POST	/deleteDefinitions/:id				controllers.DefinitionsController.delete(id: Long)
+POST 	/saveDefinitions/:newEntry			controllers.DefinitionsController.save(newEntry: Int)

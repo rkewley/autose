@@ -1,0 +1,34 @@
+
+@(vDefinitions: MdlDefinitions)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>Definitions Information</h3>
+		  <dl>
+
+		  	<dt>idDefinitions</dt>
+		  	<dd>@Html(vDefinitions.vidDefinitions.toString)</dd>
+
+		  	<dt>Word</dt>
+		  	<dd>@Html(vDefinitions.vWord.toString)</dd>
+
+		  	<dt>Definition</dt>
+		  	<dd>@Html(vDefinitions.vDefinition.toString)</dd>
+	       </dl>
+     <div>
+       <a href="@routes.DefinitionsController.list(0)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

@@ -18,7 +18,8 @@
 			<tr>
 				<th>Program</th>
 				<th>Program Outcome</th>
-				<th>Link to Performance Indicators</th>
+				<th>Performance Indicators</th>
+				<th>Show Details</th>
 				<th>Edit</th>
 				<th>Delete</th>
 			</tr>
@@ -30,9 +31,10 @@
     		@defining(AppDB.dal.Programs.select(vProgramOutcomes.vProgram).get){pkModel =>
       		  <td><a href="@routes.ProgramsController.show(vProgramOutcomes.vProgram)">@pkModel.selectIdentifier._2</a></td>
     		}
-				<td><a href="@routes.ProgramOutcomesController.show(vProgramOutcomes.vProgramOutcomeNumber.get)">@vProgramOutcomes.vProgramOutcome</a></td>
+				<td>@vProgramOutcomes.vProgramOutcome</td>
 
-    			<td><a href="@routes.PerfIndProgramOutcomesController.list(vProgramOutcomes.vProgramOutcomeNumber.get)">Link to Performance Indicators</a></td>
+    			<td><a href="@routes.PerformanceIndicatorController.list(vProgramOutcomes.vProgramOutcomeNumber.get)">Supporting Performance Indicators</a></td>
+    			<td><a href="@routes.ProgramOutcomesController.show(vProgramOutcomes.vProgramOutcomeNumber.get)">Show Details</a></td>    			
     			<td><a href="@routes.ProgramOutcomesController.edit(vProgramOutcomes.vProgramOutcomeNumber.get)">Edit</a></td>
     	  		<td>
     	  			<form action="@routes.ProgramOutcomesController.delete(vProgramOutcomes.vProgramOutcomeNumber.get)" method="POST">

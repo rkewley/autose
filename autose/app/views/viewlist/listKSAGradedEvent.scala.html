@@ -5,18 +5,21 @@
     @import persistence._
     
     
-    @main("Systems Net", "Systems Body of Knowledge") {
-	<div>
-	  <div class="column span-4">
-		 
-	  </div>
+    @gradedEventPage(idGradedRequirements) {
 
     
-    <div class="column span-20 last">
-		  <h3>Knowledge and Skills Listing for @AppDB.dal.GradedRequirements.select(idGradedRequirements).get.vGradedEventName</h3>
+    <div class="column span-18 last">
+		  <h3>
+		    <a href="#" title="@AppDB.dal.Definitions.getDefinition("Knowledge")">Knowledge</a>,
+		    <a href="#" title="@AppDB.dal.Definitions.getDefinition("Skill")">Skills</a>, and
+			<a href="#" title="@AppDB.dal.Definitions.getDefinition("Behavior")">Behaviors</a> (KSB)			
+            for @AppDB.dal.GradedRequirements.select(idGradedRequirements).get.vGradedEventName
+          </h3>
+	      <a href="#" title="@AppDB.dal.Definitions.getDefinition("KSB Guidance")">KSB Guidance</a>		
+
 		  <table>
 			<tr>
-				<th>KSA</th>
+				<th>KSB</th>
 				<th>GradedEvent</th>
 				<th>Show</th>
 				<th>Edit</th>

@@ -5,7 +5,7 @@
     @import persistence._
 		  
     
-    @main("Systems Net", "Systems Body of Knowledge") {
+    @main("Systems Net", "Systems Engineering Curriculum Management Interface") {
 	<div>
 	  <div class="column span-4">
 		 
@@ -24,9 +24,9 @@
       		  <dd><a href="@routes.TopicObjectivesController.showTopicObjectives(vKSAPerfIndicator.vKSA)">@pkModel.selectIdentifier._2</a></dd>
     		}
 
-    		@defining(SqlTerminalLearningObjective.select(vKSAPerfIndicator.vPerformanceIndicator)){pkModel =>
+    		@defining(AppDB.dal.PerformanceIndicator.select(vKSAPerfIndicator.vPerformanceIndicator).get){pkModel =>
       		  <dt>PerformanceIndicator</dt>
-      		  <dd><a href="@routes.TerminalLearningObjectiveController.showTerminalLearningObjective(vKSAPerfIndicator.vPerformanceIndicator)">@pkModel.selectIdentifier._2</a></dd>
+      		  <dd><a href="@routes.PerformanceIndicatorController.show(vKSAPerfIndicator.vPerformanceIndicator)">@pkModel.selectIdentifier._2</a></dd>
     		}
 	       </dl>
      <div>

@@ -19,9 +19,9 @@
         <h3>Student Learning Outcome:  @vProgramOutcomes.vProgramOutcome
         <br>Supporting Performance Indicators: </h3>
 	    <div id="accordion">
-		  @defining(AppDB.dal.PerfIndProgramOutcomes.joinPerformanceIndicatorsByProgramOutcome(vProgramOutcomes.vProgramOutcomeNumber.get)) { perfIndList =>
+		  @defining(AppDB.dal.PerformanceIndicator.selectByProgramOutcome(vProgramOutcomes.vProgramOutcomeNumber.get)) { perfIndList =>
 	        @perfIndList.map { perfInd =>
-	          <h3>@perfInd._2</h3>
+	          <h3>@perfInd.vPerformanceIndicator</h3>
 	          <div>
 	            
 	            <table>
@@ -30,55 +30,54 @@
 		  	        <th>Courses</th>
 		  	      </tr>
 		  	      
-		  	      @AppDB.dal.KSAPerfIndicator.joinKSAByPerfIndicator(perfInd._3).map { ksa =>
+		  	      @AppDB.dal.KSAPerfIndicator.joinKSAByPerfIndicator(perfInd.vidPerformanceIndicator.get).map { ksa =>
 		  	           	
-		  	          <tr>
-		  	            <td>@ksa._3:  @ksa._2</td>
-		  	        @AppDB.dal.KSA.buildKSATeachData(ksa._1).map { teachData =>
+		  	        <tr>
+		  	          <td>@ksa._3:  @ksa._2</td>
 		  	          <td>  
-		  	          <table>
-		  	          <tr>
-		  	            <th>Course</th>
-		  	            <th>Lessons</th>
-		  	            <th>Graded Events</th>
-		  	          </th>
-		  	          <tr>  
-		  	            <td><a href="@routes.CoursesController.homeCourses(teachData.courseIndex)">@teachData.courseNumber</a></td>
-		  	            <td>@teachData.lessons.map { lsn =>
-		  	                <a href="@routes.LessonsController.showLessons(lsn.lessonIndex)">@lsn.lessonNumber</a>
+		  	            <table>
+		  	              <tr>
+		  	                <th>Course</th>
+		  	                <th>Lessons</th>
+		  	                <th>Graded Events</th>
+		  	              </tr>		  	            
+		  	              @AppDB.dal.KSA.buildKSATeachData(ksa._1).map { teachData =>
+
+		  	              <tr>  
+		  	                <td><a href="@routes.CoursesController.homeCourses(teachData.courseIndex)">@teachData.courseNumber</a></td>
+		  	                <td>@teachData.lessons.map { lsn =>
+		  	                  <a href="@routes.LessonsController.showLessons(lsn.lessonIndex)">@lsn.lessonNumber</a>
+		  	                }</td>
+		  	                <td>
+		  	                  <table>
+		  	                    <tr>
+		  	                      <th>Graded Event</th>
+		  	                      <th>Sub Events</th>
+		  	                    </tr>		  	                
+		  	                	@teachData.gradedEvents.map { gradedEvent =>
+
+		  	                      <tr>
+		  	                        <td><a href="@routes.GradedRequirementsController.show(gradedEvent.eventIndex)">@gradedEvent.eventName</a></td>
+		  	                        <td>
+		  	                          @gradedEvent.subEvents.map { subEvent =>
+		  	                          @subEvent.description <br>
+		  	                        }</td>
+		  	                      </tr>
+		  	                    }    
+		  	                  </table>
+		  	                </td>  
+		  	              </tr>   
 		  	              }
-		  	            </td>
-		  	            <td>@teachData.gradedEvents.map { gradedEvent =>
-		  	              <table>
-		  	                <tr>
-		  	                  <th>Graded Event</th>
-		  	                  <th>Sub Events</th>
-		  	                </tr>
-		  	                <tr>
-		  	                  <td><a href="@routes.GradedRequirementsController.show(gradedEvent.eventIndex)">@gradedEvent.eventName</a></td>
-		  	                  <td>
-		  	                    @gradedEvent.subEvents.map { subEvent =>
-		  	                      @subEvent.description <br>
-		  	                    }
-		  	                  </td>
-		  	                </tr>  
-		  	              </table> 
-		  	            }  
-		  	            </td>
-		  	          </tr>  
-		  	          </table>  
-		  	          </td>  
-		  	          </tr>
-		  	          
-		  	        }
-		  	      }
-	                       
-	            </table>
-	          
+		  	            </table>    
+		  	          </td>
+		  	        </tr>
+		  	      }  
+		  	    </table>           
 	          </div>
 	        }
 	      }
-	    </div>  
+	    </div>
+	  </div>  
         <div>
           <a href="@routes.ProgramOutcomesController.list(vProgramOutcomes.vProgram)">Return to listing</a>
         </div>

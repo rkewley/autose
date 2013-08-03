@@ -3,11 +3,13 @@
 
 @import helper._
 @import persistence._
+@import slick.AppDB 
 
 <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.1.min.js")"></script>
 <script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
 
-    @main("Systems Net", "Systems Body of Knowledge") {
+
+    @main("Systems Net", "Systems Engineering Curriculum Management Interface") {
 	<div>
 	  <div class="column span-4">
 		 
@@ -27,22 +29,28 @@
                 <input type="hidden" name="@fPerformanceIndicator.name" id="@fPerformanceIndicator.id" value="@fPerformanceIndicator.value">
                 
 		  <h4>
-		  	<p>@SqlTerminalLearningObjective.select(fPerformanceIndicator.value.get.toLong).vTerminalLearningObjective</p>
+		  	<p>@(AppDB.dal.PerformanceIndicator.select(fPerformanceIndicator.value.get.toLong).get).vPerformanceIndicator</p>
 		  </h4>
-			
-			<p>Select the knowledge and skill below to link them to this performance indicator.</p>
-			@defining(SqlTerminalLearningObjective.select(fPerformanceIndicator.value.get.toLong).vTopic) { topicId =>
-		      <script type-"text/javascript">
-				$(document).ready(function(){
-					var checkboxdiv = $('#ksaCheckBoxList')
-					var topicIndex = @topicId;
-					var performanceIndicator = @fPerformanceIndicator.value.get.toLong
-					getNewCheckboxes('/getKSAJsonByTopic/' + performanceIndicator + '/' + topicIndex, checkboxdiv, 'fKSA');
-
-				});
-			  </script>
-
+		<script type-"text/javascript">
+		$(document).ready(function(){
+			var checkboxdiv = $('#ksaCheckBoxList')
+			$("#topicSelect").change(function() {
+				var topicIndex = $("#topicSelect").val();
+				var performanceIndicator = @fPerformanceIndicator.value.get.toLong
+				getNewCheckboxes('/getKSAJsonByTopic/' + performanceIndicator + '/' + topicIndex, checkboxdiv, 'fKSA');
+			});
+		});
+		</script> 			
+			<p>First select the topic for the knowledge and skills you will link to this performance indicator.</p>
+			@defining(SqlTopics.all.sortWith((v1: MdlTopics, v2: MdlTopics) => v1.vTopic < v2.vTopic)) { topicList =>
+			  <select id="topicSelect">
+			    <option value=""></option>
+			  @topicList.map { topic =>
+			    <option value="@topic.vTopicsIndex">@topic.vTopic</option>
+			  }
+			  </select>
 			}
+
 				
 			<div id="ksaCheckBoxList">
 			</div>                        

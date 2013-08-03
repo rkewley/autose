@@ -1,11 +1,11 @@
 
-@(listKSAPerfIndicator: List[MdlKSAPerfIndicator], idTerminalLearningObjective: Long)
+@(listKSAPerfIndicator: List[MdlKSAPerfIndicator], idPerformanceIndicator: Long)
     
     @import slick.AppDB
     @import persistence._
     
     
-    @main("Systems Net", "Systems Body of Knowledge") {
+    @main("Systems Net", "Systems Engineering Curriculum Management Interface") {
 	<div>
 	  <div class="column span-4">
 		 
@@ -15,7 +15,7 @@
     <div class="column span-20 last">
 		  <h4>
 		  	<p>Knowledge and skills linked to:</p> 
-		  	<p>@SqlTerminalLearningObjective.select(idTerminalLearningObjective).vTerminalLearningObjective</p>
+		  	<p>@AppDB.dal.PerformanceIndicator.select(idPerformanceIndicator).get.vPerformanceIndicator</p>
 		  </h4>
 		  <table>
 			<tr>
@@ -44,7 +44,7 @@
       		}
 
       	</table>
-      <a href="@routes.KSAPerfIndicatorController.create(idTerminalLearningObjective)">Link new knowledge and skills to this performance indicator</a>
+      <a href="@routes.KSAPerfIndicatorController.create(idPerformanceIndicator)">Link new knowledge and skills to this performance indicator</a>
     </div>
   </div>
   }
