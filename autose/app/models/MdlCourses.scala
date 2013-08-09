@@ -1,5 +1,17 @@
     
  package models
+ 
+ object Courses {
+   def compare(a: MdlCourses, b: MdlCourses): Boolean = {
+     (a.vAcademicYear*10 + a.vAcademicTerm) - (b.vAcademicYear*10 + b.vAcademicTerm) match {
+       case x if x < 0 => true
+       case x if x > 0 => false
+       case 0 => {
+         a.vCourseIDNumber < b.vCourseIDNumber
+       }
+     }
+   }
+ }
     
  case class MdlCourses (
  	vidCourse : Long,

@@ -9,6 +9,7 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 # Courses Routes
 GET     /homeCourses/:id						controllers.CoursesController.homeCourses(id: Long)
 GET     /listCourses							controllers.CoursesController.listCourses
+GET     /listAllCourses							controllers.CoursesController.listAllCourses
 GET		/showCourses/:id						controllers.CoursesController.showCourses(id: Long)
 GET 	/editCourses/:id						controllers.CoursesController.editCourses(id: Long)
 GET 	/createCourses							controllers.CoursesController.createCourses

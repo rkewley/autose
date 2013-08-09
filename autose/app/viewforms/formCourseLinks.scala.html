@@ -24,7 +24,9 @@
                 <input type="hidden" name="@fCourse.name" id="@fCourse.id" value="@fCourse.value">
 			}
 
-			@checkbox(field = f("fIsFileLink"), '_label -> "Is this link a file?")
+            @defining(f("fIsFileLink")) { fIsFileLink =>
+                <input type="hidden" name="@fIsFileLink.name" id="@fIsFileLink.id" value="false">
+			}
 
             @textarea(field = f("fLink"), args = 'rows -> 2, 'cols -> 100, '_label-> "Link")
             <p>Enter the full url link to your link above.  It must start with "http://"</p>
@@ -39,7 +41,7 @@
 
        		<fieldset style="margin-top: 10px;">
           		<input type="submit" value="Submit" />
-          		<a href="@routes.CourseLinksController.listCourseLinks(course)">Cancel and return to listing</a>
+          		<a href="@routes.CoursesController.homeCourses(course)">Cancel and return to home page</a>
       		</fieldset>
 	  	</fieldset></div>
 	  	}

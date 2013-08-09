@@ -38,10 +38,13 @@ object CoursesController extends Base {
   )
       
 
-  def listCourses = Action {
-    Ok(viewlist.html.listCourses(SqlCourses.all))
+  def listAllCourses = Action {
+    Ok(viewlist.html.listCourses(SqlCourses.all.sortWith(Courses.compare)))
   }
 
+  def listCourses = Action {
+    Ok(viewlist.html.listCourses(SqlCourses.all.filter(vCourses => vCourses.vAcademicYear == Globals.currentYear && vCourses.vAcademicTerm == Globals.currentTerm).sortWith(Courses.compare)))
+  }
    def editCourses(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
     Ok(viewforms.html.formCourses(formCourses.fill(SqlCourses.select(id)), 0))
   }
@@ -107,7 +110,7 @@ object CoursesController extends Base {
             case 0 => SqlCourses.update(vCourses)
             case _ => SqlCourses.insert(vCourses)
           }
-          Redirect(routes.CoursesController.listCourses)
+          Redirect(routes.CoursesController.homeCourses(vCourses.vidCourse))
         } else {
           val validationErrors = vCourses.validationErrors
           Logger.debug(validationErrors)

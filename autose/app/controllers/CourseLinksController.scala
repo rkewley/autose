@@ -98,7 +98,7 @@ object CourseLinksController extends Base {
                   case 0 => SqlCourseLinks.update(v2CourseLinks)
                   case _ => SqlCourseLinks.insert(v2CourseLinks)
                 }           
-              Redirect(routes.CourseLinksController.listCourseLinks(vCourseLinks.vCourse))
+              Redirect(routes.CoursesController.homeCourses(vCourseLinks.vCourse))
               case Some(badResult) =>
                 badResult
             }
@@ -127,7 +127,7 @@ object CourseLinksController extends Base {
             case 0 => SqlCourseLinks.update(vCourseLinks)
             case _ => SqlCourseLinks.insert(vCourseLinks)
           }
-          Redirect(routes.CourseLinksController.listCourseLinks(vCourseLinks.vCourse))
+          Redirect(routes.CoursesController.homeCourses(vCourseLinks.vCourse))
         } else {
           val validationErrors = vCourseLinks.validationErrors
           Logger.debug(validationErrors)

@@ -89,7 +89,7 @@ object LessonTopicObjectivesController extends Base {
             case 0 => SqlLessonTopicObjectives.update(vLessonTopicObjectives)
             case _ => SqlLessonTopicObjectives.insert(vLessonTopicObjectives)
           }
-          Redirect(routes.LessonTopicObjectivesController.listLessonTopicObjectives(vLessonTopicObjectives.vLesson))
+          Redirect(routes.LessonsController.showLessons(vLessonTopicObjectives.vLesson))
         } else {
           val validationErrors = vLessonTopicObjectives.validationErrors
           Logger.debug(validationErrors)
@@ -116,7 +116,7 @@ object LessonTopicObjectivesController extends Base {
             BadRequest(viewforms.html.formError(validationErrors, request.headers("REFERER")))
           }
         )
-        Redirect(routes.LessonTopicObjectivesController.listLessonTopicObjectives(vLessonTopicObjectivesList.vLesson))
+        Redirect(routes.LessonsController.showLessons(vLessonTopicObjectivesList.vLesson))
       })
   }
 

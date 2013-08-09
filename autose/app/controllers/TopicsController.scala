@@ -26,7 +26,7 @@ object TopicsController extends Base {
       
 
   def listTopics = Action {
-    Ok(viewlist.html.listTopics(SqlTopics.all))
+    Ok(viewlist.html.listTopics(SqlTopics.all.sortWith(MdlTopics.compare)))
   }
 
    def editTopics(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>

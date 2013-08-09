@@ -3,7 +3,9 @@
 @main("Systems Net", course.vCourseIDNumber) {
 
 	<div class="column span-4 colborder">
-
+		<form method="GET" action="@routes.CoursesController.editCourses(course.vidCourse)">
+			<input type="submit" value="Edit Course Information">
+		</form>
 		  <ul id="menu">
 			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse)">Home</a></li>
 			<li><a href="@routes.CoursesController.showCourses(course.vidCourse)">Information</a></li>

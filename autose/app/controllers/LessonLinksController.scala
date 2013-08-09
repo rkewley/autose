@@ -52,7 +52,7 @@ object LessonLinksController extends Base {
   }
 
   def createLessonLinks(idLessons: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    val vLessonLinks = new MdlLessonLinks(0, "", "", true, idLessons, -1)
+    val vLessonLinks = new MdlLessonLinks(0, "", "", false, idLessons, -1)
     Ok(viewforms.html.formLessonLinks(formLessonLinks.fill(vLessonLinks), 1))
   }
 

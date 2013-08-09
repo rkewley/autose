@@ -8,6 +8,7 @@
 
 	<div class="column span-14 colborder">
 		<h3>@vCourses.vCourseName</h3>
+
 		<div>@vCourses.vCourseDescriptionWebsite</div>
 		<hr>
 		
@@ -28,6 +29,9 @@
 	</div>
 	
 	<div class="column span-4 last">
+	  	<form method="GET" action="@routes.CourseLinksController.uploadCourseFile(vCourses.vidCourse)">
+			<input type="submit" value="Upload Course File">
+		</form>
 
 	  <ul id="menu">
 		@defining(FileGroup.getFileGroupsCourseLinks(SqlCourseLinks.selectWhere("Course = " + vCourses.vidCourse + " AND IsFileLink = 1"))) { listCourseLinks =>
@@ -50,6 +54,9 @@
 	   	}
 	  </ul>
 
+	  	<form method="GET" action="@routes.CourseLinksController.createCourseLinks(vCourses.vidCourse)">
+			<input type="submit" value="Create Course Link">
+		</form>
 		
 	  <ul id="menu">
 		@defining(FileGroup.getFileGroupsCourseLinks(SqlCourseLinks.selectWhere("Course = " + vCourses.vidCourse + " AND IsFileLink = 0"))) { listCourseLinks =>

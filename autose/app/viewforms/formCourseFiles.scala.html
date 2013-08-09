@@ -23,9 +23,6 @@
             @defining(f("fCourse")) { fCourse =>
                 <input type="hidden" name="@fCourse.name" id="@fCourse.id" value="@fCourse.value">
 			}
-            @defining(f("fLink")) { fLink =>
-                <input type="hidden" name="@fLink.name" id="@fLink.id" value="">
-			}
             @defining(f("fIsFileLink")) { fIsFileLink =>
                 <input type="hidden" name="@fIsFileLink.name" id="@fIsFileLink.id" value="true">
 			}
@@ -49,7 +46,7 @@
 
        		<fieldset style="margin-top: 10px;">
           		<input type="submit" value="Submit" />
-          		<a href="@routes.CourseLinksController.listCourseLinks(course)">Cancel and return to listing</a>
+          		<a href="@routes.CoursesController.homeCourses(course)">Cancel and return to home page</a>
       		</fieldset>
 	  	</fieldset></div>
 	  	}

@@ -2,6 +2,7 @@
 @(vLessons: MdlLessons)
 
 @import persistence._
+@import slick.AppDB
 @import utilities.FileGroup
 		    
 @lessonPage(vLessons.vLessonIndex) {
@@ -18,7 +19,16 @@
 		  <h4>Lesson Summary</h4>
 		  <p>@Html(vLessons.vLessonSummary.toString)</p>
 		  
-		  <h4>Knowledge and Skills Covered During the Lesson</h4>
+		  <h4>
+		     <a href="#" title="@AppDB.dal.Definitions.getDefinition("Knowledge").">Knowledge</a>, 
+		     <a href="#" title="@AppDB.dal.Definitions.getDefinition("Skill").">Skills</a>, and 
+		     <a href="#" title="@AppDB.dal.Definitions.getDefinition("Behavior").">Behaviors</a>
+		    Covered During the Lesson
+		  </h4>
+		  <form method="GET" action="@routes.LessonTopicObjectivesController.createLessonTopicObjectivesList(vLessons.vLessonIndex)">
+			<input type="submit" value="Link Knowledge, Skills, and Behaviors to Lesson">
+		  </form>
+		  
 		  @defining({ 
 		  	(SqlLessonTopicObjectives.selectWhere("Lesson = " + vLessons.vLessonIndex)).map(lto =>
 		  	  
@@ -76,6 +86,10 @@
 	
 	<div class="column span-4 last">
 	  Files
+	  	<form method="GET" action="@routes.LessonLinksController.uploadLessonFile(vLessons.vLessonIndex)">
+			<input type="submit" value="Upload Lesson File">
+		</form>
+	  
 	  <ul id="menu">
 		@defining(FileGroup.getFileGroupsLessonLinks(lessonLinks.filter(lessonLink => lessonLink.vIsFileLiink == true))) { listLessonLinks =>
        		@listLessonLinks.map { fileGroup =>
@@ -99,6 +113,9 @@
 	  </ul>
 
 	  Links
+	  	<form method="GET" action="@routes.LessonLinksController.createLessonLinks(vLessons.vLessonIndex)">
+			<input type="submit" value="Create Lesson Link">
+		</form>
 	  <ul id="menu">
 		@defining(FileGroup.getFileGroupsLessonLinks(lessonLinks.filter(lessonLink => lessonLink.vIsFileLiink == false))) { listLessonLinks =>
        		@listLessonLinks.map { fileGroup =>
