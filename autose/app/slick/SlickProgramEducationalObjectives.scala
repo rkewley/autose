@@ -11,7 +11,7 @@ trait ProgramEducationalObjectivesComponent  {
 
 	object ProgramEducationalObjectives extends Table[MdlProgramEducationalObjectives]("ProgramEducationalObjectives") with Crud[MdlProgramEducationalObjectives, Long]  {
 
-      def vProgObjNumber = column[Long]("ProgObjNumber", O.PrimaryKey)
+      def vProgObjNumber = column[Long]("ProgObjNumber", O.PrimaryKey, O.AutoInc)
       def vProgram = column[Long]("Program")
       def vProgramEducationalObjective = column[String]("ProgramEducationalObjective")
       def * = vProgObjNumber.? ~ vProgram ~ vProgramEducationalObjective<> (MdlProgramEducationalObjectives.apply _, MdlProgramEducationalObjectives.unapply _)
@@ -49,9 +49,9 @@ trait ProgramEducationalObjectivesComponent  {
 	    }
 	  }
 
-	  def insert(vProgramEducationalObjectives: MdlProgramEducationalObjectives) {
+	  def insert(vProgramEducationalObjectives: MdlProgramEducationalObjectives): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      ProgramEducationalObjectives.forInsert insert MdlProgramEducationalObjectives(None, vProgramEducationalObjectives.vProgram, vProgramEducationalObjectives.vProgramEducationalObjective)
+	      ProgramEducationalObjectives.forInsert returning ProgramEducationalObjectives.vProgObjNumber insert MdlProgramEducationalObjectives(None, vProgramEducationalObjectives.vProgram, vProgramEducationalObjectives.vProgramEducationalObjective)
 
 	    }
 	  }

@@ -11,7 +11,7 @@ trait EventTypeComponent  {
 
 	object EventType extends Table[MdlEventType]("EventType") with Crud[MdlEventType, Long]  {
 
-      def vidEventType = column[Long]("idEventType", O.PrimaryKey)
+      def vidEventType = column[Long]("idEventType", O.PrimaryKey, O.AutoInc)
       def vEventType = column[String]("EventType")
       def vDescription = column[String]("Description")
       def * = vidEventType.? ~ vEventType ~ vDescription<> (MdlEventType.apply _, MdlEventType.unapply _)
@@ -49,9 +49,9 @@ trait EventTypeComponent  {
 	    }
 	  }
 
-	  def insert(vEventType: MdlEventType) {
+	  def insert(vEventType: MdlEventType): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      EventType.forInsert insert MdlEventType(None, vEventType.vEventType, vEventType.vDescription)
+	      EventType.forInsert returning EventType.vidEventType insert MdlEventType(None, vEventType.vEventType, vEventType.vDescription)
 
 	    }
 	  }

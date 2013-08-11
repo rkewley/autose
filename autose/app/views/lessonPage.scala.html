@@ -2,7 +2,7 @@
 @import persistence._
 
 @defining(SqlLessons.select(idLesson)) { lesson =>
-@defining(SqlCourses.select(lesson.vidCourse)) { course =>
+@defining(slick.AppDB.dal.Courses.select(lesson.vidCourse).get) { course =>
 @main("Systems Net", course.vCourseIDNumber) {
 
 	<div class="column span-4 colborder">
@@ -11,11 +11,11 @@
 		</form>
 
 		  <ul id="menu">
-			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse)">Course Home</a></li>
+			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse.get)">Course Home</a></li>
 			<li><a href="@routes.LessonsController.showLessons(lesson.vLessonIndex)">Lesson @lesson.vLessonNumber Home</a></li>
-			<li><a href="@routes.LessonsController.listLessons(course.vidCourse)">Syllabus</a></li>
+			<li><a href="@routes.LessonsController.listLessons(course.vidCourse.get)">Syllabus</a></li>
 			<li><a href="@routes.LessonTopicObjectivesController.listLessonTopicObjectives(lesson.vLessonIndex)">Knowledge and Skills</a></li>
-			<li><a href="@routes.LessonLinksController.listLessonLinks(lesson.vLessonIndex)">Lesson Links and Files</a></li>
+			<li><a href="@routes.LessonLinksController.list(lesson.vLessonIndex)">Lesson Links and Files</a></li>
 		  </ul>
 
 	</div>

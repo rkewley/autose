@@ -11,7 +11,7 @@ trait KSAGradedEventComponent  {
 
 	object KSAGradedEvent extends Table[MdlKSAGradedEvent]("KSAGradedEvent") with Crud[MdlKSAGradedEvent, Long]  {
  
-      def vidKSAGradedEvent = column[Long]("idKSAGradedEvent", O.PrimaryKey)
+      def vidKSAGradedEvent = column[Long]("idKSAGradedEvent", O.PrimaryKey, O.AutoInc)
       def vKSA = column[Long]("KSA")
       def vGradedEvent = column[Long]("GradedEvent")
       def * = vidKSAGradedEvent.? ~ vKSA ~ vGradedEvent<> (MdlKSAGradedEvent.apply _, MdlKSAGradedEvent.unapply _)
@@ -79,9 +79,9 @@ trait KSAGradedEventComponent  {
 	    }
 	  }
 
-	  def insert(vKSAGradedEvent: MdlKSAGradedEvent) {
+	  def insert(vKSAGradedEvent: MdlKSAGradedEvent): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      KSAGradedEvent.forInsert insert MdlKSAGradedEvent(None, vKSAGradedEvent.vKSA, vKSAGradedEvent.vGradedEvent)
+	      KSAGradedEvent.forInsert returning KSAGradedEvent.vidKSAGradedEvent insert MdlKSAGradedEvent(None, vKSAGradedEvent.vKSA, vKSAGradedEvent.vGradedEvent)
 
 	    }
 	  }

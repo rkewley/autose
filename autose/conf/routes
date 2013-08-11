@@ -10,11 +10,12 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 GET     /homeCourses/:id						controllers.CoursesController.homeCourses(id: Long)
 GET     /listCourses							controllers.CoursesController.listCourses
 GET     /listAllCourses							controllers.CoursesController.listAllCourses
-GET		/showCourses/:id						controllers.CoursesController.showCourses(id: Long)
-GET 	/editCourses/:id						controllers.CoursesController.editCourses(id: Long)
-GET 	/createCourses							controllers.CoursesController.createCourses
-POST	/deleteCourses/:id						controllers.CoursesController.deleteCourses(id: Long)
-POST 	/saveCourses/:newEntry					controllers.CoursesController.saveCourses(newEntry: Int)
+GET		/showCourses/:id						controllers.CoursesController.show(id: Long)
+GET 	/editCourses/:id						controllers.CoursesController.edit(id: Long)
+GET 	/createCourses/:id						controllers.CoursesController.create(id: Long)
+GET 	/copyCourses/:id						controllers.CoursesController.copyCourses(id: Long)
+POST	/deleteCourses/:id						controllers.CoursesController.delete(id: Long)
+POST 	/saveCourses/:newEntry/:copyEntry/:originalCourse		controllers.CoursesController.saveCourses(newEntry: Int, copyEntry: Int, originalCourse: Long)
 
 
 # Faculty Routes
@@ -144,14 +145,15 @@ POST 	/saveUser/:newEntry					controllers.UserController.saveUser(newEntry: Int)
 GET	    /fileManagement						controllers.UserController.fileManagement
 
 # LessonLinks Routes
-GET     /listLessonLinks/:idLessons			controllers.LessonLinksController.listLessonLinks(idLessons: Long)
-GET		/showLessonLinks/:id				controllers.LessonLinksController.showLessonLinks(id: Long)
-GET 	/editLessonLinks/:id				controllers.LessonLinksController.editLessonLinks(id: Long)
-GET 	/createLessonLinks/:idLessons		controllers.LessonLinksController.createLessonLinks(idLessons: Long)
-POST	/deleteLessonLinks/:id				controllers.LessonLinksController.deleteLessonLinks(id: Long)
-POST 	/saveLessonLinks/:newEntry			controllers.LessonLinksController.saveLessonLinks(newEntry: Int)
+GET     /listLessonLinks/:idLessons			controllers.LessonLinksController.list(idLessons: Long)
+GET		/showLessonLinks/:id				controllers.LessonLinksController.show(id: Long)
+GET 	/editLessonLinks/:id				controllers.LessonLinksController.edit(id: Long)
+GET 	/createLessonLinks/:idLessons					controllers.LessonLinksController.create(idLessons: Long)
+POST	/deleteLessonLinks/:id				controllers.LessonLinksController.delete(id: Long)
+POST 	/saveLessonLinks/:newEntry			controllers.LessonLinksController.save(newEntry: Int)
 GET 	/uploadLessonFile/:lessonId			controllers.LessonLinksController.uploadLessonFile(lessonId: Long)
 POST 	/postLessonFile/:newEntry			controllers.LessonLinksController.postLessonFile(newEntry: Int)
+
 
 # LessonLinkTopicObjectives Routes
 GET     /listLessonLinkTopicObjectives/:idLessonLinks		controllers.LessonLinkTopicObjectivesController.listLessonLinkTopicObjectives(idLessonLinks: Long)

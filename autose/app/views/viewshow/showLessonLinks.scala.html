@@ -1,0 +1,47 @@
+
+@(vLessonLinks: MdlLessonLinks)
+
+    @import persistence._
+		  
+    
+    @main("Systems Net", "Systems Engineering Curriculum Management Interface") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>LessonLinks Information</h3>
+		  <dl>
+
+		  	<dt>Link</dt>
+		  	<dd>@Html(vLessonLinks.vLink.toString)</dd>
+
+		  	<dt>Description</dt>
+		  	<dd>@Html(vLessonLinks.vDescription.toString)</dd>
+
+		  	<dt>Is this link a file?</dt>
+		  	<dd>@Html(vLessonLinks.vIsFileLiink.toString)</dd>
+
+    		@defining(SqlLessons.select(vLessonLinks.vLesson)){pkModel =>
+      		  <dt>Lesson</dt>
+      		  <dd><a href="@routes.LessonsController.showLessons(vLessonLinks.vLesson)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+		  	<dt>Faculty associated with this link, or course level link</dt>
+		  	<dd>
+    	    	@{vLessonLinks.vFaculty match {
+    	    	  case -1 => "Course level file"
+    	    	  case _  => SqlFaculty.select(vLessonLinks.vFaculty).selectIdentifier._2
+    	    	}}
+    	    </dd>
+	       </dl>
+     <div>
+       <a href="@routes.LessonLinksController.list(vLessonLinks.vLesson)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

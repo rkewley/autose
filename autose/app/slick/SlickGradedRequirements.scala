@@ -11,7 +11,7 @@ trait GradedRequirementsComponent  {
 
 	object GradedRequirements extends Table[MdlGradedRequirements]("GradedRequirements") with Crud[MdlGradedRequirements, Long]  {
 
-      def vGradedEventIndex = column[Long]("GradedEventIndex", O.PrimaryKey)
+      def vGradedEventIndex = column[Long]("GradedEventIndex", O.PrimaryKey, O.AutoInc)
       def vCourse = column[Long]("Course")
       def vGradedEventName = column[String]("GradedEventName")
       def vEventDescription = column[String]("EventDescription")
@@ -48,15 +48,21 @@ trait GradedRequirementsComponent  {
 	    }
 	  }
 	  
+      def selectByCourse(course: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val q = Query(GradedRequirements)
+	      q.filter(p => p.vCourse === course).elements.toList
+	    }
+	  }
 	  def delete(pk: Long) {
 	    AppDB.database.withSession { implicit session: Session =>
 	      selectQuery(pk).delete
 	    }
 	  }
 
-	  def insert(vGradedRequirements: MdlGradedRequirements) {
+	  def insert(vGradedRequirements: MdlGradedRequirements): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      GradedRequirements.forInsert insert MdlGradedRequirements(None, vGradedRequirements.vCourse, vGradedRequirements.vGradedEventName, vGradedRequirements.vEventDescription, vGradedRequirements.vTypeOfEvent, vGradedRequirements.vPoints, vGradedRequirements.vLessonassigned, vGradedRequirements.vLessoncompleted)
+	      GradedRequirements.forInsert returning GradedRequirements.vGradedEventIndex insert MdlGradedRequirements(None, vGradedRequirements.vCourse, vGradedRequirements.vGradedEventName, vGradedRequirements.vEventDescription, vGradedRequirements.vTypeOfEvent, vGradedRequirements.vPoints, vGradedRequirements.vLessonassigned, vGradedRequirements.vLessoncompleted)
 
 	    }
 	  }

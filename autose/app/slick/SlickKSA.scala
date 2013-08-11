@@ -11,7 +11,7 @@ trait KSAComponent  {
 
 	object KSA extends Table[MdlKSA]("TopicObjectives") with Crud[MdlKSA, Long]  {
 
-      def vTopicObjectiveNumber = column[Long]("TopicObjectiveNumber", O.PrimaryKey)
+      def vTopicObjectiveNumber = column[Long]("TopicObjectiveNumber", O.PrimaryKey, O.AutoInc)
       def vObjective = column[String]("Objective")
       def vTopic = column[Long]("Topic")
       def vKSAB = column[String]("KSAB")
@@ -50,9 +50,9 @@ trait KSAComponent  {
 	    }
 	  }
 	  
-	  def insert(vTopicObjectives: MdlKSA) {
+	  def insert(vTopicObjectives: MdlKSA): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      KSA.forInsert insert MdlKSA(None, vTopicObjectives.vObjective, vTopicObjectives.vTopic, vTopicObjectives.vKSAB)
+	      KSA.forInsert returning KSA.vTopicObjectiveNumber insert MdlKSA(None, vTopicObjectives.vObjective, vTopicObjectives.vTopic, vTopicObjectives.vKSAB)
 
 	    }
 	  }

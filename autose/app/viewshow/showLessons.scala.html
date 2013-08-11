@@ -35,7 +35,7 @@
 		  	    (SqlTopicObjectives.select(lto.vTopicObjective), SqlTopics.select((SqlTopicObjectives.select(lto.vTopicObjective)).vTopic))
 		  	  
 		  	)})  { toData =>
-  		@defining(SqlLessonLinks.selectWhere("Lesson = " + vLessons.vLessonIndex)) { lessonLinks =>
+  		@defining(AppDB.dal.LessonLinks.all.filter(lsnLink => lsnLink.vLesson == vLessons.vLessonIndex)) { lessonLinks =>
   		@defining(SqlLessonLinkTopicObjectives.all) { lltos =>
 		  	<table>
 		  	  <tr>
@@ -52,7 +52,7 @@
 		  	      <td>@dataRow._1.vKSAB</td>
 		  	      <td>
 		  	      @defining(lltos.filter(llto => llto.vTopicObjective == dataRow._1.vTopicObjectiveNumber)) { relevantlltos =>
-		  	        @defining(lessonLinks.filter(ll => relevantlltos.map(_.vLessonLink).contains(ll.vLessonLinkNumber))) { links =>
+		  	        @defining(lessonLinks.filter(ll => relevantlltos.map(_.vLessonLink).contains(ll.vLessonLinkNumber.get))) { links =>
 					  @links.map { link =>
 		  			    <p><small><a href="@link.vLink">@link.vDescription</a></small></p>
 					  }
@@ -113,7 +113,7 @@
 	  </ul>
 
 	  Links
-	  	<form method="GET" action="@routes.LessonLinksController.createLessonLinks(vLessons.vLessonIndex)">
+	  	<form method="GET" action="@routes.LessonLinksController.create(vLessons.vLessonIndex)">
 			<input type="submit" value="Create Lesson Link">
 		</form>
 	  <ul id="menu">

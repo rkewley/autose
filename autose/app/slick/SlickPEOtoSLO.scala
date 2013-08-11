@@ -10,7 +10,7 @@ trait PEOtoSLOComponent  {
 
 	object PEOtoSLO extends Table[MdlPEOtoSLO]("PEOtoSLO") with Crud[MdlPEOtoSLO, Long]  {
 
-      def vidPEOtoSLO = column[Long]("idPEOtoSLO", O.PrimaryKey)
+      def vidPEOtoSLO = column[Long]("idPEOtoSLO", O.PrimaryKey, O.AutoInc)
       def vPEO = column[Long]("PEO")
       def vSLO = column[Long]("SLO")
       def * = vidPEOtoSLO.? ~ vPEO ~ vSLO<> (MdlPEOtoSLO.apply _, MdlPEOtoSLO.unapply _)
@@ -55,9 +55,9 @@ trait PEOtoSLOComponent  {
 	    }
 	  }
 
-	  def insert(vPEOtoSLO: MdlPEOtoSLO) {
+	  def insert(vPEOtoSLO: MdlPEOtoSLO): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      PEOtoSLO.forInsert insert MdlPEOtoSLO(None, vPEOtoSLO.vPEO, vPEOtoSLO.vSLO)
+	      PEOtoSLO.forInsert returning PEOtoSLO.vidPEOtoSLO insert MdlPEOtoSLO(None, vPEOtoSLO.vPEO, vPEOtoSLO.vSLO)
 
 	    }
 	  }

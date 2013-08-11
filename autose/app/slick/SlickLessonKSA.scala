@@ -11,7 +11,7 @@ trait LessonKSAComponent  {
 
 	object LessonKSA extends Table[MdlLessonKSA]("LessonTopicObjectives") with Crud[MdlLessonKSA, Long]  {
 
-      def vidLessonTopicObjectives = column[Long]("idLessonTopicObjectives", O.PrimaryKey)
+      def vidLessonTopicObjectives = column[Long]("idLessonTopicObjectives", O.PrimaryKey, O.AutoInc)
       def vLesson = column[Long]("Lesson")
       def vTopicObjective = column[Long]("TopicObjective")
       def * = vidLessonTopicObjectives.? ~ vLesson ~ vTopicObjective<> (MdlLessonKSA.apply _, MdlLessonKSA.unapply _)
@@ -35,6 +35,13 @@ trait LessonKSAComponent  {
 	  def selectQuery(pk: Long)(implicit session: Session) = {
 	      val q = Query(LessonKSA)
 	      q.filter(p => p.vidLessonTopicObjectives === pk)
+	  }
+
+	  def selectByLesson(lesson: Long) = {
+          AppDB.database.withSession { implicit session: Session =>
+	      	val q = Query(LessonKSA)
+	      	q.filter(p => p.vLesson === lesson).elements.toList
+          }
 	  }
 
       def select(pk: Long) = {
@@ -65,9 +72,9 @@ trait LessonKSAComponent  {
 	    }
 	  }
 
-	  def insert(vLessonTopicObjectives: MdlLessonKSA) {
+	  def insert(vLessonTopicObjectives: MdlLessonKSA): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      LessonKSA.forInsert insert MdlLessonKSA(None, vLessonTopicObjectives.vLesson, vLessonTopicObjectives.vTopicObjective)
+	      LessonKSA.forInsert returning LessonKSA.vidLessonTopicObjectives insert MdlLessonKSA(None, vLessonTopicObjectives.vLesson, vLessonTopicObjectives.vTopicObjective)
 
 	    }
 	  }

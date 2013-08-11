@@ -39,10 +39,23 @@ object CourseLinksController extends Base {
     Ok(viewshow.html.showCourseLinks(SqlCourseLinks.select(id)))
   }
 
-   def deleteCourseLinks(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    val vCourseLinks = SqlCourseLinks.select(id)
-    SqlCourseLinks.delete(id)
-    Redirect(routes.CourseLinksController.listCourseLinks(vCourseLinks.vCourse))
+  def deleteCourseLinks(id: Long) = compositeAction(NormalUser) { user =>
+    implicit template => implicit request =>
+      val vCourseLinks = SqlCourseLinks.select(id)
+      SqlCourseLinks.delete(id)
+      if (vCourseLinks.vIsFileLink) {
+        val sardine = SardineFactory.begin("seweb", "G0Systems!")
+        try {
+          if (sardine.exists(vCourseLinks.vLink)) {
+            sardine.delete(vCourseLinks.vLink)
+          }
+        } catch {
+          case e: Exception => {
+            println("Could not delete file " + vCourseLinks.vLink)
+          }
+        }
+      }
+      Redirect(routes.CourseLinksController.listCourseLinks(vCourseLinks.vCourse))
   }
 
   def createCourseLinks(courseId: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
@@ -66,7 +79,7 @@ object CourseLinksController extends Base {
         request.body.file("courseFile").map { courseFile =>
           if (vCourseLinks.validate) {
             val courseId = vCourseLinks.vCourse
-            val course = SqlCourses.select(courseId)
+            val course = slick.AppDB.dal.Courses.select(courseId).get
             val courseIdNumber = course.vCourseIDNumber
             val term = "AT" + (course.vAcademicYear - 2000) + "-" + course.vAcademicTerm
             val filename = Globals.webDavServer + "Courses/" + term + "/" + courseIdNumber + "/CourseFiles/" + courseFile.filename

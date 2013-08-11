@@ -34,6 +34,7 @@ object SqlCourseReferences {
 	}
 
   	def selectWhere(where: String): List[MdlCourseReferences] = DB.withConnection { implicit c =>
+  	    println(where)
   		SQL("select * from `CourseReferences` WHERE " + where).as(vCourseReferences *)
 	}
 

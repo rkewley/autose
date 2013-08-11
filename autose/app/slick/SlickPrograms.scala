@@ -10,7 +10,7 @@ trait ProgramsComponent  {
 	import profile.simple._
 
 	object Programs extends Table[MdlPrograms]("Programs") with Crud[MdlPrograms, Long]  {
-	  def vidPrograms = column[Long]("idPrograms", O.PrimaryKey)
+	  def vidPrograms = column[Long]("idPrograms", O.PrimaryKey, O.AutoInc)
 	  def vProgram = column[String]("Program")
 	  def vName = column[String]("Name")
 	  def vSlogan = column[String]("Slogan")
@@ -53,10 +53,10 @@ trait ProgramsComponent  {
 	    }
 	  }
 	  
-	  def insert(vPrograms: MdlPrograms) {
+	  def insert(vPrograms: MdlPrograms): Long = {
 	    println("Inserting " + vPrograms.toString)
 	    AppDB.database.withSession { implicit session: Session =>
-	      Programs.forInsert insert MdlPrograms(None, vPrograms.vProgram, vPrograms.vName, vPrograms.vSlogan, vPrograms.vInformation, vPrograms.vProgramDirector, vPrograms.vDepartment)
+	      Programs.forInsert returning Programs.vidPrograms insert MdlPrograms(None, vPrograms.vProgram, vPrograms.vName, vPrograms.vSlogan, vPrograms.vInformation, vPrograms.vProgramDirector, vPrograms.vDepartment)
 	    }
 	  }
 	  

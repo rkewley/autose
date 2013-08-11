@@ -2,10 +2,11 @@
 @(listLessonLinkTopicObjectives: List[MdlLessonLinkTopicObjectives], idLessonLinks: Long)
     
     @import persistence._
+    @import slick.AppDB
 
-@defining(SqlLessonLinks.select(idLessonLinks)) { vLessonLinks =>
-@defining(SqlLessons.select(vLessonLinks.vLesson)) { vLessons =>
-@lessonPage(vLessons.vLessonIndex) {
+@defining(AppDB.dal.LessonLinks.select(idLessonLinks).get) { vLessonLinks =>
+@defining(AppDB.dal.Lessons.select(vLessonLinks.vLesson).get) { vLessons =>
+@lessonPage(vLessons.vLessonIndex.get) {
 
     
     <div class="column span-18 last">
@@ -23,8 +24,8 @@
     			
     		<tr>
 
-    		@defining(SqlLessonLinks.select(vLessonLinkTopicObjectives.vLessonLink)){pkModel =>
-      		  <td><a href="@routes.LessonLinksController.showLessonLinks(vLessonLinkTopicObjectives.vLessonLink)">@pkModel.selectIdentifier._2</a></td>
+    		@defining(AppDB.dal.LessonLinks.select(vLessonLinkTopicObjectives.vLessonLink).get){pkModel =>
+      		  <td><a href="@routes.LessonLinksController.show(vLessonLinkTopicObjectives.vLessonLink)">@pkModel.selectIdentifier._2</a></td>
     		}
 
     		@defining(SqlTopicObjectives.select(vLessonLinkTopicObjectives.vTopicObjective)){pkModel =>

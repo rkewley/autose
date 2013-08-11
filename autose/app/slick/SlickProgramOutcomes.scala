@@ -11,7 +11,7 @@ trait ProgramOutcomesComponent  {
 
 	object ProgramOutcomes extends Table[MdlProgramOutcomes]("ProgramOutcomes") with Crud[MdlProgramOutcomes, Long]  {
 
-      def vProgramOutcomeNumber = column[Long]("ProgramOutcomeNumber", O.PrimaryKey)
+      def vProgramOutcomeNumber = column[Long]("ProgramOutcomeNumber", O.PrimaryKey, O.AutoInc)
       def vProgram = column[Long]("Program")
       def vProgramOutcome = column[String]("ProgramOutcome")
       def * = vProgramOutcomeNumber.? ~ vProgram ~ vProgramOutcome<> (MdlProgramOutcomes.apply _, MdlProgramOutcomes.unapply _)
@@ -56,9 +56,9 @@ trait ProgramOutcomesComponent  {
 	    }
 	  }
 
-	  def insert(vProgramOutcomes: MdlProgramOutcomes) {
+	  def insert(vProgramOutcomes: MdlProgramOutcomes): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      ProgramOutcomes.forInsert insert MdlProgramOutcomes(None, vProgramOutcomes.vProgram, vProgramOutcomes.vProgramOutcome)
+	      ProgramOutcomes.forInsert returning ProgramOutcomes.vProgramOutcomeNumber insert MdlProgramOutcomes(None, vProgramOutcomes.vProgram, vProgramOutcomes.vProgramOutcome)
 
 	    }
 	  }

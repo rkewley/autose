@@ -19,7 +19,7 @@ object CourseTopicsController extends Base {
   }
   
    def showCourseTopics(id: Long) = Action {
-    Ok(viewshow.html.showCourseTopics(SqlCourses.select(id)))
+    Ok(viewshow.html.showCourseTopics(slick.AppDB.dal.Courses.select(id).get))
   }
 
    def showTopicsCourses(id: Long) = Action {

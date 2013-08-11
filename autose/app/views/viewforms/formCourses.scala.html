@@ -1,0 +1,85 @@
+
+@(f: Form[MdlCourses], newEntry: Int, copyEntry: Int, originalCourse: Long)
+
+@import helper._
+@import persistence._
+@import slick.AppDB
+
+
+    @main("Systems Net", "Systems Engineering Curriculum Management Interface") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+<div class="column span-20 last">
+    <a href="#" title="@AppDB.dal.Definitions.getDefinition("Course Information Guidance")">Course Information Guidance</a> 
+    <fieldset>
+    @helper.form(routes.CoursesController.saveCourses(newEntry, copyEntry, originalCourse)) {
+
+		  
+            @defining(f("fidCourse")) { fidCourse =>
+                <input type="hidden" name="@fidCourse.name" id="@fidCourse.id" value="@fidCourse.value">
+			}
+    
+
+
+
+        	@inputText(f("fCourseIDNumber"), '_label -> "Course ID Number")
+
+            @inputText(f("fAcademicYear"), '_label -> "Academic Year", '_help->"")
+
+            @inputText(f("fAcademicTerm"), '_label -> "Academic Term")
+
+        	@inputText(f("fCourseName"), '_label -> "Course Name")
+
+            @{val selectvFaculty = SqlFaculty.all.map(vFaculty => vFaculty.selectIdentifier).toSeq
+            select(field = f("fCourseDirector"), options = selectvFaculty, args = '_label-> "Course Director")}
+    		<a href="@routes.FacultyController.createFaculty">Create new Faculty</a>
+
+            @{val selectvFaculty = SqlFaculty.all.map(vFaculty => vFaculty.selectIdentifier).toSeq
+            select(field = f("fProgramDirector"), options = selectvFaculty, args = '_label-> "Program Director")}
+    		<a href="@routes.FacultyController.createFaculty">Create new Faculty</a>
+
+            @textarea(field = f("fCourseDescriptionRedbook"), args = 'rows -> 2, 'cols -> 100, '_label-> "Course Description Redbook")
+        	@*@inputText(f("fCourseDescriptionRedbook"), '_label -> "CourseDescriptionRedbook")*@
+
+            @inputText(f("fCreditHours"), '_label -> "CreditHours")
+
+            @textarea(field = f("fPrerequisites"), args = 'rows -> 2, 'cols -> 100, '_label-> "Prerequisites")
+        	@*@inputText(f("fPrerequisites"), '_label -> "Prerequisites")*@
+
+            @textarea(field = f("fCorequisites"), args = 'rows -> 2, 'cols -> 100, '_label-> "Corequisites")
+        	@*@inputText(f("fCorequisites"), '_label -> "Corequisites")*@
+
+            @textarea(field = f("fDisqualifiers"), args = 'rows -> 2, 'cols -> 100, '_label-> "Disqualifiers")
+        	@*@inputText(f("fDisqualifiers"), '_label -> "Disqualifiers")*@
+
+            @textarea(field = f("fCourseStrategy"), args = 'rows -> 2, 'cols -> 100, '_label-> "Course Strategy")
+        	@*@inputText(f("fCourseStrategy"), '_label -> "CourseStrategy")*@
+
+            @textarea(field = f("fCriteriaForPassing"), args = 'rows -> 2, 'cols -> 100, '_label-> "Criteria For Passing")
+        	@*@inputText(f("fCriteriaForPassing"), '_label -> "CriteriaForPassing")*@
+
+            @textarea(field = f("fAdminInstructions"), args = 'rows -> 2, 'cols -> 100, '_label-> "Admin Instructions")
+        	@*@inputText(f("fAdminInstructions"), '_label -> "AdminInstructions")*@
+
+            @{val selectvDepartments = SqlDepartments.all.map(vDepartments => vDepartments.selectIdentifier).toSeq
+            select(field = f("fDepartmentID"), options = selectvDepartments, args = '_label-> "DepartmentID")}
+    		<a href="@routes.DepartmentsController.createDepartments">Create new Departments</a>
+
+            @helper.checkbox(f("fCourseWebsite"), '_label -> "Activate Course Website", '_help->"")
+
+            @textarea(field = f("fCourseDescriptionWebsite"), args = 'rows -> 2, 'cols -> 100, '_label-> "Course Description Website")
+        	@*@inputText(f("fCourseDescriptionWebsite"), '_label -> "CourseDescriptionWebsite")*@
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.CoursesController.listCourses">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }

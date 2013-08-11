@@ -1,6 +1,6 @@
     
  package models
- 
+
  object Courses {
    def compare(a: MdlCourses, b: MdlCourses): Boolean = {
      (a.vAcademicYear*10 + a.vAcademicTerm) - (b.vAcademicYear*10 + b.vAcademicTerm) match {
@@ -12,9 +12,10 @@
      }
    }
  }
-    
+ 
+ 
  case class MdlCourses (
- 	vidCourse : Long,
+ 	vidCourse : Option[Long],
 	vCourseIDNumber : String,
 	tempAcademicYear : Long,
 	vAcademicTerm : Long,
@@ -32,14 +33,15 @@
 	vDepartmentID : Long,
 	vCourseWebsite : Boolean,
 	vCourseDescriptionWebsite : String
-    )  {
-   
+    ) extends Mdl[Long] {
+
       val vAcademicYear: Long = tempAcademicYear match {
         case t if t >= 12 && t <= 20 => tempAcademicYear + 2000
         case _ => tempAcademicYear
       }
-    
-      def this() = this(0, "", 0, 0, "", 0, 0, "", 0.0, "", "", "", "", "", "", 0, false, "")
+
+   
+      def this() = this(Option(0), "", 0, 0, "", 0, 0, "", 0.0, "", "", "", "", "", "", 0, false, "")
 
   	  def validate: Boolean = vAcademicYear >= 2012 && vAcademicYear <= 2020 && vAcademicTerm >= 1 && vAcademicTerm <= 2
     
@@ -57,6 +59,29 @@
     
       def selectIdentifier: (String, String) = vidCourse.toString -> (vCourseIDNumber + " AT" + vAcademicYear + "-" + vAcademicTerm )
     
-      def compare(a: MdlCourses, b: MdlCourses) = a.vidCourse.compareTo(b.vidCourse)
+      def compare(a: MdlCourses, b: MdlCourses) = a.vidCourse.get.compareTo(b.vidCourse.get)
+        
+      def primaryKey = vidCourse
+      
+  def newCourse(newYear: Long, newTerm: Long) = MdlCourses(
+    Option(0),
+    vCourseIDNumber,
+    newYear,
+    newTerm,
+    vCourseName,
+    vCourseDirector,
+    vProgramDirector,
+    vCourseDescriptionRedbook,
+    vCreditHours,
+    vPrerequisites,
+    vCorequisites,
+    vDisqualifiers,
+    vCourseStrategy,
+    vCriteriaForPassing,
+    vAdminInstructions,
+    vDepartmentID,
+    vCourseWebsite,
+    vCourseDescriptionWebsite)
+
 }
     

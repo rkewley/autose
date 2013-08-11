@@ -11,7 +11,7 @@ trait PerformanceIndicatorComponent  {
 
 	object PerformanceIndicator extends Table[MdlPerformanceIndicator]("PerformanceIndicator") with Crud[MdlPerformanceIndicator, Long]  {
 
-      def vidPerformanceIndicator = column[Long]("idPerformanceIndicator", O.PrimaryKey)
+      def vidPerformanceIndicator = column[Long]("idPerformanceIndicator", O.PrimaryKey, O.AutoInc)
       def vPerformanceIndicator = column[String]("PerformanceIndicator")
       def vProgramOutcome = column[Long]("ProgramOutcome")
       def * = vidPerformanceIndicator.? ~ vPerformanceIndicator ~ vProgramOutcome<> (MdlPerformanceIndicator.apply _, MdlPerformanceIndicator.unapply _)
@@ -49,9 +49,9 @@ trait PerformanceIndicatorComponent  {
 	    }
 	  }
 
-	  def insert(vPerformanceIndicator: MdlPerformanceIndicator) {
+	  def insert(vPerformanceIndicator: MdlPerformanceIndicator): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      PerformanceIndicator.forInsert insert MdlPerformanceIndicator(None, vPerformanceIndicator.vPerformanceIndicator, vPerformanceIndicator.vProgramOutcome)
+	      PerformanceIndicator.forInsert returning PerformanceIndicator.vidPerformanceIndicator insert MdlPerformanceIndicator(None, vPerformanceIndicator.vPerformanceIndicator, vPerformanceIndicator.vProgramOutcome)
 
 	    }
 	  }

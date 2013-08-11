@@ -11,7 +11,7 @@ trait KSAPerfIndicatorComponent  {
 
 	object KSAPerfIndicator extends Table[MdlKSAPerfIndicator]("KSAPerfIndicator") with Crud[MdlKSAPerfIndicator, Long]  {
 
-      def vidKSAPerfIndicator = column[Long]("idKSAPerfIndicator", O.PrimaryKey)
+      def vidKSAPerfIndicator = column[Long]("idKSAPerfIndicator", O.PrimaryKey, O.AutoInc)
       def vKSA = column[Long]("KSA")
       def vPerformanceIndicator = column[Long]("PerformanceIndicator")
       def * = vidKSAPerfIndicator.? ~ vKSA ~ vPerformanceIndicator<> (MdlKSAPerfIndicator.apply _, MdlKSAPerfIndicator.unapply _)
@@ -69,9 +69,9 @@ trait KSAPerfIndicatorComponent  {
 	    }
 	  }
 
-	  def insert(vKSAPerfIndicator: MdlKSAPerfIndicator) {
+	  def insert(vKSAPerfIndicator: MdlKSAPerfIndicator): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      KSAPerfIndicator.forInsert insert MdlKSAPerfIndicator(None, vKSAPerfIndicator.vKSA, vKSAPerfIndicator.vPerformanceIndicator)
+	      KSAPerfIndicator.forInsert returning KSAPerfIndicator.vidKSAPerfIndicator insert MdlKSAPerfIndicator(None, vKSAPerfIndicator.vKSA, vKSAPerfIndicator.vPerformanceIndicator)
 
 	    }
 	  }

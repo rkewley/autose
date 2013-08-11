@@ -3,15 +3,15 @@
 @import slick.AppDB
 
 @defining(AppDB.dal.GradedRequirements.select(idGradedRequirement).get) { gradedRequirement =>
-@defining(SqlCourses.select(gradedRequirement.vCourse)) { course =>
+@defining(slick.AppDB.dal.Courses.select(gradedRequirement.vCourse).get) { course =>
 @main("Systems Net", course.vCourseIDNumber) {
 
 	<div class="column span-4 colborder">
 
 		  <ul id="menu">
-			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse)">Course Home</a></li>
-			<li><a href="@routes.LessonsController.listLessons(course.vidCourse)">Syllabus</a></li>
-			<li><a href="@routes.GradedRequirementsController.list(course.vidCourse)">Graded Events</a></li>
+			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse.get)">Course Home</a></li>
+			<li><a href="@routes.LessonsController.listLessons(course.vidCourse.get)">Syllabus</a></li>
+			<li><a href="@routes.GradedRequirementsController.list(course.vidCourse.get)">Graded Events</a></li>
 			<li><a href="@routes.GradedRequirementLinksController.list(idGradedRequirement)">Files and Links</a></li>
 			<li><a href="@routes.SubGradedEventController.list(idGradedRequirement)">Sub Events</a></li>
 			<li><a href="@routes.KSAGradedEventController.list(idGradedRequirement)">Link to Knowledge and Skills</a></li>

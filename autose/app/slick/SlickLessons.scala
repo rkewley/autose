@@ -11,7 +11,7 @@ trait LessonsComponent  {
 
 	object Lessons extends Table[MdlLessonsSlick]("Lessons") with Crud[MdlLessonsSlick, Long]  {
 
-      def vLessonIndex = column[Long]("LessonIndex", O.PrimaryKey)
+      def vLessonIndex = column[Long]("LessonIndex", O.PrimaryKey, O.AutoInc)
       def vLessonNumber = column[Long]("LessonNumber")
       def vLessonName = column[String]("LessonName")
       def vAssignment = column[String]("Assignment")
@@ -55,9 +55,9 @@ trait LessonsComponent  {
 	    }
 	  }
 
-	  def insert(vLessons: MdlLessonsSlick) {
+	  def insert(vLessons: MdlLessonsSlick): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      Lessons.forInsert insert MdlLessonsSlick(None, vLessons.vLessonNumber, vLessons.vLessonName, vLessons.vAssignment, vLessons.vLocation, vLessons.vidCourse, vLessons.vDuration, vLessons.vLab, vLessons.vLessonSummary)
+	      Lessons.forInsert returning Lessons.vLessonIndex insert MdlLessonsSlick(None, vLessons.vLessonNumber, vLessons.vLessonName, vLessons.vAssignment, vLessons.vLocation, vLessons.vidCourse, vLessons.vDuration, vLessons.vLab, vLessons.vLessonSummary)
 
 	    }
 	  }

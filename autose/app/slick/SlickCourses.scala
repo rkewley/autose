@@ -1,7 +1,7 @@
 
 package slick
 
-import models.MdlCoursesSlick
+import models.MdlCourses
 import models.Mdl
 
 trait CoursesSlickComponent  {
@@ -9,9 +9,9 @@ trait CoursesSlickComponent  {
 	  
 	import profile.simple._
 
-	object Courses extends Table[MdlCoursesSlick]("Courses") with Crud[MdlCoursesSlick, Long]  {
+	object Courses extends Table[MdlCourses]("Courses") with Crud[MdlCourses, Long]  {
 
-      def vidCourse = column[Long]("idCourse", O.PrimaryKey)
+      def vidCourse = column[Long]("idCourse", O.PrimaryKey, O.AutoInc)
       def vCourseIDNumber = column[String]("CourseIDNumber")
       def vAcademicYear = column[Long]("AcademicYear")
       def vAcademicTerm = column[Long]("AcademicTerm")
@@ -29,10 +29,10 @@ trait CoursesSlickComponent  {
       def vDepartmentID = column[Long]("DepartmentID")
       def vCourseWebsite = column[Boolean]("CourseWebsite")
       def vCourseDescriptionWebsite = column[String]("CourseDescriptionWebsite")
-      def * = vidCourse.? ~ vCourseIDNumber ~ vAcademicYear ~ vAcademicTerm ~ vCourseName ~ vCourseDirector ~ vProgramDirector ~ vCourseDescriptionRedbook ~ vCreditHours ~ vPrerequisites ~ vCorequisites ~ vDisqualifiers ~ vCourseStrategy ~ vCriteriaForPassing ~ vAdminInstructions ~ vDepartmentID ~ vCourseWebsite ~ vCourseDescriptionWebsite<> (MdlCoursesSlick.apply _, MdlCoursesSlick.unapply _)
+      def * = vidCourse.? ~ vCourseIDNumber ~ vAcademicYear ~ vAcademicTerm ~ vCourseName ~ vCourseDirector ~ vProgramDirector ~ vCourseDescriptionRedbook ~ vCreditHours ~ vPrerequisites ~ vCorequisites ~ vDisqualifiers ~ vCourseStrategy ~ vCriteriaForPassing ~ vAdminInstructions ~ vDepartmentID ~ vCourseWebsite ~ vCourseDescriptionWebsite<> (MdlCourses.apply _, MdlCourses.unapply _)
       def forInsert = vCourseIDNumber ~ vAcademicYear ~ vAcademicTerm ~ vCourseName ~ vCourseDirector ~ vProgramDirector ~ vCourseDescriptionRedbook ~ vCreditHours ~ vPrerequisites ~ vCorequisites ~ vDisqualifiers ~ vCourseStrategy ~ vCriteriaForPassing ~ vAdminInstructions ~ vDepartmentID ~ vCourseWebsite ~ vCourseDescriptionWebsite <> 
-      ({t => MdlCoursesSlick(None , t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17)},
-      {(vCourses: MdlCoursesSlick) => Some(vCourses.vCourseIDNumber, vCourses.vAcademicYear, vCourses.vAcademicTerm, vCourses.vCourseName, vCourses.vCourseDirector, vCourses.vProgramDirector, vCourses.vCourseDescriptionRedbook, vCourses.vCreditHours, vCourses.vPrerequisites, vCourses.vCorequisites, vCourses.vDisqualifiers, vCourses.vCourseStrategy, vCourses.vCriteriaForPassing, vCourses.vAdminInstructions, vCourses.vDepartmentID, vCourses.vCourseWebsite, vCourses.vCourseDescriptionWebsite)})
+      ({t => MdlCourses(None , t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17)},
+      {(vCourses: MdlCourses) => Some(vCourses.vCourseIDNumber, vCourses.vAcademicYear, vCourses.vAcademicTerm, vCourses.vCourseName, vCourses.vCourseDirector, vCourses.vProgramDirector, vCourses.vCourseDescriptionRedbook, vCourses.vCreditHours, vCourses.vPrerequisites, vCourses.vCorequisites, vCourses.vDisqualifiers, vCourses.vCourseStrategy, vCourses.vCriteriaForPassing, vCourses.vAdminInstructions, vCourses.vDepartmentID, vCourses.vCourseWebsite, vCourses.vCourseDescriptionWebsite)})
 
 	  def allQuery = {
 	    AppDB.database.withSession { implicit session: Session =>
@@ -64,15 +64,15 @@ trait CoursesSlickComponent  {
 	    }
 	  }
 
-	  def insert(vCourses: MdlCoursesSlick) {
+	  def insert(vCourses: MdlCourses): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      Courses.forInsert insert MdlCoursesSlick(None, vCourses.vCourseIDNumber, vCourses.vAcademicYear, vCourses.vAcademicTerm, vCourses.vCourseName, vCourses.vCourseDirector, vCourses.vProgramDirector, vCourses.vCourseDescriptionRedbook, vCourses.vCreditHours, vCourses.vPrerequisites, vCourses.vCorequisites, vCourses.vDisqualifiers, vCourses.vCourseStrategy, vCourses.vCriteriaForPassing, vCourses.vAdminInstructions, vCourses.vDepartmentID, vCourses.vCourseWebsite, vCourses.vCourseDescriptionWebsite)
+	      Courses.forInsert returning Courses.vidCourse insert MdlCourses(None, vCourses.vCourseIDNumber, vCourses.vAcademicYear, vCourses.vAcademicTerm, vCourses.vCourseName, vCourses.vCourseDirector, vCourses.vProgramDirector, vCourses.vCourseDescriptionRedbook, vCourses.vCreditHours, vCourses.vPrerequisites, vCourses.vCorequisites, vCourses.vDisqualifiers, vCourses.vCourseStrategy, vCourses.vCriteriaForPassing, vCourses.vAdminInstructions, vCourses.vDepartmentID, vCourses.vCourseWebsite, vCourses.vCourseDescriptionWebsite)
 
 	    }
 	  }
     
 
-	  def update(vCourses: MdlCoursesSlick) {
+	  def update(vCourses: MdlCourses) {
 	    AppDB.database.withSession { implicit session: Session =>
 	      val q = selectQuery(vCourses.vidCourse.get)
 	      val q2 = q.map(vCourses => vCourses.vCourseIDNumber ~ vCourses.vAcademicYear ~ vCourses.vAcademicTerm ~ vCourses.vCourseName ~ vCourses.vCourseDirector ~ vCourses.vProgramDirector ~ vCourses.vCourseDescriptionRedbook ~ vCourses.vCreditHours ~ vCourses.vPrerequisites ~ vCourses.vCorequisites ~ vCourses.vDisqualifiers ~ vCourses.vCourseStrategy ~ vCourses.vCriteriaForPassing ~ vCourses.vAdminInstructions ~ vCourses.vDepartmentID ~ vCourses.vCourseWebsite ~ vCourses.vCourseDescriptionWebsite)

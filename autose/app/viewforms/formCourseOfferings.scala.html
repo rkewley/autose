@@ -24,9 +24,9 @@
     
 
 
-            @{val selectvCourses = SqlCourses.all.map(vCourses => vCourses.selectIdentifier).toSeq
+            @{val selectvCourses = slick.AppDB.dal.Courses.all.map(vCourses => vCourses.selectIdentifier).toSeq
             select(field = f("fCourse"), options = selectvCourses, args = '_label-> "Course")}
-    		<a href="@routes.CoursesController.createCourses">Create new Courses</a>
+    		<a href="@routes.CoursesController.create(0)">Create new Courses</a>
 
         	@inputText(f("fClassHour"), '_label -> "Class Hour")
 

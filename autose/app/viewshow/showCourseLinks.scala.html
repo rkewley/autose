@@ -15,9 +15,9 @@
 		  <h3>CourseLinks Information</h3>
 		  <dl>
 
-    		@defining(SqlCourses.select(vCourseLinks.vCourse)){pkModel =>
+    		@defining(slick.AppDB.dal.Courses.select(vCourseLinks.vCourse).get){pkModel =>
       		  <dt>Course</dt>
-      		  <dd><a href="@routes.CoursesController.showCourses(vCourseLinks.vCourse)">@pkModel.selectIdentifier._2</a></dd>
+      		  <dd><a href="@routes.CoursesController.show(vCourseLinks.vCourse)">@pkModel.selectIdentifier._2</a></dd>
     		}
 
 		  	<dt>Link</dt>

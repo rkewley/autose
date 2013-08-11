@@ -15,9 +15,9 @@
 		  <h3>Course References Information</h3>
 		  <dl>
 
-    		@defining(SqlCourses.select(vCourseReferences.vCourse)){pkModel =>
+    		@defining(slick.AppDB.dal.Courses.select(vCourseReferences.vCourse).get){pkModel =>
       		  <dt>Course</dt>
-      		  <dd><a href="@routes.CoursesController.showCourses(vCourseReferences.vCourse)">@pkModel.selectIdentifier._2</a></dd>
+      		  <dd><a href="@routes.CoursesController.show(vCourseReferences.vCourse)">@pkModel.selectIdentifier._2</a></dd>
     		}
 
     		@defining(SqlReference.select(vCourseReferences.vReference)){pkModel =>

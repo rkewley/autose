@@ -18,9 +18,9 @@
 		  	<dt>idCourseOfferings</dt>
 		  	<dd>@Html(vCourseOfferings.vidCourseOfferings.toString)</dd>
 
-    		@defining(SqlCourses.select(vCourseOfferings.vCourse)){pkModel =>
+    		@defining(slick.AppDB.dal.Courses.select(vCourseOfferings.vCourse).get){pkModel =>
       		  <dt>Course</dt>
-      		  <dd><a href="@routes.CoursesController.showCourses(vCourseOfferings.vCourse)">@pkModel.selectIdentifier._2</a></dd>
+      		  <dd><a href="@routes.CoursesController.show(vCourseOfferings.vCourse)">@pkModel.selectIdentifier._2</a></dd>
     		}
 
 		  	<dt>ClassHour</dt>

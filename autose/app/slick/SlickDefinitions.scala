@@ -11,7 +11,7 @@ trait DefinitionsComponent  {
 
 	object Definitions extends Table[MdlDefinitions]("Definitions") with Crud[MdlDefinitions, Long]  {
 
-      def vidDefinitions = column[Long]("idDefinitions", O.PrimaryKey)
+      def vidDefinitions = column[Long]("idDefinitions", O.PrimaryKey, O.AutoInc)
       def vWord = column[String]("Word")
       def vDefinition = column[String]("Definition")
       def * = vidDefinitions.? ~ vWord ~ vDefinition<> (MdlDefinitions.apply _, MdlDefinitions.unapply _)
@@ -63,10 +63,9 @@ trait DefinitionsComponent  {
 	    }
 	  }
 
-	  def insert(vDefinitions: MdlDefinitions) {
+	  def insert(vDefinitions: MdlDefinitions): Long =  {
 	    AppDB.database.withSession { implicit session: Session =>
-	      Definitions.forInsert insert MdlDefinitions(None, vDefinitions.vWord, vDefinitions.vDefinition)
-
+	      Definitions.forInsert returning Definitions.vidDefinitions insert MdlDefinitions(None, vDefinitions.vWord, vDefinitions.vDefinition)
 	    }
 	  }
     

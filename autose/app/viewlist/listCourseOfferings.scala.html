@@ -23,8 +23,8 @@
     			
     		<tr>
 
-    		@defining(SqlCourses.select(vCourseOfferings.vCourse)){pkModel =>
-      		  <td><a href="@routes.CoursesController.showCourses(vCourseOfferings.vCourse)">@pkModel.selectIdentifier._2</a></td>
+    		@defining(slick.AppDB.dal.Courses.select(vCourseOfferings.vCourse).get){pkModel =>
+      		  <td><a href="@routes.CoursesController.show(vCourseOfferings.vCourse)">@pkModel.selectIdentifier._2</a></td>
     		}
 				<td>@vCourseOfferings.vClassHour</td>
 				<td>@vCourseOfferings.vSection</td>

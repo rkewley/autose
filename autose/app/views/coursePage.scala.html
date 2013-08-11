@@ -3,17 +3,17 @@
 @main("Systems Net", course.vCourseIDNumber) {
 
 	<div class="column span-4 colborder">
-		<form method="GET" action="@routes.CoursesController.editCourses(course.vidCourse)">
+		<form method="GET" action="@routes.CoursesController.edit(course.vidCourse.get)">
 			<input type="submit" value="Edit Course Information">
 		</form>
 		  <ul id="menu">
-			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse)">Home</a></li>
-			<li><a href="@routes.CoursesController.showCourses(course.vidCourse)">Information</a></li>
-			<li><a href="@routes.CourseReferencesController.listCourseReferences(course.vidCourse)">Course References</a></li>
-			<li><a href="@routes.CourseLinksController.listCourseLinks(course.vidCourse)">Course Links and Files</a></li>
-			<li><a href="@routes.LessonsController.listLessons(course.vidCourse)">Syllabus</a></li>
-			<li><a href="@routes.GradedRequirementsController.list(course.vidCourse)">Graded Events</a></li>
-			<li><a href="@routes.CourseTopicsController.showCourseTopics(course.vidCourse)">Topics</a></li> 
+			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse.get)">Home</a></li>
+			<li><a href="@routes.CoursesController.show(course.vidCourse.get)">Information</a></li>
+			<li><a href="@routes.CourseReferencesController.listCourseReferences(course.vidCourse.get)">Course References</a></li>
+			<li><a href="@routes.CourseLinksController.listCourseLinks(course.vidCourse.get)">Course Links and Files</a></li>
+			<li><a href="@routes.LessonsController.listLessons(course.vidCourse.get)">Syllabus</a></li>
+			<li><a href="@routes.GradedRequirementsController.list(course.vidCourse.get)">Graded Events</a></li>
+			<li><a href="@routes.CourseTopicsController.showCourseTopics(course.vidCourse.get)">Topics</a></li> 
 		  </ul>
 
 	</div>

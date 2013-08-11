@@ -5,14 +5,14 @@
     @import persistence._
     
     
-    @main("Systems Net", "Systems Engineering Curriculum Management Interface") {
+    @gradedEventPage(AppDB.dal.SubGradedEvent.select(idSubGradedEvent).get.vGradedEvent) {
 	<div>
 	  <div class="column span-4">
 		 
 	  </div>
 
     
-    <div class="column span-20 last">
+    <div class="column span-18 last">
 		  <h3>Knowledge and Skills for @AppDB.dal.SubGradedEvent.select(idSubGradedEvent).get.vDescription</h3>
 		  <table>
 			<tr>

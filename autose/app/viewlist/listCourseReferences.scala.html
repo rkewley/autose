@@ -3,7 +3,7 @@
     
     @import persistence._
     
-@defining(SqlCourses.select(courseId)) { vCourses =>
+@defining(slick.AppDB.dal.Courses.select(courseId).get) { vCourses =>
 @coursePage(vCourses) {
     
     <div class="column span-18 last">
@@ -21,8 +21,8 @@
     			
     		<tr>
 
-    		@defining(SqlCourses.select(vCourseReferences.vCourse)){pkModel =>
-      		  <td><a href="@routes.CoursesController.showCourses(vCourseReferences.vCourse)">@pkModel.selectIdentifier._2</a></td>
+    		@defining(slick.AppDB.dal.Courses.select(vCourseReferences.vCourse).get){pkModel =>
+      		  <td><a href="@routes.CoursesController.show(vCourseReferences.vCourse)">@pkModel.selectIdentifier._2</a></td>
     		}
 
     		@defining(SqlReference.select(vCourseReferences.vReference)){pkModel =>

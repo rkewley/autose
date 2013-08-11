@@ -2,6 +2,7 @@
 @(vLessonLinkTopicObjectives: MdlLessonLinkTopicObjectives)
 
     @import persistence._
+    @import slick.AppDB
 		  
     
     @main("Systems Net", "Systems Engineering Curriculum Management Interface") {
@@ -18,9 +19,9 @@
 		  	<dt>idLessonLinkTopicObjective</dt>
 		  	<dd>@Html(vLessonLinkTopicObjectives.vidLessonLinkTopicObjective.toString)</dd>
 
-    		@defining(SqlLessonLinks.select(vLessonLinkTopicObjectives.vLessonLink)){pkModel =>
+    		@defining(AppDB.dal.LessonLinks.select(vLessonLinkTopicObjectives.vLessonLink).get){pkModel =>
       		  <dt>LessonLink</dt>
-      		  <dd><a href="@routes.LessonLinksController.showLessonLinks(vLessonLinkTopicObjectives.vLessonLink)">@pkModel.selectIdentifier._2</a></dd>
+      		  <dd><a href="@routes.LessonLinksController.show(vLessonLinkTopicObjectives.vLessonLink)">@pkModel.selectIdentifier._2</a></dd>
     		}
 
     		@defining(SqlTopicObjectives.select(vLessonLinkTopicObjectives.vTopicObjective)){pkModel =>

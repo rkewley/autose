@@ -11,7 +11,7 @@ trait SubGradedEventComponent  {
 
 	object SubGradedEvent extends Table[MdlSubGradedEvent]("SubGradedEvent") with Crud[MdlSubGradedEvent, Long]  {
 
-      def vidSubGradedEvent = column[Long]("idSubGradedEvent", O.PrimaryKey)
+      def vidSubGradedEvent = column[Long]("idSubGradedEvent", O.PrimaryKey, O.AutoInc)
       def vGradedEvent = column[Long]("GradedEvent")
       def vDescription = column[String]("Description")
       def vPoints = column[Double]("Points")
@@ -44,15 +44,22 @@ trait SubGradedEventComponent  {
 	    }
 	  }
 	  
+      def selectByGradedEvent(gradedEvent: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val q = Query(SubGradedEvent)
+	      q.filter(p => p.vGradedEvent === gradedEvent).elements.toList
+	    }
+	  }
+	  
 	  def delete(pk: Long) {
 	    AppDB.database.withSession { implicit session: Session =>
 	      selectQuery(pk).delete
 	    }
 	  }
 
-	  def insert(vSubGradedEvent: MdlSubGradedEvent) {
+	  def insert(vSubGradedEvent: MdlSubGradedEvent): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      SubGradedEvent.forInsert insert MdlSubGradedEvent(None, vSubGradedEvent.vGradedEvent, vSubGradedEvent.vDescription, vSubGradedEvent.vPoints)
+	      SubGradedEvent.forInsert returning SubGradedEvent.vidSubGradedEvent insert MdlSubGradedEvent(None, vSubGradedEvent.vGradedEvent, vSubGradedEvent.vDescription, vSubGradedEvent.vPoints)
 
 	    }
 	  }

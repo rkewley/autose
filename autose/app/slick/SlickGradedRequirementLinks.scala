@@ -11,7 +11,7 @@ trait GradedRequirementLinksComponent  {
 
 	object GradedRequirementLinks extends Table[MdlGradedRequirementLinks]("GradedRequirementLinks") with Crud[MdlGradedRequirementLinks, Long]  {
 
-      def vidGradedRequirementLinks = column[Long]("idGradedRequirementLinks", O.PrimaryKey)
+      def vidGradedRequirementLinks = column[Long]("idGradedRequirementLinks", O.PrimaryKey, O.AutoInc)
       def vLink = column[String]("Link")
       def vDescription = column[String]("Description")
       def vIsFileLink = column[Boolean]("IsFileLink")
@@ -58,9 +58,9 @@ trait GradedRequirementLinksComponent  {
 	    }
 	  }
 
-	  def insert(vGradedRequirementLinks: MdlGradedRequirementLinks) {
+	  def insert(vGradedRequirementLinks: MdlGradedRequirementLinks): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      GradedRequirementLinks.forInsert insert MdlGradedRequirementLinks(None, vGradedRequirementLinks.vLink, vGradedRequirementLinks.vDescription, vGradedRequirementLinks.vIsFileLink, vGradedRequirementLinks.vGradedRequirement)
+	      GradedRequirementLinks.forInsert returning GradedRequirementLinks.vidGradedRequirementLinks insert MdlGradedRequirementLinks(None, vGradedRequirementLinks.vLink, vGradedRequirementLinks.vDescription, vGradedRequirementLinks.vIsFileLink, vGradedRequirementLinks.vGradedRequirement)
 
 	    }
 	  }

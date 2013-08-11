@@ -2,70 +2,165 @@
 package controllers
 
 import play.api._
-import play.api.mvc._
-import play.api.data._
-import models._
-import persistence._
-import play.Logger
+import play.api.templates._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
+import models._
+import views._
+import slick.AppDB
+import scala.slick.driver.MySQLDriver.simple._
+import play.api.mvc._
 import com.googlecode.sardine._
+import persistence._
 
-object CoursesController extends Base {
 
-  val formCourses = Form[MdlCourses](
-    mapping (
-	"fidCourse" -> of[Long],
-	"fCourseIDNumber" -> text,
-	"fAcademicYear" -> of[Long],
-	"fAcademicTerm" -> of[Long],
-	"fCourseName" -> text,
-	"fCourseDirector" -> of[Long],
-	"fProgramDirector" -> of[Long],
-	"fCourseDescriptionRedbook" -> text,
-	"fCreditHours" -> of[Double],
-	"fPrerequisites" -> text,
-	"fCorequisites" -> text,
-	"fDisqualifiers" -> text,
-	"fCourseStrategy" -> text,
-	"fCriteriaForPassing" -> text,
-	"fAdminInstructions" -> text,
-	"fDepartmentID" -> of[Long],
-	"fCourseWebsite" -> of[Boolean],
-	"fCourseDescriptionWebsite" -> text
-    )(MdlCourses.apply)(MdlCourses.unapply)
-  )
-      
+object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Base {
+
+  val form = Form[MdlCourses](
+    mapping(
+      "fidCourse" -> optional(of[Long]),
+      "fCourseIDNumber" -> text,
+      "fAcademicYear" -> of[Long],
+      "fAcademicTerm" -> of[Long],
+      "fCourseName" -> text,
+      "fCourseDirector" -> of[Long],
+      "fProgramDirector" -> of[Long],
+      "fCourseDescriptionRedbook" -> text,
+      "fCreditHours" -> of[Double],
+      "fPrerequisites" -> text,
+      "fCorequisites" -> text,
+      "fDisqualifiers" -> text,
+      "fCourseStrategy" -> text,
+      "fCriteriaForPassing" -> text,
+      "fAdminInstructions" -> text,
+      "fDepartmentID" -> of[Long],
+      "fCourseWebsite" -> of[Boolean],
+      "fCourseDescriptionWebsite" -> text)(MdlCourses.apply)(MdlCourses.unapply))
+
+  override def listFunction(ffk: Long): Html =
+    views.html.viewlist.listCourses(getAll(ffk))
+
+  override def listFunction(item: MdlCourses): Html =
+    views.html.viewlist.listCourses(getAll(item))
+
+  override def showFunction(vCourses: MdlCourses): Html =
+    views.html.viewshow.showCourses(vCourses)
+
+  override def editFunction(mdlCoursesForm: Form[MdlCourses]): Html =
+    views.html.viewforms.formCourses(mdlCoursesForm, 0, 0, 0)
+
+  override def createFunction(mdlCoursesForm: Form[MdlCourses]): Html =
+    views.html.viewforms.formCourses(mdlCoursesForm, 1, 0, 0)
+
+  def crud = slick.AppDB.dal.Courses
 
   def listAllCourses = Action {
-    Ok(viewlist.html.listCourses(SqlCourses.all.sortWith(Courses.compare)))
+    Ok(views.html.viewlist.listCourses(crud.all.sortWith(Courses.compare)))
   }
 
   def listCourses = Action {
-    Ok(viewlist.html.listCourses(SqlCourses.all.filter(vCourses => vCourses.vAcademicYear == Globals.currentYear && vCourses.vAcademicTerm == Globals.currentTerm).sortWith(Courses.compare)))
+    Ok(views.html.viewlist.listCourses(crud.all.filter(vCourses => vCourses.vAcademicYear == Globals.currentYear && vCourses.vAcademicTerm == Globals.currentTerm).sortWith(Courses.compare)))
   }
-   def editCourses(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    Ok(viewforms.html.formCourses(formCourses.fill(SqlCourses.select(id)), 0))
+  
+  def copyCourses(id: Long) = compositeAction(NormalUser) { user =>
+    implicit template => implicit request =>
+      val course = AppDB.dal.Courses.select(id).get
+      val yearTerm = course.vAcademicTerm match {
+        case 1 => (course.vAcademicYear, 2)
+        case _ => (course.vAcademicYear + 1, 1)
+      }
+      val newCourse = course.newCourse(yearTerm._1, yearTerm._2)
+      Ok(views.html.viewforms.formCourses(form.fill(newCourse), 1, 1, id))
   }
 
-   def showCourses(id: Long) = Action {
-    Ok(viewshow.html.showCourses(SqlCourses.select(id)))
+  def copyCourseData(orignalCourseId: Long, newCourseId: Long) {
+	  // Copy course references
+	  val references = SqlCourseReferences.selectWhere("Course = " + orignalCourseId)
+	  references.foreach(reference => {
+	    val newReference = new MdlCourseReferences(0, newCourseId, reference.vReference)
+	    SqlCourseReferences.insert(newReference)
+	  })
+	  
+	  // Copy course links
+	  val courseLinks = SqlCourseLinks.selectWhere("Course = " + orignalCourseId)
+	  courseLinks.foreach(courseLink => {
+	    val newCourseLink = new MdlCourseLinks(0, newCourseId, 	courseLink.vLink, courseLink.vDisplayDescription, courseLink.vIsFileLink, courseLink.vFaculty)
+	    SqlCourseLinks.insert(newCourseLink)
+	  })
+	  
+	  // Copy lessons
+	  val lessons = AppDB.dal.Lessons.all.filter(lsn => lsn.vidCourse == orignalCourseId)
+	  lessons.foreach(lesson =>{
+	    val newLesson = new MdlLessonsSlick(Option(0), lesson.vLessonNumber, lesson.vLessonName, lesson.vAssignment, lesson.vLocation,
+	    		newCourseId, lesson.vDuration, lesson.vLab, lesson.vLessonSummary)
+	    val newLessonId = AppDB.dal.Lessons.insert(newLesson)
+	    
+	    // Copy lesson links
+	    val lessonLinks =  AppDB.dal.LessonLinks.all.filter(lsnLink => lsnLink.vLesson == lesson.vLessonIndex.get)        
+	    lessonLinks.foreach(lessonLink => {
+	      val newLessonLink = new MdlLessonLinks(Option(0), lessonLink.vLink, lessonLink.vDescription, lessonLink.vIsFileLiink, newLessonId, lessonLink.vFaculty)
+	      val newLessonLinkId = AppDB.dal.LessonLinks.insert(newLessonLink)
+	      
+	      // Copy knowledge, skills and behaviors associated with each link
+	      val lessonLinkKSAs = SqlLessonLinkTopicObjectives.selectWhere("LessonLink = " + lessonLink.vLessonLinkNumber.get)
+	      lessonLinkKSAs.foreach(lessonLinkKSA => {
+	        val newLessonLinkKSA = new MdlLessonLinkTopicObjectives(0, newLessonLinkId, lessonLinkKSA.vTopicObjective)
+	        SqlLessonLinkTopicObjectives.insert(newLessonLinkKSA)
+	      })
+	    })
+	    
+	    // Copy Knowledge Skills and Behaviors for this lesson
+	    val lessonKSAs = AppDB.dal.LessonKSA.selectByLesson(lesson.vLessonIndex.get)
+	    lessonKSAs.foreach(lessonKSA => {
+	      val newLessonKSA = new MdlLessonKSA(Option(0), newLessonId, lessonKSA.vTopicObjective)
+	      AppDB.dal.LessonKSA.insert(newLessonKSA)
+	    })	    
+	  })
+	  
+	  // Copy Graded Events
+	  val gradedEvents = AppDB.dal.GradedRequirements.selectByCourse(orignalCourseId)
+	  gradedEvents.foreach(gradedEvent => {
+	    val newGradedEvent = new MdlGradedRequirements(Option(0), newCourseId, gradedEvent.vGradedEventName, gradedEvent.vEventDescription, gradedEvent.vTypeOfEvent,
+	    		gradedEvent.vPoints, gradedEvent.vLessonassigned, gradedEvent.vLessoncompleted)	
+	    val newGradedEventId = AppDB.dal.GradedRequirements.insert(newGradedEvent)
+	    
+	    // Copy graded event links
+	    val gradedEventLinks = AppDB.dal.GradedRequirementLinks.selectByGradedRequirement(gradedEvent.vGradedEventIndex.get)
+	    gradedEventLinks.foreach(gradedEventLink=> {
+	      val newGradedEventLink = new MdlGradedRequirementLinks(Option(0), gradedEventLink.vLink, gradedEventLink.vDescription, 
+	          gradedEventLink.vIsFileLink, newGradedEventId)
+	      AppDB.dal.GradedRequirementLinks.insert(newGradedEventLink)
+	    })
+	    
+	    // Copy Knowledge, Skills, and Behaviors for this Graded Event
+	    val gradedEventKSAs = AppDB.dal.KSAGradedEvent.selectByGradedEvent(gradedEvent.vGradedEventIndex.get)
+	    gradedEventKSAs.foreach(gradedEventKSA => {
+	      val newGradedEventKSA = new MdlKSAGradedEvent(Option(0), gradedEventKSA.vKSA, newGradedEventId)
+	      AppDB.dal.KSAGradedEvent.insert(newGradedEventKSA)
+	    })
+	    
+	    // Copy Sub-Events
+	    val subEvents = AppDB.dal.SubGradedEvent.selectByGradedEvent(gradedEvent.vGradedEventIndex.get)
+	    subEvents.foreach(subEvent=> {
+	      val newSubEvent = new MdlSubGradedEvent(Option(0), newGradedEventId, subEvent.vDescription, subEvent.vPoints)
+	      val newSubEventId = AppDB.dal.SubGradedEvent.insert(newSubEvent)
+	      
+	      // Copy Knowledge Skill, and Behaviors for Sub Event
+	      val subEventKSAs = AppDB.dal.KSASubGradedEvent.selectBySubGradedEvent(subEvent.vidSubGradedEvent.get)
+	      subEventKSAs.foreach(subEventKSA => {
+	        val newSubEventKSA = new MdlKSASubGradedEvent(Option(0), subEventKSA.vKSA, newSubEventId)
+	        AppDB.dal.KSASubGradedEvent.insert(newSubEventKSA)
+	      })
+	    })
+	  })
+	  
+	 
   }
-   
+
   def homeCourses(id: Long) = Action {
-    Ok(viewhome.html.homeCourses(SqlCourses.select(id)))
+    Ok(viewhome.html.homeCourses(AppDB.dal.Courses.select(id).get))
   }
-
-   def deleteCourses(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    SqlCourses.delete(id)
-    Ok(viewlist.html.listCourses(SqlCourses.all))
-  }
-
-  def createCourses = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    Ok(viewforms.html.formCourses(formCourses.fill(new MdlCourses()), 1))
-  }
-
   def createCourseDirectoryStructure(vCourses: MdlCourses) {
     val directory = Globals.webDavServer + "Courses/AT" + String.valueOf(vCourses.vAcademicYear).substring(2) + "-" +
       String.valueOf(vCourses.vAcademicTerm) + "/" + vCourses.vCourseIDNumber
@@ -87,7 +182,7 @@ object CoursesController extends Base {
               case _ => String.valueOf(i)
             }
             sardine.createDirectory(dirPath + "/Lessons/Lesson" + lessonPath)
-            createLessonDirectory(i+1)
+            createLessonDirectory(i + 1)
           }
         }
         createLessonDirectory(1)
@@ -96,21 +191,30 @@ object CoursesController extends Base {
 
   }
 
-  def saveCourses(newEntry: Int) = Action { implicit request =>
-  	formCourses.bindFromRequest.fold(
-  	  form => {
+  def saveCourses(newEntry: Int, copyEntry: Int, originalCourse: Long) = Action { implicit request =>
+    form.bindFromRequest.fold(
+      form => {
         val errorMessage = formErrorMessage(form.errors)
         Logger.debug(errorMessage)
         BadRequest(viewforms.html.formError(errorMessage, request.headers("REFERER")))
       },
       vCourses => {
         if (vCourses.validate) {
-          createCourseDirectoryStructure(vCourses)
-          newEntry match {
-            case 0 => SqlCourses.update(vCourses)
-            case _ => SqlCourses.insert(vCourses)
+          val newCourseId = newEntry match {
+            case 0 => {
+              AppDB.dal.Courses.update(vCourses)
+              vCourses.vidCourse.get
+            }
+            case _ => {
+              val newId = AppDB.dal.Courses.insert(vCourses)
+              //createCourseDirectoryStructure(vCourses)
+              if (copyEntry != 0) {
+                copyCourseData(originalCourse, newId)
+              }
+              newId
+            }
           }
-          Redirect(routes.CoursesController.homeCourses(vCourses.vidCourse))
+          Redirect(routes.CoursesController.homeCourses(newCourseId))
         } else {
           val validationErrors = vCourses.validationErrors
           Logger.debug(validationErrors)
@@ -118,13 +222,6 @@ object CoursesController extends Base {
         }
       })
   }
-    
-  def formErrorMessage(errors: Seq[FormError]) = {
-    def errMess(message: String, errorList: List[FormError]): String = {
-      if (errorList.isEmpty) message else {
-        errMess(message + errorList.head.message + "\n", errorList.tail)
-      }
-    }
-    errMess("Error Messages:\n", formCourses.errors.toList)
-  }
+
+  def newItem(fkId: Long) = new MdlCourses
 }

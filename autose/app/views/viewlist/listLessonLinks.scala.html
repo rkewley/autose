@@ -1,0 +1,71 @@
+
+@(listLessonLinks: List[MdlLessonLinks], idLessons: Long)
+    
+@import persistence._
+@import slick.AppDB
+    
+@defining(AppDB.dal.Lessons.select(idLessons).get) {  vLessons =>  
+@lessonPage(vLessons.vLessonIndex.get) {
+                                
+  <div class="column span-19 last">
+    <h3>Lesson Links Listing</h3>
+    <table>
+      <tr>
+        <th>Link</th>
+        <th>File?</th>
+        <th>Lesson</th>
+        <th>Associated Topics</th>
+        <th>Faculty</th>
+        <th>Show</th>
+        <th>Edit</th>
+        <th>Link to topics</th>
+        <th>Delete</th>
+      </tr>
+
+      @* Create a two list of topic objective data (toData) for this lesson
+         toData is a tuple of (MdlTopicObjectives, MdlTopic) for each topic objective in the lesson
+      *@
+	  @defining({ 
+	    (SqlLessonTopicObjectives.selectWhere("Lesson = " + vLessons.vLessonIndex.get)).map(lto =>
+		  (SqlTopicObjectives.select(lto.vTopicObjective), SqlTopics.select((SqlTopicObjectives.select(lto.vTopicObjective)).vTopic))
+      )})  { toData =>
+      
+
+        @listLessonLinks.map { vLessonLinks =>
+          <tr>
+            <td><a href="@vLessonLinks.vLink">@vLessonLinks.vDescription</td>
+            <td>@vLessonLinks.vIsFileLiink</td>
+            @defining(SqlLessons.select(vLessonLinks.vLesson)){pkModel =>
+      	      <td><a href="@routes.LessonsController.showLessons(vLessonLinks.vLesson)">@pkModel.selectIdentifier._2</a></td>
+    	    }
+    	    
+    	    <td>
+    	      @* Get the topic objectives for this link and iterate through it *@
+    	      @SqlLessonLinkTopicObjectives.selectWhere("LessonLink = " + vLessonLinks.vLessonLinkNumber.get).map { llto =>
+    	        <p>@SqlTopicObjectives.shortenedTopicNameFor(SqlTopicObjectives.select(llto.vTopicObjective), 100)</p>
+    	      }
+    	    </td>
+    	    <td>
+    	    	@{vLessonLinks.vFaculty match {
+    	    	  case -1 => "Course level file"
+    	    	  case _  => SqlFaculty.select(vLessonLinks.vFaculty).selectIdentifier._2
+    	    	}}
+    	    </td>
+    	    <td><a href="@routes.LessonLinksController.show(vLessonLinks.vLessonLinkNumber.get)">Show</a></td>
+    	    <td><a href="@routes.LessonLinksController.edit(vLessonLinks.vLessonLinkNumber.get)">Edit</a></td>
+    	    <td><a href="@routes.LessonLinkTopicObjectivesController.listLessonLinkTopicObjectives(vLessonLinks.vLessonLinkNumber.get)">Modify links to topics</a></td>
+    	    <td>
+    	      <form action="@routes.LessonLinksController.delete(vLessonLinks.vLessonLinkNumber.get)" method="POST">
+    	      <input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	      </form>
+    	    </td>
+    	  </tr>
+        }
+      }
+    </table>
+    <p><a href="@routes.LessonLinksController.create(vLessons.vLessonIndex.get)">Create new link for lesson @vLessons.vLessonNumber</a></p>
+    <p><a href="@routes.LessonLinksController.uploadLessonFile(vLessons.vLessonIndex.get)">Upload new file for lesson @vLessons.vLessonNumber</a></p>
+  </div>
+</div>
+}
+}
