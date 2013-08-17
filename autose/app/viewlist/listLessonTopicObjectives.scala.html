@@ -2,13 +2,22 @@
 @(listLessonTopicObjectives: List[MdlLessonTopicObjectives], idLessons: Long)
     
     @import persistence._
+    @import slick.AppDB
 
 @defining(SqlLessons.select(idLessons)) { lesson =>
 @lessonPage(idLessons) {
 
     
     <div class="column span-18 last">
-		  <h3>Knowledge and Skills Covered During Lesson @lesson.vLessonNumber</h3>
+		  <h3>Knowledge and Skills </h3>
+		  <h3>
+		    <a href="#" title="@AppDB.dal.Definitions.getDefinition("Knowledge")">Knowledge</a>,
+		    <a href="#" title="@AppDB.dal.Definitions.getDefinition("Skill")">Skills</a>, and
+			<a href="#" title="@AppDB.dal.Definitions.getDefinition("Behavior")">Behaviors</a> (KSB)			
+            Covered During Lesson @lesson.selectIdentifier._2
+          </h3>
+	      <h4><a href="#" title="@AppDB.dal.Definitions.getDefinition("KSB Guidance")">KSB Guidance</a></h4>
+		  
 		  <table>
 			<tr>
 				<th>Lesson</th>

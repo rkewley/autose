@@ -72,7 +72,7 @@ object CourseLinksController extends Base {
     formCourseLinks.bindFromRequest().fold(
       errFrm => {
         val fErrorMessage = formErrorMessage(errFrm.errors)
-        Logger.debug(fErrorMessage)
+        Logger.debug("Form error " + fErrorMessage + errFrm.toString)
         BadRequest(viewforms.html.formError(fErrorMessage, request.headers("REFERER")))
       },
       vCourseLinks => {
@@ -96,7 +96,10 @@ object CourseLinksController extends Base {
               None
             } 
             catch {
-              case e: Exception => Some(BadRequest(viewforms.html.formError(e.getMessage, request.headers("REFERER"))))
+              case e: Exception => {
+                Logger.debug("Sardine Error")
+                Some(BadRequest(viewforms.html.formError("Sardine Error: " + e.getMessage, request.headers("REFERER"))))
+              }
             }
             simpleResult match { // Only update the database if there is no file error
               case None =>
@@ -113,12 +116,13 @@ object CourseLinksController extends Base {
                 }           
               Redirect(routes.CoursesController.homeCourses(vCourseLinks.vCourse))
               case Some(badResult) =>
+                Logger.debug("File Error")
                 badResult
             }
           } else {
               val validationErrors = vCourseLinks.validationErrors
-               Logger.debug(validationErrors)
-               BadRequest(viewforms.html.formError(validationErrors, request.headers("REFERER")))
+               Logger.debug("Validation error: " + validationErrors)
+               BadRequest(viewforms.html.formError("Validation error: " + validationErrors, request.headers("REFERER")))
           }
         }.getOrElse {
           BadRequest(viewforms.html.formError("File upload error", request.headers("REFERRER")))

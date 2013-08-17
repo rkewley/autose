@@ -50,7 +50,7 @@ object CourseOfferingsController extends Base {
   	formCourseOfferings.bindFromRequest.fold(
   	  form => {
         val errorMessage = formErrorMessage(form.errors)
-        Logger.debug(errorMessage)
+        Logger.debug("Form error: " + errorMessage + form.toString)
         BadRequest(viewforms.html.formError(errorMessage, request.headers("REFERER")))
       },
       vCourseOfferings => {

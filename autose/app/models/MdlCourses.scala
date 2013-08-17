@@ -57,7 +57,7 @@
   	    ayError + atError
   	  }
     
-      def selectIdentifier: (String, String) = vidCourse.toString -> (vCourseIDNumber + " AT" + vAcademicYear + "-" + vAcademicTerm )
+      def selectIdentifier: (String, String) = vidCourse.get.toString -> (vCourseIDNumber + " AT" + vAcademicYear + "-" + vAcademicTerm )
     
       def compare(a: MdlCourses, b: MdlCourses) = a.vidCourse.get.compareTo(b.vidCourse.get)
         

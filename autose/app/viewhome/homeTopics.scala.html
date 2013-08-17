@@ -68,7 +68,7 @@
      <p><em><small>Click to enlarge</small></em></p>
    	 @defining(SqlTopicPicture.selectWhere("Topic = " + vTopics.vTopicsIndex)) { listTopicPictures =>
        @listTopicPictures.map { vPicture =>
-         <p><a href="@vPicture.vHyperlink"><img src="@vPicture.vHyperlink" alt=@vPicture.vAlternateText width=150></a></p>
+         <p><a href="@vPicture.vHyperlink"><img src="@vPicture.vHyperlink" alt="@vPicture.vAlternateText" width=150></a></p>
 		 <p><caption>@vPicture.vCaption</caption></p>
 		 <hr class="space">	
 	   }

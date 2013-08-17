@@ -5,6 +5,7 @@ import play.api.templates._
 import play.api.data._
 import models._
 import play.api.mvc._
+import jp.t2v.lab.play2.auth._
 
 
 trait ControllerTrait[K, D <: Mdl[K], FFK]  {
@@ -33,7 +34,6 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
           badRequest("Programs with key " + id + " not found in database", request)
       }
 	}
-
 	
 	def edit(id: K) = compositeAction(NormalUser) {user => implicit template => implicit request =>
       crud.select(id) match {

@@ -3,11 +3,11 @@
 
 @import helper._
 @import persistence._
+@import slick.AppDB
 
-<script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.1.min.js")"></script>
-<script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
 
-    @main("Systems Net", "Systems Engineering Curriculum Management Interface") {
+@main("Systems Net", "Systems Engineering Curriculum Management Interface") {
+  <script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
 	<div>
 	  <div class="column span-4">
 		 
@@ -28,6 +28,12 @@
 		</script> 
 
 <div class="column span-20 last">
+		  <h4>
+		    Link <a href="#" title="@AppDB.dal.Definitions.getDefinition("KSB Guidance").">Knowledge, Skills, and Behaviors</a>
+		    to this graded event.  These linkages will allow program directors to see where key elements of learning, needed to achieve student outcomes,
+          	are evaluated during the program.  Some of these graded events will be used as direct assessment of those outcomes.
+		  </h4>
+
     <fieldset>
     @helper.form(routes.KSAGradedEventController.saveList) {
 

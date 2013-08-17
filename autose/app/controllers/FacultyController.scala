@@ -195,13 +195,20 @@ object FacultyController extends Base {
     errMess("Error Messages:\n", formFaculty.errors.toList)
   }
   
-  def getFacultyListForCourse(idCourse: Long) = {
+  def getFacultyListForCourse(idCourse: Long): List[(String, String)] = {
     val courseOfferingList1 = SqlCourseOfferings.selectWhere("`Course` = " + idCourse).map(_.vInstructor)
     val courseOfferingList = courseOfferingList1.distinct
-    val inClause = courseOfferingList.mkString(", ")
-    println("Faculty Query: " + inClause)
-    val facultyList = SqlFaculty.selectWhere("idFaculty IN (" + inClause + ")").sortWith((a:MdlFaculty, b:MdlFaculty) => a.vLastName < b.vLastName)
-    val identifierList = facultyList.map(_.selectIdentifier)
-    identifierList.+:(("-1", "Course level file"))
+    val identifierList: List[(String, String)] = courseOfferingList.isEmpty match {
+      case false => {
+        val inClause = courseOfferingList.mkString(", ")
+        //println("Faculty Query: " + inClause)
+        val facultyList = SqlFaculty.selectWhere("idFaculty IN (" + inClause + ")").sortWith((a:MdlFaculty, b:MdlFaculty) => a.vLastName < b.vLastName)
+        val identifierList = facultyList.map(_.selectIdentifier)
+        identifierList.+:(("-1", "Course level file"))
+      }
+      case true => List(("-1", "Course level file"))
+    }
+    identifierList
   }
+
 }

@@ -3,12 +3,14 @@
 
 @import helper._
 @import persistence._
+@import slick.AppDB
 
-<script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.1.min.js")"></script>
-<script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
 
 
 @defining(f("fLesson").value.get.toLong) { vLesson =>
+@lessonPage(vLesson) {
+
+<script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
 
 <script type="text/javascript">
   $(document).ready(function(){
@@ -21,7 +23,7 @@
   });
 </script>
 
-@lessonPage(vLesson) {
+
 <div class="column span-18 last">
     <fieldset>
     @helper.form(routes.LessonTopicObjectivesController.saveLessonTopicObjectivesList) {
@@ -34,6 +36,12 @@
             @defining(f("fLesson")) { fLesson =>
                 <input type="hidden" name="@fLesson.name" id="@fLesson.id" value="@fLesson.value">
 }
+ 
+		  <h4>
+		    Link <a href="#" title="@AppDB.dal.Definitions.getDefinition("KSB Guidance").">Knowledge, Skills, and Behaviors</a>
+		    to this lesson.  This linkage will allow program directors to see which lessons teach these key elements of learning to students.
+		    It will support program evaluation and assessment.
+		  </h4>
 
 <p>First select the topic for the knowledge and skills you will link to this lesson.</p>
 @defining(SqlTopics.all.sortWith((v1: MdlTopics, v2: MdlTopics) => v1.vTopic < v2.vTopic)) { topicList =>

@@ -58,7 +58,6 @@ trait Base extends Controller with Auth with Pjax with AuthConfigImpl {
         template <- pjax(user).right
       } yield f(user)(template)(request)).merge
     }
-
 }
 
 trait Pjax {

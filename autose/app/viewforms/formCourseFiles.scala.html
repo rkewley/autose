@@ -27,6 +27,10 @@
                 <input type="hidden" name="@fIsFileLink.name" id="@fIsFileLink.id" value="true">
 			}
 
+            @defining(f("fLink")) { fLink =>
+                <input type="hidden" name="@fLink.name" id="@fLink.id" value="fLink.value">
+			}
+
             @*@textarea(field = f("fLink"), args = 'rows -> 2, 'cols -> 100, '_label-> "Link")
             <p>Enter the full url link to your link above.  It must start with "http://"
                If you are linking to a file that you need to upload, please use BitKinex.  See 

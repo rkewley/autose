@@ -13,9 +13,9 @@ import scala.slick.driver.MySQLDriver.simple._
 import play.api.mvc._
 import com.googlecode.sardine._
 import persistence._
+import jp.t2v.lab.play2.auth._
 
-
-object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Base {
+object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Base with OptionalAuthElement {
 
   val form = Form[MdlCourses](
     mapping(
@@ -158,9 +158,10 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
 	 
   }
 
-  def homeCourses(id: Long) = Action {
-    Ok(viewhome.html.homeCourses(AppDB.dal.Courses.select(id).get))
-  }
+  def homeCourses(id: Long) = StackAction { implicit request => 
+    Ok(viewhome.html.homeCourses(AppDB.dal.Courses.select(id).get, !(loggedIn.isEmpty)))
+  } 
+  
   def createCourseDirectoryStructure(vCourses: MdlCourses) {
     val directory = Globals.webDavServer + "Courses/AT" + String.valueOf(vCourses.vAcademicYear).substring(2) + "-" +
       String.valueOf(vCourses.vAcademicTerm) + "/" + vCourses.vCourseIDNumber
@@ -207,7 +208,7 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
             }
             case _ => {
               val newId = AppDB.dal.Courses.insert(vCourses)
-              //createCourseDirectoryStructure(vCourses)
+              createCourseDirectoryStructure(vCourses)
               if (copyEntry != 0) {
                 copyCourseData(originalCourse, newId)
               }

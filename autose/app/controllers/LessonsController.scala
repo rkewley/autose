@@ -68,7 +68,7 @@ object LessonsController extends Base {
             case 0 => SqlLessons.update(vLessons)
             case _ => SqlLessons.insert(vLessons)
           }
-          Redirect(routes.LessonsController.showLessons(vLessons.vLessonIndex))
+          Redirect(routes.LessonsController.listLessons(vLessons.vidCourse))
         } else {
           val validationErrors = vLessons.validationErrors
           Logger.debug(validationErrors)
