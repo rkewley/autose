@@ -10,8 +10,9 @@ import models._
 import views._
 import slick.AppDB
 import scala.slick.driver.MySQLDriver.simple._
+import jp.t2v.lab.play2.auth._
 
-object GradedRequirementsController extends ControllerTrait[Long, MdlGradedRequirements, Long] with Base {
+object GradedRequirementsController extends ControllerTrait[Long, MdlGradedRequirements, Long] with Base with OptionalAuthElement {
 
   val form = Form[MdlGradedRequirements](
     mapping (
@@ -27,13 +28,13 @@ object GradedRequirementsController extends ControllerTrait[Long, MdlGradedRequi
   )
       
 
-	override def listFunction(ffk: Long): Html = 
+	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listGradedRequirements(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlGradedRequirements): Html = 
+	override def listFunction(item: MdlGradedRequirements)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listGradedRequirements(getAll(item), item.vCourse)
  
-	override def showFunction(vGradedRequirements: MdlGradedRequirements): Html = 
+	override def showFunction(vGradedRequirements: MdlGradedRequirements)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewshow.showGradedRequirements(vGradedRequirements)
 	
 	override def editFunction(mdlGradedRequirementsForm: Form[MdlGradedRequirements]): Html = 

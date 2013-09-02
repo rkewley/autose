@@ -1,12 +1,13 @@
-@(idLesson: Long, loggedIn: Boolean = false)(content: Html)
+@(idLesson: Long, loggedIn: Option[MdlUser] = None)(content: Html)
 @import persistence._
+@import models._
 
 @defining(SqlLessons.select(idLesson)) { lesson =>
 @defining(slick.AppDB.dal.Courses.select(lesson.vidCourse).get) { course =>
 @main("Systems Net", course.vCourseIDNumber) {
 
 	<div class="column span-4 colborder">
-		@if(loggedIn){<form method="GET" action="@routes.LessonsController.editLessons(idLesson)">
+		@if(loggedIn.isDefined){<form method="GET" action="@routes.LessonsController.editLessons(idLesson)">
 			<input type="submit" value="Edit Lesson Information">
 		</form>}
 

@@ -10,8 +10,9 @@ import models._
 import views._
 import slick.AppDB
 import scala.slick.driver.MySQLDriver.simple._
+import jp.t2v.lab.play2.auth._
 
-object PerformanceIndicatorController extends ControllerTrait[Long, MdlPerformanceIndicator, Long] with Base {
+object PerformanceIndicatorController extends ControllerTrait[Long, MdlPerformanceIndicator, Long] with Base with OptionalAuthElement {
 
   val form = Form[MdlPerformanceIndicator](
     mapping (
@@ -22,13 +23,13 @@ object PerformanceIndicatorController extends ControllerTrait[Long, MdlPerforman
   )
       
 
-	override def listFunction(ffk: Long): Html = 
+	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listPerformanceIndicator(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlPerformanceIndicator): Html = 
+	override def listFunction(item: MdlPerformanceIndicator)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listPerformanceIndicator(getAll(item), item.vProgramOutcome)
  
-	override def showFunction(vPerformanceIndicator: MdlPerformanceIndicator): Html = 
+	override def showFunction(vPerformanceIndicator: MdlPerformanceIndicator)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewshow.showPerformanceIndicator(vPerformanceIndicator)
 	
 	override def editFunction(mdlPerformanceIndicatorForm: Form[MdlPerformanceIndicator]): Html = 

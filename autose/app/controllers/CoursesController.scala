@@ -38,13 +38,13 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
       "fCourseWebsite" -> of[Boolean],
       "fCourseDescriptionWebsite" -> text)(MdlCourses.apply)(MdlCourses.unapply))
 
-  override def listFunction(ffk: Long): Html =
+  override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
     views.html.viewlist.listCourses(getAll(ffk))
 
-  override def listFunction(item: MdlCourses): Html =
+  override def listFunction(item: MdlCourses)(implicit maybeUser: Option[MdlUser]): Html =
     views.html.viewlist.listCourses(getAll(item))
 
-  override def showFunction(vCourses: MdlCourses): Html =
+  override def showFunction(vCourses: MdlCourses)(implicit maybeUser: Option[MdlUser]): Html =
     views.html.viewshow.showCourses(vCourses)
 
   override def editFunction(mdlCoursesForm: Form[MdlCourses]): Html =
@@ -55,11 +55,11 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
 
   def crud = slick.AppDB.dal.Courses
 
-  def listAllCourses = Action {
+  def listAllCourses = StackAction { implicit request =>
     Ok(views.html.viewlist.listCourses(crud.all.sortWith(Courses.compare)))
   }
 
-  def listCourses = Action {
+  def listCourses = StackAction { implicit request =>
     Ok(views.html.viewlist.listCourses(crud.all.filter(vCourses => vCourses.vAcademicYear == Globals.currentYear && vCourses.vAcademicTerm == Globals.currentTerm).sortWith(Courses.compare)))
   }
   

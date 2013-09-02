@@ -14,8 +14,9 @@ import slick.AppDB
 import scala.slick.driver.MySQLDriver.simple._
 import play.api.libs.json._
 import persistence._
+import jp.t2v.lab.play2.auth._
 
-object KSAPerfIndicatorController extends ControllerTrait[Long, MdlKSAPerfIndicator, Long] with Base {
+object KSAPerfIndicatorController extends ControllerTrait[Long, MdlKSAPerfIndicator, Long] with Base with OptionalAuthElement {
 
   val form = Form[MdlKSAPerfIndicator](
     mapping (
@@ -26,13 +27,13 @@ object KSAPerfIndicatorController extends ControllerTrait[Long, MdlKSAPerfIndica
   )
       
 
-	override def listFunction(ffk: Long): Html = 
+	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listKSAPerfIndicator(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlKSAPerfIndicator): Html = 
+	override def listFunction(item: MdlKSAPerfIndicator)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listKSAPerfIndicator(getAll(item), item.vPerformanceIndicator)
  
-	override def showFunction(vKSAPerfIndicator: MdlKSAPerfIndicator): Html = 
+	override def showFunction(vKSAPerfIndicator: MdlKSAPerfIndicator)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewshow.showKSAPerfIndicator(vKSAPerfIndicator)
 	
 	override def editFunction(mdlKSAPerfIndicatorForm: Form[MdlKSAPerfIndicator]): Html = 

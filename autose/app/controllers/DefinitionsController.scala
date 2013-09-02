@@ -10,8 +10,9 @@ import models._
 import views._
 import slick.AppDB
 import scala.slick.driver.MySQLDriver.simple._
+import jp.t2v.lab.play2.auth._
 
-object DefinitionsController extends ControllerTrait[Long, MdlDefinitions, Long] with Base {
+object DefinitionsController extends ControllerTrait[Long, MdlDefinitions, Long] with Base with OptionalAuthElement {
 
   val form = Form[MdlDefinitions](
     mapping (
@@ -22,13 +23,13 @@ object DefinitionsController extends ControllerTrait[Long, MdlDefinitions, Long]
   )
       
 
-	override def listFunction(ffk: Long): Html = 
+	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listDefinitions(getAll(ffk))
  
-	override def listFunction(item: MdlDefinitions): Html = 
+	override def listFunction(item: MdlDefinitions)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listDefinitions(getAll(item))
  
-	override def showFunction(vDefinitions: MdlDefinitions): Html = 
+	override def showFunction(vDefinitions: MdlDefinitions)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewshow.showDefinitions(vDefinitions)
 	
 	override def editFunction(mdlDefinitionsForm: Form[MdlDefinitions]): Html = 

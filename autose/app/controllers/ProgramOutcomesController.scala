@@ -10,8 +10,9 @@ import models._
 import views._
 import slick.AppDB
 import scala.slick.driver.MySQLDriver.simple._
+import jp.t2v.lab.play2.auth._
 
-object ProgramOutcomesController extends ControllerTrait[Long, MdlProgramOutcomes, Long] with Base {
+object ProgramOutcomesController extends ControllerTrait[Long, MdlProgramOutcomes, Long] with Base with OptionalAuthElement {
 
   val form = Form[MdlProgramOutcomes](
     mapping (
@@ -22,15 +23,15 @@ object ProgramOutcomesController extends ControllerTrait[Long, MdlProgramOutcome
   )
       
 
-	override def listFunction(ffk: Long): Html = {
+	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = {
 	  views.html.viewlist.listProgramOutcomes(getAll(ffk), ffk)
   	}
  
-	override def listFunction(item: MdlProgramOutcomes): Html = {
+	override def listFunction(item: MdlProgramOutcomes)(implicit maybeUser: Option[MdlUser]): Html = {
 	  views.html.viewlist.listProgramOutcomes(getAll(item), item.vProgram)
   	}
  
-	override def showFunction(vProgramOutcomes: MdlProgramOutcomes): Html = 
+	override def showFunction(vProgramOutcomes: MdlProgramOutcomes)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewshow.showProgramOutcomes(vProgramOutcomes)
 	
 	override def editFunction(mdlProgramOutcomesForm: Form[MdlProgramOutcomes]): Html = 

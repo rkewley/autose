@@ -6,15 +6,16 @@ import play.api.data._
 import models._
 import play.api.mvc._
 import jp.t2v.lab.play2.auth._
+import jp.t2v.lab.play2.stackc._
 
 
 trait ControllerTrait[K, D <: Mdl[K], FFK]  {
-	this: Base =>
+	this: Base with OptionalAuthElement =>
 	
 	def form: Form[D]
-	def listFunction(ffk: FFK): Html
-	def listFunction(item: D): Html
-	def showFunction(item: D): Html
+	def listFunction(ffk: FFK)(implicit maybeUser: Option[MdlUser]): Html
+	def listFunction(item: D)(implicit maybeUser: Option[MdlUser]): Html
+	def showFunction(item: D)(implicit maybeUser: Option[MdlUser] = None): Html
 	def editFunction(aForm: Form[D]): Html
 	def createFunction(aForm: Form[D]): Html
 	def crud: slick.Crud[D, K]
@@ -22,11 +23,11 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
 	def getAll(item: D):List[D] = crud.all
 	def getAll(ffk: FFK):List[D] = crud.all
 
-	def list(id: FFK) = Action {
+	def list(id: FFK) = StackAction { implicit request => 
 	  Ok(listFunction(id))
 	}
 	
-    def show(id: K) = Action { implicit request =>
+    def show(id: K) = StackAction { implicit request =>
 	  crud.select(id) match {
         case item: Some[D] =>
           Ok(showFunction(item.get))
@@ -48,6 +49,7 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
 	  crud.select(id) match {
         case item: Some[D] =>
           crud.delete(id)
+          implicit val userOption = Some(user)
           Ok(listFunction(item.get))
         case None =>
           badRequest("Programs with key " + id + " not found in database", request)
@@ -58,7 +60,7 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
     Ok(createFunction(form.fill(newItem(id))))
   }
 
-  def save(newEntry: Int) = Action { implicit request =>
+  def save(newEntry: Int) = StackAction { implicit request =>
   	form.bindFromRequest.fold(
   	  form => {
         val errorMessage = formErrorMessage(form.errors)

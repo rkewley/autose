@@ -1,7 +1,8 @@
 
-@(listCourses: List[MdlCourses])
+@(listCourses: List[MdlCourses])(implicit loggedIn: Option[MdlUser])
     
     @import persistence._
+    @import models._
     
     
     @main("Systems Net", "Systems Engineering Curriculum Management Interface") {
@@ -20,10 +21,12 @@
 				<th>Academic Term</th>
 				<th>Course Name</th>
 				<th>Course Director</th>
-				<th>Department</th>
+				@*<th>Department</th>*@
 				<th>Home</th>
-				<th>Edit</th>
-				<th>Copy to Next Semester</th>
+				@if(loggedIn.isDefined) {
+				  <th>Edit</th>
+				  <th>Copy to Next Semester</th>
+				}
 				@*<th>Delete</th>*@
 			</tr>
 
@@ -39,18 +42,22 @@
       		  <td><a href="@routes.FacultyController.showFaculty(vCourses.vCourseDirector)">@pkModel.selectIdentifier._2</a></td>
     		}
 
+			@*
     		@defining(SqlDepartments.select(vCourses.vDepartmentID)){pkModel =>
       		  <td><a href="@routes.DepartmentsController.showDepartments(vCourses.vDepartmentID)">@pkModel.selectIdentifier._2</a></td>
     		}
+    		*@
 
     			<td><a href="@routes.CoursesController.homeCourses(vCourses.vidCourse.get)">Course Home Page</a></td>
-    			<td><a href="@routes.CoursesController.edit(vCourses.vidCourse.get)">Edit</a></td>
-    			<td><a href="@routes.CoursesController.copyCourses(vCourses.vidCourse.get)">Copy</a></td>
-    	  		@*<td>
+    			@if(loggedIn.isDefined) {
+    			  <td><a href="@routes.CoursesController.edit(vCourses.vidCourse.get)">Edit</a></td>
+    			  <td><a href="@routes.CoursesController.copyCourses(vCourses.vidCourse.get)">Copy</a></td>
+    	  		  @*<td>
     	  			<form action="@routes.CoursesController.deleteCourses(vCourses.vidCourse)" method="POST">
     	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
     	  			</form>
-    	  		</td>*@
+    	  		  </td>*@
+    	  		}  
     		</tr>
     
 

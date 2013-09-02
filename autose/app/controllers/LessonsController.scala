@@ -33,7 +33,7 @@ object LessonsController extends Base with OptionalAuthElement {
     SqlLessons.selectWhere("`idCourse` = " + idCourses).sortWith(sortLessons)
   }
 
-  def listLessons(idCourses: Long) = Action {
+  def listLessons(idCourses: Long) = StackAction { implicit request =>
      Ok(viewlist.html.listLessons(getSortedLessons(idCourses), idCourses))
   }
 
@@ -42,7 +42,7 @@ object LessonsController extends Base with OptionalAuthElement {
   }
 
    def showLessons(id: Long) = StackAction { implicit request => 
-    Ok(viewshow.html.showLessons(SqlLessons.select(id), !(loggedIn.isEmpty)))
+    Ok(viewshow.html.showLessons(SqlLessons.select(id)))
   }
 
    def deleteLessons(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>

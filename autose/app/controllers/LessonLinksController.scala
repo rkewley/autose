@@ -13,8 +13,9 @@ import slick.AppDB
 import scala.slick.driver.MySQLDriver.simple._
 import com.googlecode.sardine._
 import java.io.FileInputStream
+import jp.t2v.lab.play2.auth._
 
-object LessonLinksController extends ControllerTrait[Long, MdlLessonLinks, Long] with Base {
+object LessonLinksController extends ControllerTrait[Long, MdlLessonLinks, Long] with Base with OptionalAuthElement {
 
   val form = Form[MdlLessonLinks](
     mapping (
@@ -28,13 +29,13 @@ object LessonLinksController extends ControllerTrait[Long, MdlLessonLinks, Long]
   )
       
 
-	override def listFunction(ffk: Long): Html = 
+	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listLessonLinks(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlLessonLinks): Html = 
+	override def listFunction(item: MdlLessonLinks)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listLessonLinks(getAll(item), item.vLesson)
  
-	override def showFunction(vLessonLinks: MdlLessonLinks): Html = 
+	override def showFunction(vLessonLinks: MdlLessonLinks)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewshow.showLessonLinks(vLessonLinks)
 	
 	override def editFunction(mdlLessonLinksForm: Form[MdlLessonLinks]): Html = 

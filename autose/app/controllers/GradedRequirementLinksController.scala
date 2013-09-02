@@ -15,8 +15,9 @@ import scala.slick.driver.MySQLDriver.simple._
 import com.googlecode.sardine._
 import play.api.libs.Files._
 import java.io._
+import jp.t2v.lab.play2.auth._
 
-object GradedRequirementLinksController extends ControllerTrait[Long, MdlGradedRequirementLinks, Long] with Base {
+object GradedRequirementLinksController extends ControllerTrait[Long, MdlGradedRequirementLinks, Long] with Base with OptionalAuthElement {
 
   val form = Form[MdlGradedRequirementLinks](
     mapping(
@@ -26,13 +27,13 @@ object GradedRequirementLinksController extends ControllerTrait[Long, MdlGradedR
       "fIsFileLink" -> of[Boolean],
       "fGradedRequirement" -> of[Long])(MdlGradedRequirementLinks.apply)(MdlGradedRequirementLinks.unapply))
 
-  override def listFunction(ffk: Long): Html =
+  override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html =
     views.html.viewlist.listGradedRequirementLinks(getAll(ffk), ffk)
 
-  override def listFunction(item: MdlGradedRequirementLinks): Html =
+  override def listFunction(item: MdlGradedRequirementLinks)(implicit maybeUser: Option[MdlUser]): Html =
     views.html.viewlist.listGradedRequirementLinks(getAll(item), item.vGradedRequirement)
 
-  override def showFunction(vGradedRequirementLinks: MdlGradedRequirementLinks): Html =
+  override def showFunction(vGradedRequirementLinks: MdlGradedRequirementLinks)(implicit maybeUser: Option[MdlUser]): Html =
     views.html.viewshow.showGradedRequirementLinks(vGradedRequirementLinks)
 
   override def editFunction(mdlGradedRequirementLinksForm: Form[MdlGradedRequirementLinks]): Html =

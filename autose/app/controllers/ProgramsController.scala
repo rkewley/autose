@@ -7,10 +7,11 @@ import play.api.data.Forms._
 import play.api.data.format.Formats._
 import models._
 import views._
+import jp.t2v.lab.play2.auth._
 
 //import play.api.mvc._
 
-object ProgramsController extends ControllerTrait[Long, MdlPrograms, Long] with Base {
+object ProgramsController extends ControllerTrait[Long, MdlPrograms, Long] with Base with OptionalAuthElement {
   
   
   override def form = Form[MdlPrograms](
@@ -25,13 +26,13 @@ object ProgramsController extends ControllerTrait[Long, MdlPrograms, Long] with 
     )(MdlPrograms.apply)(MdlPrograms.unapply) 
   )
   
-	override def listFunction(ffk: Long): Html = 
+	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listPrograms(getAll(ffk))
  
-	override def listFunction(item: MdlPrograms): Html = 
+	override def listFunction(item: MdlPrograms)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listPrograms(getAll(item))
  
-	override def showFunction(vMdlPrograms: MdlPrograms): Html = 
+	override def showFunction(vMdlPrograms: MdlPrograms)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewshow.showPrograms(vMdlPrograms)
 	
 	override def editFunction(mdlProgramsForm: Form[MdlPrograms]): Html = 

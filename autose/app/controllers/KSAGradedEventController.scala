@@ -13,8 +13,9 @@ import views._
 import slick.AppDB
 import persistence._
 import scala.slick.driver.MySQLDriver.simple._
+import jp.t2v.lab.play2.auth._
 
-object KSAGradedEventController extends ControllerTrait[Long, MdlKSAGradedEvent, Long] with Base {
+object KSAGradedEventController extends ControllerTrait[Long, MdlKSAGradedEvent, Long] with Base with OptionalAuthElement {
 
   val form = Form[MdlKSAGradedEvent](
     mapping (
@@ -24,13 +25,13 @@ object KSAGradedEventController extends ControllerTrait[Long, MdlKSAGradedEvent,
     )(MdlKSAGradedEvent.apply)(MdlKSAGradedEvent.unapply)
   )
 
-	override def listFunction(ffk: Long): Html = 
+	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listKSAGradedEvent(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlKSAGradedEvent): Html = 
+	override def listFunction(item: MdlKSAGradedEvent)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listKSAGradedEvent(getAll(item), item.vGradedEvent)
  
-	override def showFunction(vKSAGradedEvent: MdlKSAGradedEvent): Html = 
+	override def showFunction(vKSAGradedEvent: MdlKSAGradedEvent)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewshow.showKSAGradedEvent(vKSAGradedEvent)
 	
 	override def editFunction(mdlKSAGradedEventForm: Form[MdlKSAGradedEvent]): Html = 
