@@ -12,8 +12,8 @@ object ApplicationBuild extends Build {
     jdbc,
     anorm, javaJdbc, "mysql" % "mysql-connector-java" % "5.1.22",
         "org.mindrot" % "jbcrypt" % "0.3m",
-        "jp.t2v" %% "play2.auth"      % "0.8",
-        "jp.t2v" %% "play2.auth.test" % "0.8" % "test",
+        "jp.t2v" %% "play2.auth"      % "0.10.1",
+        "jp.t2v" %% "play2.auth.test" % "0.10.1" % "test",
         "com.typesafe.slick" %% "slick" % "1.0.0",
         "com.typesafe.play" %% "play-slick" % "0.3.2"
   )

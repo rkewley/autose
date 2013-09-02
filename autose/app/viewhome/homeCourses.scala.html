@@ -1,15 +1,15 @@
-@(vCourses: MdlCourses, loggedIn: Boolean)
+@(vCourses: MdlCourses)(implicit userOption: Option[MdlUser])
 
 @import persistence._
 @import utilities.FileGroup
 @import play.api.mvc._
 
-@coursePage(vCourses) { 
+@coursePage(vCourses, userOption) { 
    <div>
 	<div class="column span-14 colborder">
 		<h3>@vCourses.vCourseName</h3>
         
-		<div>@vCourses.vCourseDescriptionWebsite</div>
+		<div>@Html(vCourses.vCourseDescriptionWebsite)</div>
 		<hr>
 		
 		 <h4>@vCourses.vCourseIDNumber References</h4>
@@ -17,7 +17,7 @@
 		 @defining(SqlCourseReferences.selectWhere("Course = " + vCourses.vidCourse.get)) { listCourseReferences =>
 		     @defining(listCourseReferences.map(r=>"idReference = " + r.vReference).mkString(" OR ")) { whereClause =>
 		       @if(whereClause.length > 0) {
-		         @defining(SqlReference.selectWhere(whereClause)) { listReferences =>
+		         @defining(SqlReference.selectWhere(whereClause).sortWith(MdlReference.compare)) { listReferences =>
 		           @listReferences.map { vReference =>
 			         <li><a href="@vReference.vLink">@vReference.vTitle.</a>  @vReference.vText</li>
 			       }
@@ -29,7 +29,7 @@
 	</div>
 	
 	<div class="column span-4 last">
-	  	@if(loggedIn){<form method="GET" action="@routes.CourseLinksController.uploadCourseFile(vCourses.vidCourse.get)">
+	  	@if(userOption.isDefined){<form method="GET" action="@routes.CourseLinksController.uploadCourseFile(vCourses.vidCourse.get)">
 			<input type="submit" value="Upload Course File">
 		</form>}
 
@@ -54,7 +54,7 @@
 	   	}
 	  </ul>
 
-	  	@if(loggedIn){<form method="GET" action="@routes.CourseLinksController.createCourseLinks(vCourses.vidCourse.get)">
+	  	@if(userOption.isDefined){<form method="GET" action="@routes.CourseLinksController.createCourseLinks(vCourses.vidCourse.get)">
 			<input type="submit" value="Create Course Link">
 		</form>}
 		

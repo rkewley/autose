@@ -1,11 +1,11 @@
 
-@(vLessons: MdlLessons)
+@(vLessons: MdlLessons, loggedIn: Boolean = false)
 
 @import persistence._
 @import slick.AppDB
 @import utilities.FileGroup
 		    
-@lessonPage(vLessons.vLessonIndex) {
+@lessonPage(vLessons.vLessonIndex, loggedIn) {
 
     
      <div class="column span-14">
@@ -25,9 +25,9 @@
 		     <a href="#" title="@AppDB.dal.Definitions.getDefinition("Behavior").">Behaviors</a>
 		    Covered During the Lesson
 		  </h4>
-		  <form method="GET" action="@routes.LessonTopicObjectivesController.createLessonTopicObjectivesList(vLessons.vLessonIndex)">
+		  @if(loggedIn){<form method="GET" action="@routes.LessonTopicObjectivesController.createLessonTopicObjectivesList(vLessons.vLessonIndex)">
 			<input type="submit" value="Link Knowledge, Skills, and Behaviors to Lesson">
-		  </form>
+		  </form>}
 		  
 		  @defining({ 
 		  	(SqlLessonTopicObjectives.selectWhere("Lesson = " + vLessons.vLessonIndex)).map(lto =>
@@ -86,9 +86,9 @@
 	
 	<div class="column span-4 last">
 	  Files
-	  	<form method="GET" action="@routes.LessonLinksController.uploadLessonFile(vLessons.vLessonIndex)">
+	  	@if(loggedIn){<form method="GET" action="@routes.LessonLinksController.uploadLessonFile(vLessons.vLessonIndex)">
 			<input type="submit" value="Upload Lesson File">
-		</form>
+		</form>}
 	  
 	  <ul id="menu">
 		@defining(FileGroup.getFileGroupsLessonLinks(lessonLinks.filter(lessonLink => lessonLink.vIsFileLiink == true))) { listLessonLinks =>
@@ -113,9 +113,9 @@
 	  </ul>
 
 	  Links
-	  	<form method="GET" action="@routes.LessonLinksController.create(vLessons.vLessonIndex)">
+	  	@if(loggedIn){<form method="GET" action="@routes.LessonLinksController.create(vLessons.vLessonIndex)">
 			<input type="submit" value="Create Lesson Link">
-		</form>
+		</form>}
 	  <ul id="menu">
 		@defining(FileGroup.getFileGroupsLessonLinks(lessonLinks.filter(lessonLink => lessonLink.vIsFileLiink == false))) { listLessonLinks =>
        		@listLessonLinks.map { fileGroup =>

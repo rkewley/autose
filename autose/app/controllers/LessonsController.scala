@@ -10,8 +10,9 @@ import play.Logger
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
+import jp.t2v.lab.play2.auth._
 
-object LessonsController extends Base {
+object LessonsController extends Base with OptionalAuthElement {
 
   val formLessons = Form[MdlLessons](
     mapping (
@@ -40,8 +41,8 @@ object LessonsController extends Base {
     Ok(viewforms.html.formLessons(formLessons.fill(SqlLessons.select(id)), 0))
   }
 
-   def showLessons(id: Long) = Action {
-    Ok(viewshow.html.showLessons(SqlLessons.select(id)))
+   def showLessons(id: Long) = StackAction { implicit request => 
+    Ok(viewshow.html.showLessons(SqlLessons.select(id), !(loggedIn.isEmpty)))
   }
 
    def deleteLessons(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>

@@ -159,7 +159,7 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
   }
 
   def homeCourses(id: Long) = StackAction { implicit request => 
-    Ok(viewhome.html.homeCourses(AppDB.dal.Courses.select(id).get, !(loggedIn.isEmpty)))
+    Ok(viewhome.html.homeCourses(AppDB.dal.Courses.select(id).get))
   } 
   
   def createCourseDirectoryStructure(vCourses: MdlCourses) {

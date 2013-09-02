@@ -20,6 +20,5 @@
     
       def selectIdentifier: (String, String) = vTopicsIndex.toString -> vTopic
     
-      def compare(a: MdlTopics, b: MdlTopics) = a.vTopic.compareTo(b.vTopic)
 }
     

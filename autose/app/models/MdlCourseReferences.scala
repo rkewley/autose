@@ -1,5 +1,11 @@
     
- package models
+package models
+
+import persistence.SqlReference
+ 
+object MdlCourseReferences {
+   def compare(a: MdlCourseReferences, b: MdlCourseReferences) = MdlReference.compare(SqlReference.select(a.vReference), SqlReference.select(b.vReference))
+ }
     
  case class MdlCourseReferences (
  	vidCourseReferences : Long,
@@ -14,7 +20,6 @@
 	  def validationErrors: String = ""
     
       def selectIdentifier: (String, String) = vidCourseReferences.toString -> vidCourseReferences.toString
-    
-      def compare(a: MdlCourseReferences, b: MdlCourseReferences) = a.vidCourseReferences.compareTo(b.vidCourseReferences)
+  
 }
     

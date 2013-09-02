@@ -23,7 +23,7 @@ object CourseReferencesController extends Base {
       
 
   def listCourseReferences(courseId: Long) = Action {
-    Ok(viewlist.html.listCourseReferences(SqlCourseReferences.selectWhere("Course = " + courseId), courseId))
+    Ok(viewlist.html.listCourseReferences(SqlCourseReferences.selectWhere("Course = " + courseId).sortWith(MdlCourseReferences.compare), courseId))
   }
 
    def editCourseReferences(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>

@@ -1,5 +1,5 @@
 
-@(vTopics: MdlTopics)
+@(vTopics: MdlTopics, loggedIn: Boolean = false)
 
     @import persistence._
     @import slick.AppDB
@@ -35,9 +35,9 @@
 		   <a href="#" title="@AppDB.dal.Definitions.getDefinition("Skill").">Skills</a>, and 
 		   <a href="#" title="@AppDB.dal.Definitions.getDefinition("Behavior").">Behaviors</a>
 		 </h4>
-		 <form method="GET" action="@routes.TopicObjectivesController.createTopicObjectives(vTopics.vTopicsIndex)">
+		 @if(loggedIn){<form method="GET" action="@routes.TopicObjectivesController.createTopicObjectives(vTopics.vTopicsIndex)">
 			<input type="submit" value="Add new knowledge, skills, and behaviors to this topic">
-		 </form>
+		 </form>}
 		 
 		 <p><em>These learning objectives are discrete testable skills that support the terminal learning objective.</em></p>
 		 @defining(SqlTopicObjectives.selectWhere("Topic=" + vTopics.vTopicsIndex)) { listTopicObjectives =>
