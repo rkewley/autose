@@ -48,10 +48,10 @@ object GradedRequirementsController extends ControllerTrait[Long, MdlGradedRequi
     def newItem(fkId: Long): MdlGradedRequirements = new MdlGradedRequirements(Option(0), fkId, "", "", 0, 0.0, 0, 0)
     
     override def getAll(fkId: Long): List[MdlGradedRequirements] = AppDB.database.withSession { implicit session: Session =>
-      AppDB.dal.GradedRequirements.allQuery.filter(v1GradedRequirements => v1GradedRequirements.vCourse === fkId).elements.toList
+      AppDB.dal.GradedRequirements.allQuery.filter(v1GradedRequirements => v1GradedRequirements.vCourse === fkId).elements.toList.sortWith(MdlGradedRequirements.compare)
     }
     
     override def getAll(vGradedRequirements: MdlGradedRequirements): List[MdlGradedRequirements] = AppDB.database.withSession { implicit session: Session =>
-      AppDB.dal.GradedRequirements.allQuery.filter(v1GradedRequirements => v1GradedRequirements.vCourse === vGradedRequirements.vCourse).elements.toList
+      AppDB.dal.GradedRequirements.allQuery.filter(v1GradedRequirements => v1GradedRequirements.vCourse === vGradedRequirements.vCourse).elements.toList.sortWith(MdlGradedRequirements.compare)
     }
   }

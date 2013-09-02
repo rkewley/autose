@@ -1,5 +1,9 @@
     
  package models
+ 
+ object MdlGradedRequirements { 
+	 def compare(a: MdlGradedRequirements, b: MdlGradedRequirements): Boolean = a.vLessoncompleted < b.vLessoncompleted
+ }
     
  case class MdlGradedRequirements (
  	vGradedEventIndex : Option[Long],
@@ -20,7 +24,6 @@
     
       def selectIdentifier: (String, String) = vGradedEventIndex.get.toString -> vGradedEventName
     
-      def compare(a: MdlGradedRequirements, b: MdlGradedRequirements) = a.vGradedEventIndex.get.compareTo(b.vGradedEventIndex.get)
         
       def primaryKey = vGradedEventIndex
 }

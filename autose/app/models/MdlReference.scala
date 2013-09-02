@@ -1,5 +1,9 @@
     
  package models
+ 
+ object MdlReference {
+   def compare(a: MdlReference, b: MdlReference): Boolean = (a.vTitle < b.vTitle)
+ }
     
  case class MdlReference (
  	vidReference : Long,

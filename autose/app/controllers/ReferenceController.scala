@@ -26,7 +26,7 @@ object ReferenceController extends Base {
       
 
   def listReference = Action {
-    Ok(viewlist.html.listReference(SqlReference.all))
+    Ok(viewlist.html.listReference(SqlReference.all.sortWith(MdlReference.compare)))
   }
 
    def editReference(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
@@ -43,7 +43,7 @@ object ReferenceController extends Base {
   }
 
   def createReference = compositeAction(NormalUser) { user => implicit template => implicit request =>
-    Ok(viewforms.html.formReference(formReference.fill(new MdlReference()), 1))
+    Ok(viewforms.html.formReference(formReference.fill(new MdlReference(0, "", "", "http://")), 1))
   }
   
   def uploadReferenceFile = compositeAction(NormalUser) { user => implicit template => implicit request =>

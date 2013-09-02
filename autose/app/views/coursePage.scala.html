@@ -1,11 +1,11 @@
-@(course: MdlCourses)(content: Html)
+@(course: MdlCourses, userOption: Option[MdlUser] = None)(content: Html)
 
 @main("Systems Net", course.vCourseIDNumber) {
 
 	<div class="column span-4 colborder">
-		<form method="GET" action="@routes.CoursesController.edit(course.vidCourse.get)">
+		@if(userOption.isDefined){<form method="GET" action="@routes.CoursesController.edit(course.vidCourse.get)">
 			<input type="submit" value="Edit Course Information">
-		</form>
+		</form>}
 		  <ul id="menu">
 			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse.get)">Home</a></li>
 			<li><a href="@routes.CoursesController.show(course.vidCourse.get)">Information</a></li>

@@ -25,7 +25,7 @@
 		  	<dd>@Html(vReference.vText.toString)</dd>
 
 		  	<dt>Link</dt>
-		  	<dd>@Html(vReference.vLink.toString)</dd>
+		  	<dd><a href="@vReference.vLink.toString">@vReference.vLink.toString</a></dd>
 	       </dl>
      <div>
        <a href="@routes.ReferenceController.listReference">Return to listing</a>

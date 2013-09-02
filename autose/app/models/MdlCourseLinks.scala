@@ -19,5 +19,6 @@
       def selectIdentifier: (String, String) = vidCourseLinks.toString -> vidCourseLinks.toString
     
       def compare(a: MdlCourseLinks, b: MdlCourseLinks) = a.vidCourseLinks.compareTo(b.vidCourseLinks)
+      
 }
     

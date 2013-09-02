@@ -11,9 +11,10 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 import com.googlecode.sardine._
+import jp.t2v.lab.play2.auth._
 
 
-object TopicsController extends Base {
+object TopicsController extends Base with OptionalAuthElement{
 
   val formTopics = Form[MdlTopics](
     mapping (
@@ -37,8 +38,8 @@ object TopicsController extends Base {
     Ok(viewshow.html.showTopics(SqlTopics.select(id)))
   }
 
-   def homeTopics(id: Long) = Action {
-    Ok(viewhome.html.homeTopics(SqlTopics.select(id)))
+   def homeTopics(id: Long) = StackAction { implicit request => 
+    Ok(viewhome.html.homeTopics(SqlTopics.select(id), !(loggedIn.isEmpty)))
   }
 
    def deleteTopics(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>

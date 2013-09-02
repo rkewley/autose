@@ -1,4 +1,4 @@
-@(idLesson: Long)(content: Html)
+@(idLesson: Long, loggedIn: Boolean = false)(content: Html)
 @import persistence._
 
 @defining(SqlLessons.select(idLesson)) { lesson =>
@@ -6,9 +6,9 @@
 @main("Systems Net", course.vCourseIDNumber) {
 
 	<div class="column span-4 colborder">
-		<form method="GET" action="@routes.LessonsController.editLessons(idLesson)">
+		@if(loggedIn){<form method="GET" action="@routes.LessonsController.editLessons(idLesson)">
 			<input type="submit" value="Edit Lesson Information">
-		</form>
+		</form>}
 
 		  <ul id="menu">
 			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse.get)">Course Home</a></li>

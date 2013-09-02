@@ -25,17 +25,18 @@
       		  <td><a href="@routes.CoursesController.show(vCourseReferences.vCourse)">@pkModel.selectIdentifier._2</a></td>
     		}
 
-    		@defining(SqlReference.select(vCourseReferences.vReference)){pkModel =>
-      		  <td><a href="@routes.ReferenceController.showReference(vCourseReferences.vReference)">@pkModel.selectIdentifier._2</a></td>
-    		}
+    		@defining(SqlReference.select(vCourseReferences.vReference)){vReference =>
+      		  <td><a href="@vReference.vLink">@vReference.selectIdentifier._2</a></td>
+    		
 
-    			<td><a href="@routes.CourseReferencesController.showCourseReferences(vCourseReferences.vidCourseReferences)">Show</a></td>
+    			<td><a href="@routes.ReferenceController.showReference(vReference.vidReference)">Show</a></td>
     			<td><a href="@routes.CourseReferencesController.editCourseReferences(vCourseReferences.vidCourseReferences)">Edit</a></td>
     	  		<td>
     	  			<form action="@routes.CourseReferencesController.deleteCourseReferences(vCourseReferences.vidCourseReferences)" method="POST">
     	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
     	  			</form>
     	  		</td>
+    	  	}
     		</tr>
     
 
