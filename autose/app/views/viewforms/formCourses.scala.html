@@ -46,6 +46,7 @@
         	@*@inputText(f("fCourseDescriptionRedbook"), '_label -> "CourseDescriptionRedbook")*@
 
             @inputText(f("fCreditHours"), '_label -> "CreditHours")
+            @inputText(f("fETCredits"), '_label -> "Engineering Topic Hours")
 
             @textarea(field = f("fPrerequisites"), args = 'rows -> 2, 'cols -> 100, '_label-> "Prerequisites")
         	@*@inputText(f("fPrerequisites"), '_label -> "Prerequisites")*@
@@ -53,8 +54,6 @@
             @textarea(field = f("fCorequisites"), args = 'rows -> 2, 'cols -> 100, '_label-> "Corequisites")
         	@*@inputText(f("fCorequisites"), '_label -> "Corequisites")*@
 
-            @textarea(field = f("fDisqualifiers"), args = 'rows -> 2, 'cols -> 100, '_label-> "Disqualifiers")
-        	@*@inputText(f("fDisqualifiers"), '_label -> "Disqualifiers")*@
 
             @textarea(field = f("fCourseStrategy"), args = 'rows -> 2, 'cols -> 100, '_label-> "Course Strategy")
         	@*@inputText(f("fCourseStrategy"), '_label -> "CourseStrategy")*@

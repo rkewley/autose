@@ -1,0 +1,44 @@
+
+@(f: Form[MdlElectiveGroupCourse], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fElectiveGroup").value.get.toLong) { vElectiveGroup =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.ElectiveGroupCourseController.save(newEntry)) {
+
+
+		  
+            @defining(f("fidElectiveGroupCourse")) { fidElectiveGroupCourse =>
+                <input type="hidden" name="@fidElectiveGroupCourse.name" id="@fidElectiveGroupCourse.id" value="@fidElectiveGroupCourse.value">
+			}
+
+
+            @defining(f("fElectiveGroup")) { fElectiveGroup =>
+                <input type="hidden" name="@fElectiveGroup.name" id="@fElectiveGroup.id" value="@fElectiveGroup.value">
+			}
+    
+        	@inputText(f("fCourse"), '_label -> "Course")
+
+            @helper.checkbox(f("fRequired"), '_label -> "Check if this course is required for the track", '_help->"")
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.ElectiveGroupCourseController.list(vElectiveGroup)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

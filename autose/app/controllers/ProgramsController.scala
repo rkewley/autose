@@ -8,6 +8,7 @@ import play.api.data.format.Formats._
 import models._
 import views._
 import jp.t2v.lab.play2.auth._
+import slick.AppDB
 
 //import play.api.mvc._
 
@@ -43,5 +44,13 @@ object ProgramsController extends ControllerTrait[Long, MdlPrograms, Long] with 
 	  
 	def crud = slick.AppDB.dal.Programs
 	def newItem(fkId: Long) = new MdlPrograms
+	
+	def se = AppDB.dal.Programs.all.find(p => p.vProgram == "SE").get
+  	def em = AppDB.dal.Programs.all.find(p => p.vProgram == "EM").get
+  	
+  	def seId = se.vidPrograms.get
+  	def emId = em.vidPrograms.get
+
+
 
 }

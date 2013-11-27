@@ -66,6 +66,13 @@ trait KSAComponent  {
 	    }
 	  }
 	  
+	  def selectByTopic(topicId: Long): List[MdlKSA] = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val q = Query(KSA)
+	      q.filter(k => k.vTopic === topicId).elements.toList
+	    }	    
+	  }
+	  
 	  class KSALessonData(val lessonIndex: Long, val lessonNumber: Long)
 	  class KSASubEventData(val gradedEventIndex: Long, val description: String)
 	  class KSAGradedEventData(val eventIndex: Long, val eventName: String, val subEvents: List[KSASubEventData])

@@ -9,6 +9,7 @@ import play.api.data.format.Formats._
 import models._
 import views._
 import slick.AppDB
+import util.pdf.PDF
 import scala.slick.driver.MySQLDriver.simple._
 import play.api.mvc._
 import com.googlecode.sardine._
@@ -30,7 +31,7 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
       "fCreditHours" -> of[Double],
       "fPrerequisites" -> text,
       "fCorequisites" -> text,
-      "fDisqualifiers" -> text,
+      "fETCredits" -> of[Double],
       "fCourseStrategy" -> text,
       "fCriteriaForPassing" -> text,
       "fAdminInstructions" -> text,
@@ -63,6 +64,14 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
     Ok(views.html.viewlist.listCourses(crud.all.filter(vCourses => vCourses.vAcademicYear == Globals.currentYear && vCourses.vAcademicTerm == Globals.currentTerm).sortWith(Courses.compare)))
   }
   
+  def publish(idCourse: Long, idProgram: Long) = { 
+    PDF.ok(views.html.viewpdf.publishCourses.render(AppDB.dal.Courses.select(idCourse).get, AppDB.dal.Programs.select(idProgram).get))
+  } 
+
+  def abet(idCourse: Long, idProgram: Long) = StackAction  { implicit request =>
+    Ok(views.html.viewpdf.publishCourses.render(AppDB.dal.Courses.select(idCourse).get, AppDB.dal.Programs.select(idProgram).get))
+  } 
+
   def copyCourses(id: Long) = compositeAction(NormalUser) { user =>
     implicit template => implicit request =>
       val course = AppDB.dal.Courses.select(id).get

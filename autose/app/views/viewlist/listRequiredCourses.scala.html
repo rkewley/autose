@@ -1,0 +1,158 @@
+
+@(listRequiredCourses: List[MdlRequiredCourses], idPrograms: Long, fCrs: Form[MdlRequiredCourses], electiveForms: List[Form[MdlElectiveGroupCourse]])(implicit userOption: Option[MdlUser])
+    
+    @import slick.AppDB
+    @import helper._
+    
+    @defining(AppDB.dal.Programs.select(idPrograms)) { vPrograms =>    
+    @programPage(vPrograms.get) {
+    	
+   	<style type="text/css">
+   		hr.sep {height: 5px}
+   	</style>
+
+    
+    <div class="column span-18 last">
+
+    	  	@vPrograms match {
+    	  		case Some(p) => {<h3>Required Courses Listing for @p.vName</h3> NOTE:  Log in to edit these requirements}
+		  		case None => {ERROR:  Could not find value for program @idPrograms}
+		  	}
+		  
+		  <table>
+			<tr>
+				<th>Course</th>
+				<th>Course Title</th>
+				@if(userOption.isDefined) {
+				<th>Edit</th>
+				<th>Delete</th>}
+			</tr>
+
+            @listRequiredCourses.map { vRequiredCourses =>
+    			
+    		<tr>
+				<td>@vRequiredCourses.vCourse</td>
+				
+				@*  Select the most recent course that has the name that is given *@
+				<td>
+				@defining(AppDB.dal.Courses.all.filter(_.vCourseIDNumber.contains(vRequiredCourses.vCourse)).sortWith((a,b) => a.vAcademicYear*10 * a.vAcademicTerm > a.vAcademicYear*10 * a.vAcademicTerm)) { matchCourses =>
+					@matchCourses.headOption match {
+						case Some(course) => {<a href="@routes.CoursesController.homeCourses(course.vidCourse.get)">@course.vCourseName</a>}
+						case None => {}
+					}
+				} 
+				</td>
+				@if(userOption.isDefined) {
+    			<td><a href="@routes.RequiredCoursesController.edit(vRequiredCourses.vidRequiredCourses.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.RequiredCoursesController.delete(vRequiredCourses.vidRequiredCourses.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>}
+    		</tr>
+
+      		}
+
+      	</table>
+      	
+      	@if(userOption.isDefined) {
+    	@helper.form(routes.RequiredCoursesController.save(1)) {
+     	<fieldset>
+            @defining(fCrs("fidRequiredCourses")) { fidRequiredCourses =>
+                <input type="hidden" name="@fidRequiredCourses.name" id="@fidRequiredCourses.id" value="@fidRequiredCourses.value">
+			}
+
+            @defining(fCrs("fProgram")) { fProgram =>
+                <input type="hidden" name="@fProgram.name" id="@fProgram.id" value="@fProgram.value">
+			}
+			<table><tr>
+    			<td>@inputText(fCrs("fCourse"), '_label -> "Add new required course")</td>
+				<td><input type="submit" value="Submit" /></td>
+			</table></tr>
+
+		</fieldset>
+        }}
+        
+    <h3>Elective groups and tracks</h3>
+    @AppDB.dal.ElectiveGroup.all.filter(_.vProgram==idPrograms).zip(electiveForms).map { eg_form =>
+    <div><hr class="sep">
+    	@defining(AppDB.dal.ElectiveGroupCourse.all.filter(_.vElectiveGroup == eg_form._1.vidElectiveGroup.get)) { electiveGroupCourses =>
+    		<table><tr>
+    			<td><h4>@eg_form._1.vElectiveGroupName:  Select @eg_form._1.vNumberToChoose of @electiveGroupCourses.length</h4></td>
+    			@if(userOption.isDefined) {
+    			<td><a href="@routes.ElectiveGroupController.edit(eg_form._1.vidElectiveGroup.get)">Edit Elective Group</a></td>
+    	  		<td>
+    	  			<form action="@routes.ElectiveGroupController.delete(eg_form._1.vidElectiveGroup.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="Delete elective group">
+    	  			</form>
+    	  		</td>}
+    		</tr></table>
+    		
+		  	<table>
+				<tr>
+					<th>Course</th>
+					<th>Course Title</th>
+					<th>Required</th>
+					@if(userOption.isDefined) {
+					<th>Edit</th>
+					<th>Delete</th>}
+				</tr>
+				@AppDB.dal.ElectiveGroupCourse.coursesForElectiveGroup(eg_form._1.vidElectiveGroup.get).toList.map { egCourse =>
+    				<tr>
+						<td>@egCourse.vCourse</td>
+				
+						@*  Select the most recent course that has the name that is given *@
+						<td>
+						@defining(AppDB.dal.Courses.all.filter(_.vCourseIDNumber.contains(egCourse.vCourse)).sortWith((a,b) => a.vAcademicYear*10 * a.vAcademicTerm > a.vAcademicYear*10 * a.vAcademicTerm)) { matchCourses =>
+							@matchCourses.headOption match {
+								case Some(course) => {<a href="@routes.CoursesController.homeCourses(course.vidCourse.get)">@course.vCourseName</a>}
+								case None => {}
+							}
+						} 
+						</td>
+						<td>@egCourse.vRequired</td>
+						@if(userOption.isDefined) {
+    					<td><a href="@routes.ElectiveGroupCourseController.edit(egCourse.vidElectiveGroupCourse.get)">Edit</a></td>
+    	  				<td>
+    	  					<form action="@routes.ElectiveGroupCourseController.delete(egCourse.vidElectiveGroupCourse.get)" method="POST">
+    	  					<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  					</form>
+    	  				</td>}
+    				</tr>
+					
+				}
+    		</table>
+    		
+    		@if(userOption.isDefined) {
+    		@helper.form(routes.ElectiveGroupCourseController.save(1)) {
+				<fieldset>
+            		@defining(eg_form._2("fidElectiveGroupCourse")) { fidElectiveGroupCourse =>
+                		<input type="hidden" name="@fidElectiveGroupCourse.name" id="@fidElectiveGroupCourse.id" value="@fidElectiveGroupCourse.value">
+					}
+
+
+            		@defining(eg_form._2("fElectiveGroup")) { fElectiveGroup =>
+                		<input type="hidden" name="@fElectiveGroup.name" id="@fElectiveGroup.id" value="@fElectiveGroup.value">
+					}
+    				<table><tr>
+    					
+        				<td>@inputText(eg_form._2("fCourse"), '_label -> "Add course to this track")</td>
+
+           	 			<td>@helper.checkbox(eg_form._2("fRequired"), '_label -> "", '_help->"Check if this course is required for the track")</td>
+
+          				<td><input type="submit" value="Submit" /><td>
+          			</tr></table>
+
+      			</fieldset>
+        	}}
+    		
+		}
+	</div>  @* class="eg" *@		
+    }
+    @if(userOption.isDefined) {
+    	<a href="@routes.ElectiveGroupController.create(idPrograms)">Create new elective group</a>
+    }
+      	
+    </div>
+  }
+  }

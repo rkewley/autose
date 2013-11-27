@@ -70,6 +70,12 @@ trait LessonsComponent  {
 	      q2.update(vLessons.vLessonNumber, vLessons.vLessonName, vLessons.vAssignment, vLessons.vLocation, vLessons.vidCourse, vLessons.vDuration, vLessons.vLab, vLessons.vLessonSummary)
 	    }
 	  }
-
+	  
+	  def lessonsForCourse(course: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val q = Query(Lessons)
+	      q.filter(p => p.vidCourse === course).elements.toList
+	    }
+	  }
 	}
 }

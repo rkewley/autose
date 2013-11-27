@@ -11,6 +11,8 @@ GET     /homeCourses/:id						controllers.CoursesController.homeCourses(id: Long
 GET     /listCourses							controllers.CoursesController.listCourses
 GET     /listAllCourses							controllers.CoursesController.listAllCourses
 GET		/showCourses/:id						controllers.CoursesController.show(id: Long)
+GET		/publishCourses/:idCourse:idProgram						controllers.CoursesController.publish(idCourse: Long, idProgram: Long)
+GET		/abet/:idCourse:idProgram								controllers.CoursesController.abet(idCourse: Long, idProgram: Long)
 GET 	/editCourses/:id						controllers.CoursesController.edit(id: Long)
 GET 	/createCourses/:id						controllers.CoursesController.create(id: Long)
 GET 	/copyCourses/:id						controllers.CoursesController.copyCourses(id: Long)
@@ -305,3 +307,36 @@ GET 	/editDefinitions/:id					controllers.DefinitionsController.edit(id: Long)
 GET 	/createDefinitions/:id					controllers.DefinitionsController.create(id: Long)
 POST	/deleteDefinitions/:id				controllers.DefinitionsController.delete(id: Long)
 POST 	/saveDefinitions/:newEntry			controllers.DefinitionsController.save(newEntry: Int)
+
+# CourseObjectives Routes
+GET     /listCourseObjectives/:idCourses						controllers.CourseObjectivesController.list(idCourses: Long)
+GET		/showCourseObjectives/:id					controllers.CourseObjectivesController.show(id: Long)
+GET 	/editCourseObjectives/:id					controllers.CourseObjectivesController.edit(id: Long)
+GET 	/createCourseObjectives/:idCourses					controllers.CourseObjectivesController.create(idCourses: Long)
+POST	/deleteCourseObjectives/:id				controllers.CourseObjectivesController.delete(id: Long)
+POST 	/saveCourseObjectives/:newEntry			controllers.CourseObjectivesController.save(newEntry: Int)
+
+# RequiredCourses Routes
+GET     /listRequiredCourses/:idPrograms						controllers.RequiredCoursesController.list(idPrograms: Long)
+GET		/showRequiredCourses/:id					controllers.RequiredCoursesController.show(id: Long)
+GET 	/editRequiredCourses/:id					controllers.RequiredCoursesController.edit(id: Long)
+GET 	/createRequiredCourses/:idPrograms					controllers.RequiredCoursesController.create(idPrograms: Long)
+POST	/deleteRequiredCourses/:id				controllers.RequiredCoursesController.delete(id: Long)
+POST 	/saveRequiredCourses/:newEntry			controllers.RequiredCoursesController.save(newEntry: Int)
+
+# ElectiveGroup Routes
+GET     /listElectiveGroup/:idPrograms						controllers.ElectiveGroupController.list(idPrograms: Long)
+GET		/showElectiveGroup/:id					controllers.ElectiveGroupController.show(id: Long)
+GET 	/editElectiveGroup/:id					controllers.ElectiveGroupController.edit(id: Long)
+GET 	/createElectiveGroup/:idPrograms					controllers.ElectiveGroupController.create(idPrograms: Long)
+POST	/deleteElectiveGroup/:id				controllers.ElectiveGroupController.delete(id: Long)
+POST 	/saveElectiveGroup/:newEntry			controllers.ElectiveGroupController.save(newEntry: Int)
+
+# ElectiveGroupCourse Routes
+GET     /listElectiveGroupCourse/:idElectiveGroup						controllers.ElectiveGroupCourseController.list(idElectiveGroup: Long)
+GET		/showElectiveGroupCourse/:id					controllers.ElectiveGroupCourseController.show(id: Long)
+GET 	/editElectiveGroupCourse/:id					controllers.ElectiveGroupCourseController.edit(id: Long)
+GET 	/createElectiveGroupCourse/:idElectiveGroup					controllers.ElectiveGroupCourseController.create(idElectiveGroup: Long)
+POST	/deleteElectiveGroupCourse/:id				controllers.ElectiveGroupCourseController.delete(id: Long)
+POST 	/saveElectiveGroupCourse/:newEntry			controllers.ElectiveGroupCourseController.save(newEntry: Int)
+

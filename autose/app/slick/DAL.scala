@@ -20,6 +20,10 @@ class DAL(override val profile: ExtendedProfile) extends ProgramsComponent
 	with LessonKSAComponent
 	with DefinitionsComponent
 	with LessonLinksComponent
+	with CourseObjectivesComponent
+	with RequiredCoursesComponent
+	with ElectiveGroupComponent
+	with ElectiveGroupCourseComponent
 	with Profile {
  
   import profile.simple._

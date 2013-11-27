@@ -1,0 +1,42 @@
+
+@(f: Form[MdlCourseObjectives], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fCourseIDNumber").value.get.toLong) { vCourseIDNumber =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.CourseObjectivesController.save(newEntry)) {
+
+
+     		
+            @defining(f("fObjectiveID")) { fObjectiveID =>
+                <input type="hidden" name="@fObjectiveID.name" id="@fObjectiveID.id" value="@fObjectiveID.value">
+			}
+    
+
+            @defining(f("fCourseIDNumber")) { fCourseIDNumber =>
+                <input type="hidden" name="@fCourseIDNumber.name" id="@fCourseIDNumber.id" value="@fCourseIDNumber.value">
+			}
+    
+            @textarea(field = f("fObjective"), args = 'rows -> 2, 'cols -> 100, '_label-> "Objective")
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.CourseObjectivesController.list(vCourseIDNumber)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

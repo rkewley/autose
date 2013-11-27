@@ -1,0 +1,137 @@
+
+@(vCourses: MdlCourses, vPrograms: MdlPrograms)
+    @import persistence._
+    @import slick.AppDB
+<!DOCTYPE html>
+	<html>
+
+	<head>
+		
+		@*<link rel="stylesheet" href="@routes.Assets.at("stylesheets/syllabus.css")" type="text/css" media="print">*@
+		<style type="text/css">
+			body {font-size:12px;}
+			li {margin-bottom: 1em;}
+			ol.alpha {list-style-type: lower-alpha;}
+			ul {list-style-type: disc; margin-left: 1.5em; padding-left: 1.5em;}
+			ol {margin-left: 1.5em; padding-left: 1.5em;}
+			table, th, td {border: 1px solid black;}
+			th {background-color: #C0C0C0}
+		</style>
+		<title>ABET Syllabus</title>
+	</head>
+		  
+	<body>
+
+		  <h3>Syllabus</h3>
+
+		<ol>
+		  	<li><em>Course number and name</em><br>
+		  	@vCourses.vCourseIDNumber, @vCourses.vCourseName</li>
+
+		  	<li><em>Credit and contact hours</em><br>
+		  	@vCourses.vCreditHours credit hours (ET = @vCourses.vETCredits credit hours);
+		  	@defining(AppDB.dal.Lessons.lessonsForCourse(vCourses.vidCourse.get)) { lessons =>
+		  		LESSONS: 
+		  		@defining(lessons.filter(lsn => !lsn.vLab).map(_.vDuration).distinct) { durations =>
+		  			@durations.map { duration => 
+		  				@lessons.filter(lsn => !lsn.vLab && lsn.vDuration == duration).length at @duration min;
+		  			}
+		  		}
+		  		LABS: 
+		  		@defining(lessons.filter(lsn => lsn.vLab).map(_.vDuration).distinct) { durations =>
+		  			@durations.map { duration => 
+		  				@lessons.filter(lsn => lsn.vLab && lsn.vDuration == duration).length at @duration min;
+		  			}
+		  		}
+		  	}</li>
+
+    		@defining(SqlFaculty.select(vCourses.vCourseDirector)){pkModel =>
+      		  <li><em>Course Director</em><br>
+      		  	@pkModel.selectIdentifier._2
+      		  </li>
+    		}
+    		
+    		<li><em>Text book, title, author, and year</em><br>
+		 		<ol class="alpha">
+		 		@defining(SqlCourseReferences.selectWhere("Course = " + vCourses.vidCourse.get)) { listCourseReferences =>
+		     		@defining(listCourseReferences.map(r=>"idReference = " + r.vReference).mkString(" OR ")) { whereClause =>
+		      	 		@if(whereClause.length > 0) {
+		         			@defining(SqlReference.selectWhere(whereClause).sortWith(MdlReference.compare)) { listReferences =>
+		           				@listReferences.map { vReference =>
+			         				<li>@vReference.vTitle.  @vReference.vText</li>
+			       				}
+			     			}
+			   			}
+			 		}
+		 		}
+			 	</ol>
+			</li>
+				
+		  	<li><em>Specific course information</em><br>
+		  		<ol class="alpha">
+		  			<li><em>Brief descriptio of the content of the course (catalog description)</em><br>
+		  				@vCourses.vCourseDescriptionRedbook
+		  			</li>
+		  			<li><em>Pre-requesites or co-requisites</em><br>
+		  				Pre-requisites: @vCourses.vPrerequisites; Co-requesities: @vCourses.vCorequisites
+		  			</li>
+		  			<li><em>Indicate whether a required, elective, or selected elective (as per Table 5-1) course in the program</em><br>
+
+		  				@RequiredCoursesController.requiredForProgram(vCourses.vCourseIDNumber, vPrograms.vidPrograms.get) match {
+		  					case true => {Required for @vPrograms.vProgram}
+		  					case false => {
+		  						@ElectiveGroupCourseController.electiveForProgram(vCourses.vCourseIDNumber, vPrograms.vidPrograms.get) match {
+		  							case true => {Elective for @vPrograms.vProgram,}
+		  							case false => {Not in @vPrograms.vProgram Program}
+		  						}
+		  					}
+		  				}
+
+
+		  			</li>
+		  		
+		  		</ol>
+		  	</li>
+		  	
+		  	<li><em>Specific goals for the course</em><br>
+		  		<ol class="alpha">
+		  			<li><em>Specific outcomes of instruction</em><br>
+		  				<ul>
+							@defining(AppDB.dal.CourseObjectives.courseObjectivesForCourse(vCourses.vidCourse.get)) { objectives =>
+								@println(objectives.length)
+								@objectives.map { objective =>
+									<li>@objective.vObjective</li>
+								}
+							}
+						</ul>
+					</li>	
+					<li><em>Explicitly indicate which of the student outcomes listed in Criterion 3 or any other outcomes are addressed by the course</em>
+						<table>
+							<tr>
+								<th>Student Outcomes Addressed by the Course</th>
+								<th>Number of Supporting KSB</th>
+							</tr>
+							@AppDB.dal.ProgramOutcomes.selectByProgram(vPrograms.vidPrograms.get).sortWith((a,b) => a.vProgramOutcome < b.vProgramOutcome).map { programOutcome =>
+								<tr>
+									<td>@programOutcome.vProgramOutcome</td>
+									<td>@ProgramOutcomesController.ksaForOutcomeAndCourse(programOutcome.vProgramOutcomeNumber.get, vCourses.vidCourse.get)</td>
+								</tr>
+							}
+							
+						</table>
+						Note:  KSB's are distinct knowledge, skills, and behaviors that are taught in a course
+					</li>			
+				</ol>
+			</li>
+			
+			<li><em>Breif list of topics to be covered</em>
+				<ul>
+				@ProgramOutcomesController.courseTopics(vCourses.vidCourse.get).map { courseTopic =>
+					<li>@courseTopic.vTopic</li>
+				}
+				</ul>
+			</li>
+
+	</body>
+
+</html>

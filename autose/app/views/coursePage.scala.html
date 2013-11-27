@@ -9,18 +9,22 @@
 		  <ul id="menu">
 			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse.get)">Home</a></li>
 			<li><a href="@routes.CoursesController.show(course.vidCourse.get)">Information</a></li>
+			<li><a href="@routes.CourseObjectivesController.list(course.vidCourse.get)">Course Objectives</a></li>
 			<li><a href="@routes.CourseReferencesController.listCourseReferences(course.vidCourse.get)">Course References</a></li>
 			<li><a href="@routes.CourseLinksController.listCourseLinks(course.vidCourse.get)">Course Links and Files</a></li>
 			<li><a href="@routes.LessonsController.listLessons(course.vidCourse.get)">Syllabus</a></li>
 			<li><a href="@routes.GradedRequirementsController.list(course.vidCourse.get)">Graded Events</a></li>
 			<li><a href="@routes.CourseTopicsController.showCourseTopics(course.vidCourse.get)">Topics</a></li> 
+			<li><a href="@routes.CoursesController.abet(course.vidCourse.get, ProgramsController.seId)">ABET Syllabus SE</a></li>
+			<li><a href="@routes.CoursesController.publish(course.vidCourse.get, ProgramsController.seId)">ABET Syllabus PDF SE</a></li>
+			<li><a href="@routes.CoursesController.abet(course.vidCourse.get, ProgramsController.emId)">ABET Syllabus EM</a></li>
+			<li><a href="@routes.CoursesController.publish(course.vidCourse.get, ProgramsController.emId)">ABET Syllabus PDF EM</a></li>
 		  </ul>
 
 	</div>
 
 	<div>
-		@content
-	</div>
+		@content	</div>
 	
 	
 }

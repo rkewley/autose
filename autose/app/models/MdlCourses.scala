@@ -26,7 +26,7 @@
 	vCreditHours : Double,
 	vPrerequisites : String,
 	vCorequisites : String,
-	vDisqualifiers : String,
+	vETCredits : Double,
 	vCourseStrategy : String,
 	vCriteriaForPassing : String,
 	vAdminInstructions : String,
@@ -41,7 +41,7 @@
       }
 
    
-      def this() = this(Option(0), "", 0, 0, "", 0, 0, "", 0.0, "", "", "", "", "", "", 0, false, "")
+      def this() = this(Option(0), "", 0, 0, "", 0, 0, "", 0.0, "", "", 0.0, "", "", "", 0, false, "")
 
   	  def validate: Boolean = vAcademicYear >= 2012 && vAcademicYear <= 2020 && vAcademicTerm >= 1 && vAcademicTerm <= 2
     
@@ -75,7 +75,7 @@
     vCreditHours,
     vPrerequisites,
     vCorequisites,
-    vDisqualifiers,
+    vETCredits,
     vCourseStrategy,
     vCriteriaForPassing,
     vAdminInstructions,

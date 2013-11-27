@@ -1,0 +1,39 @@
+
+@(listCourseObjectives: List[MdlCourseObjectives], idCourses: Long)
+    
+    @import slick.AppDB
+    
+    
+    @coursePage(slick.AppDB.dal.Courses.select(idCourses).get) {
+
+    
+    <div class="column span-18 last">
+		  <h3>Course Objectives Listing</h3>
+		  <table>
+			<tr>
+				<th>Objective</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listCourseObjectives.map { vCourseObjectives =>
+    			
+    		<tr>
+				<td>@vCourseObjectives.vObjective</td>
+
+    			<td><a href="@routes.CourseObjectivesController.edit(vCourseObjectives.vObjectiveID.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.CourseObjectivesController.delete(vCourseObjectives.vObjectiveID.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.CourseObjectivesController.create(idCourses)">Create new Course Objectives</a>
+    </div>
+  </div>
+  }

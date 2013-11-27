@@ -9,6 +9,7 @@ import play.api.data.format.Formats._
 import models._
 import views._
 import slick.AppDB
+import persistence._
 import scala.slick.driver.MySQLDriver.simple._
 import jp.t2v.lab.play2.auth._
 
@@ -54,4 +55,30 @@ object ProgramOutcomesController extends ControllerTrait[Long, MdlProgramOutcome
     override def getAll(vProgramOutcomes: MdlProgramOutcomes): List[MdlProgramOutcomes] = AppDB.database.withSession { implicit session: Session =>
 	    AppDB.dal.ProgramOutcomes.allQuery.filter(po => po.vProgram === vProgramOutcomes.vProgram).elements.toList
 	}
+    
+    def ksaForOutcomeAndCourse(outcomeId: Long, courseId: Long): Long = {
+      // find all the KSA for the program by iterating throught the performance indicators and adding distinct KSA to the list
+      val programKsa = AppDB.dal.PerformanceIndicator.selectByProgramOutcome(outcomeId).flatMap { pi =>
+        AppDB.dal.KSAPerfIndicator.selectByPerfIndicator(pi.vidPerformanceIndicator.get)
+      }.map(_.vKSA)
+      val distinctProgramKsa = programKsa.distinct
+      
+
+      courseKSA(courseId).distinct.filter(ksa => distinctProgramKsa.exists(pKsa => ksa == pKsa)).length
+    }
+    
+    // find all the KSA for the course by iterating trhough the lessons and adding distinct KSA to the list
+    def courseKSA(courseId: Long): List[Long] = {
+      AppDB.dal.Lessons.lessonsForCourse(courseId).flatMap { lesson =>
+        val cksa = AppDB.dal.LessonKSA.selectByLesson(lesson.vLessonIndex.get).map(_.vTopicObjective)
+        cksa.distinct
+      }
+    }
+    
+    def courseTopics(courseId: Long): List[MdlTopics] = {
+      val courseKsa = courseKSA(courseId)
+      SqlTopics.all.filter( topic =>
+        AppDB.dal.KSA.selectByTopic(topic.vTopicsIndex).exists(ksa => courseKsa.contains(ksa.vTopicObjectiveNumber.get))
+      )
+    }
 }

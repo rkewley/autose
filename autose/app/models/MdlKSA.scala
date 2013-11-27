@@ -7,6 +7,8 @@
 	vTopic : Long,
 	vKSAB : String
     ) extends Mdl[Long] {
+	  
+      self =>
     
       def this() = this(Option(0), "", 0, "")
 
@@ -19,5 +21,6 @@
       def compare(a: MdlKSA, b: MdlKSA) = a.vTopicObjectiveNumber.get.compareTo(b.vTopicObjectiveNumber.get)
         
       def primaryKey = vTopicObjectiveNumber
+      
 }
     

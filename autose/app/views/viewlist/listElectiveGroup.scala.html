@@ -1,0 +1,56 @@
+
+@(listElectiveGroup: List[MdlElectiveGroup], idPrograms: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>ElectiveGroup Listing</h3>
+		  <table>
+			<tr>
+				<th>idElectiveGroup</th>
+				<th>ElectiveGroupName</th>
+				<th>NumberToChoose</th>
+				<th>Program</th>
+				<th>SubDiscipline</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listElectiveGroup.map { vElectiveGroup =>
+    			
+    		<tr>
+				<td>@vElectiveGroup.vidElectiveGroup</td>
+				<td>@vElectiveGroup.vElectiveGroupName</td>
+				<td>@vElectiveGroup.vNumberToChoose</td>
+
+    		@defining(AppDB.dal.Programs.select(vElectiveGroup.vProgram).get){pkModel =>
+      		  <td><a href="@routes.ProgramsController.show(vElectiveGroup.vProgram)">@pkModel.selectIdentifier._2</a></td>
+    		}
+				<td>@vElectiveGroup.vSubDiscipline</td>
+
+    			<td><a href="@routes.ElectiveGroupController.show(vElectiveGroup.vidElectiveGroup.get)">Show</a></td>
+    			<td><a href="@routes.ElectiveGroupController.edit(vElectiveGroup.vidElectiveGroup.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.ElectiveGroupController.delete(vElectiveGroup.vidElectiveGroup.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.ElectiveGroupController.create(idPrograms)">Create new ElectiveGroup</a>
+    </div>
+  </div>
+  }

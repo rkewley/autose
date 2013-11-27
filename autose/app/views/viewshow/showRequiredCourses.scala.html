@@ -1,0 +1,36 @@
+
+@(vRequiredCourses: MdlRequiredCourses)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>RequiredCourses Information</h3>
+		  <dl>
+
+		  	<dt>idRequiredCourses</dt>
+		  	<dd>@Html(vRequiredCourses.vidRequiredCourses.toString)</dd>
+
+    		@defining(AppDB.dal.Programs.select(vRequiredCourses.vProgram).get){pkModel =>
+      		  <dt>Program</dt>
+      		  <dd><a href="@routes.ProgramsController.show(vRequiredCourses.vProgram)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+		  	<dt>Course</dt>
+		  	<dd>@Html(vRequiredCourses.vCourse.toString)</dd>
+	       </dl>
+     <div>
+       <a href="@routes.RequiredCoursesController.list(vRequiredCourses.vProgram)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

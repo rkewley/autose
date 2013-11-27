@@ -1,0 +1,42 @@
+
+@(vElectiveGroup: MdlElectiveGroup)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>ElectiveGroup Information</h3>
+		  <dl>
+
+		  	<dt>idElectiveGroup</dt>
+		  	<dd>@Html(vElectiveGroup.vidElectiveGroup.toString)</dd>
+
+		  	<dt>ElectiveGroupName</dt>
+		  	<dd>@Html(vElectiveGroup.vElectiveGroupName.toString)</dd>
+
+		  	<dt>NumberToChoose</dt>
+		  	<dd>@Html(vElectiveGroup.vNumberToChoose.toString)</dd>
+
+    		@defining(AppDB.dal.Programs.select(vElectiveGroup.vProgram).get){pkModel =>
+      		  <dt>Program</dt>
+      		  <dd><a href="@routes.ProgramsController.show(vElectiveGroup.vProgram)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+		  	<dt>SubDiscipline</dt>
+		  	<dd>@Html(vElectiveGroup.vSubDiscipline.toString)</dd>
+	       </dl>
+     <div>
+       <a href="@routes.ElectiveGroupController.list(vElectiveGroup.vProgram)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }
