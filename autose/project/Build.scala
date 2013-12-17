@@ -15,12 +15,14 @@ object ApplicationBuild extends Build {
         "jp.t2v" %% "play2.auth"      % "0.10.1",
         "jp.t2v" %% "play2.auth.test" % "0.10.1" % "test",
         "com.typesafe.slick" %% "slick" % "1.0.0",
-        "com.typesafe.play" %% "play-slick" % "0.3.2"
+        "com.typesafe.play" %% "play-slick" % "0.3.2",
+        "pdf" % "pdf_2.10" % "0.5"
   )
 
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
-    // Add your own project settings here      
+    // Add your own project settings here  
+		  resolvers += Resolver.url("Violas Play Modules", url("http://www.joergviola.de/releases/"))(Resolver.ivyStylePatterns)      
   )
 
 }
