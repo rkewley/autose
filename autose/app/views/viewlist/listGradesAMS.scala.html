@@ -1,0 +1,59 @@
+
+@(listGradesAMS: List[MdlGradesAMS], idGradedEventAMS: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>GradesAMS Listing</h3>
+		  <table>
+			<tr>
+				<th>idGradesAMS</th>
+				<th>Student</th>
+				<th>GradedEventAMS</th>
+				<th>Points</th>
+				<th>StudentId</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listGradesAMS.map { vGradesAMS =>
+    			
+    		<tr>
+				<td>@vGradesAMS.vidGradesAMS</td>
+
+    		@defining(AppDB.dal.Students.select(vGradesAMS.vStudent).get){pkModel =>
+      		  <td><a href="@routes.StudentsController.show(vGradesAMS.vStudent)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    		@defining(AppDB.dal.GradedEventAMS.select(vGradesAMS.vGradedEventAMS).get){pkModel =>
+      		  <td><a href="@routes.GradedEventAMSController.show(vGradesAMS.vGradedEventAMS)">@pkModel.selectIdentifier._2</a></td>
+    		}
+				<td>@vGradesAMS.vPoints</td>
+				<td>@vGradesAMS.vStudentId</td>
+
+    			<td><a href="@routes.GradesAMSController.show(vGradesAMS.vidGradesAMS.get)">Show</a></td>
+    			<td><a href="@routes.GradesAMSController.edit(vGradesAMS.vidGradesAMS.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.GradesAMSController.delete(vGradesAMS.vidGradesAMS.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.GradesAMSController.create(idGradedEventAMS)">Create new GradesAMS</a>
+    </div>
+  </div>
+  }

@@ -1,0 +1,38 @@
+
+@(vMappingSubEvent: MdlMappingSubEvent)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>MappingSubEvent Information</h3>
+		  <dl>
+
+		  	<dt>idMappingSubEvent</dt>
+		  	<dd>@Html(vMappingSubEvent.vidMappingSubEvent.toString)</dd>
+
+    		@defining(AppDB.dal.SubGradedEvent.select(vMappingSubEvent.vSubEvent).get){pkModel =>
+      		  <dt>SubEvent</dt>
+      		  <dd><a href="@routes.SubGradedEventController.show(vMappingSubEvent.vSubEvent)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+    		@defining(AppDB.dal.SubEventAMS.select(vMappingSubEvent.vSubEventAMS).get){pkModel =>
+      		  <dt>SubEventAMS</dt>
+      		  <dd><a href="@routes.SubEventAMSController.show(vMappingSubEvent.vSubEventAMS)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+	       </dl>
+     <div>
+       <a href="@routes.MappingSubEventController.list(0)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

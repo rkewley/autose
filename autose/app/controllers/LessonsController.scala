@@ -5,6 +5,7 @@ import play.api._
 import play.api.mvc._
 import play.api.data._
 import models._
+import models.NormalUser;
 import persistence._
 import play.Logger
 import play.api.data._

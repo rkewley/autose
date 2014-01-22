@@ -1,0 +1,49 @@
+
+@(f: Form[MdlMappingGradedEvent], newEntry: Int, course: Long)
+
+@import helper._
+@import slick.AppDB
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.MappingGradedEventController.save(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidMappingGradedEvent")) { fidMappingGradedEvent =>
+                <input type="hidden" name="@fidMappingGradedEvent.name" id="@fidMappingGradedEvent.id" value="@fidMappingGradedEvent.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidMappingGradedEvent")) { fidMappingGradedEvent =>
+                <input type="hidden" name="@fidMappingGradedEvent.name" id="@fidMappingGradedEvent.id" value="@fidMappingGradedEvent.value">
+			}
+    
+     	}
+
+            @{val selectvGradedRequirements = AppDB.dal.GradedRequirements.selectByCourse(course).map(vGradedRequirements => vGradedRequirements.selectIdentifier).toSeq
+            select(field = f("fGradedEvent"), options = selectvGradedRequirements, args = '_label-> "GradedEvent")}
+
+            @{val selectvGradedEventAMS = AppDB.dal.GradedEventAMS.selectByCourse(course).map(vGradedEventAMS => vGradedEventAMS.selectIdentifier).toSeq
+            select(field = f("fGradedEventAMS"), options = selectvGradedEventAMS, args = '_label-> "GradedEventAMS")}
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.MappingGradedEventController.list(course)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }

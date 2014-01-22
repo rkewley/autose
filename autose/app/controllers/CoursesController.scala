@@ -7,6 +7,7 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 import models._
+import models.NormalUser;
 import views._
 import slick.AppDB
 import util.pdf.PDF

@@ -1,0 +1,55 @@
+
+@(vGradedEventAMS: MdlGradedEventAMS)
+
+    @import slick.AppDB
+		  
+    
+    @gradedEventAMSPage(vGradedEventAMS.vidGradedEventAMS.get) {
+
+
+    
+     <div class="column span-14">
+		  <h3>@vGradedEventAMS.vDescription Information</h3>
+		  <dl>
+
+    		@defining(AppDB.dal.Courses.select(vGradedEventAMS.vCourse).get){pkModel =>
+      		  <dt>Course</dt>
+      		  <dd><a href="@routes.CoursesController.show(vGradedEventAMS.vCourse)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+		  	<dt>Name</dt>
+		  	<dd>@Html(vGradedEventAMS.vName.toString)</dd>
+
+		  	<dt>Description</dt>
+		  	<dd>@Html(vGradedEventAMS.vDescription.toString)</dd>
+
+		  	<dt>Detailed Description</dt>
+		  	<dd>@Html(vGradedEventAMS.vDetailedDescription.toString)</dd>
+
+		  	<dt>Type</dt>
+		  	<dd>@Html(vGradedEventAMS.vType.toString)</dd>
+
+		  	<dt>MaxPoints</dt>
+		  	<dd>@Html(vGradedEventAMS.vMaxPoints.toString)</dd>
+
+		  	<dt>Lesson</dt>
+		  	<dd>@Html(vGradedEventAMS.vLesson.toString)</dd>
+	       </dl>
+     <div>
+       <a href="@routes.GradedEventAMSController.list(vGradedEventAMS.vCourse)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   
+		 @defining(AppDB.dal.GradedEventAMSLinks.selectByGradedEventAMS(vGradedEventAMS.vidGradedEventAMS.get)) { listLinks =>
+		 <ul id="menu">
+		   <li id="label">Files and links for @vGradedEventAMS.vDescription</li>
+		   @listLinks.map { vGradedEventAMSLink =>
+			 <li><a href="@vGradedEventAMSLink.vLink">@vGradedEventAMSLink.vDescription</a></li>
+		   }
+		 
+		 }
+   
+   </div>
+  </div>
+  }

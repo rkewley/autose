@@ -1,0 +1,28 @@
+@(f: Form[MdlCourses])
+
+@main("Systems Net", "Systems Body of Knowledge") {
+	
+	@helper.form(action = routes.SubEventAMSController.saveSubEventAMSUpload, 'enctype -> "multipart/form-data") {
+		
+		Select the AMS query file that contains the sub event information.  It should be a comma-separated value file with the following columns in order:
+		<ol>crse_nbr,evnt_nbr,evnt_descr,descr_shrt,Type of Event,lsn_nbr,max_pts
+		  <li>Course Number</li>
+		  <li>Academic Year</li>
+		  <li>Academic Term (1 or 2)</li>
+		  <li>Sub Event Number</li>
+		  <li>Graded Event Number</li>
+		  <li>Sub Event Short Description</li>
+		  <li>Sub Event Description</li>
+		  <li>Maximum Points</li>
+		</ol>
+	    
+	    <input type="file" name="subEventsFile">
+	    
+	    <p>
+	        <input type="submit">
+	    </p>
+	    
+	}	
+	
+	
+}

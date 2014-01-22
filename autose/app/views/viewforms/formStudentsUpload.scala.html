@@ -1,0 +1,25 @@
+@(f: Form[MdlStudents])
+
+@main("Systems Net", "Systems Body of Knowledge") {
+	
+	@helper.form(action = routes.StudentsController.saveStudentUpload, 'enctype -> "multipart/form-data") {
+		
+		Select the AMS quary file that contains the student information.  It should be a comma-separated value file with the following columns in order
+		<ol>
+		  <li>USMA ID</li>
+		  <li>Last Name</li>
+		  <li>First Name</li>
+		  <li>Graduation Year</li>
+		  <li>Major (Spelled out, not the abbreviation)</li>
+		</ol>
+	    
+	    <input type="file" name="studentsFile">
+	    
+	    <p>
+	        <input type="submit">
+	    </p>
+	    
+	}	
+	
+	
+}

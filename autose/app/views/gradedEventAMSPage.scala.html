@@ -1,0 +1,26 @@
+@(idGradedEventAMS: Long)(content: Html)
+@import persistence._
+@import slick.AppDB
+
+@defining(AppDB.dal.GradedEventAMS.select(idGradedEventAMS).get) { gradedEventAMS =>
+@defining(slick.AppDB.dal.Courses.select(gradedEventAMS.vCourse).get) { course =>
+@main("Systems Net", course.vCourseIDNumber) {
+
+	<div class="column span-4 colborder">
+ 
+		  <ul id="menu">
+			<li><a href="@routes.CoursesController.homeCourses(course.vidCourse.get)">Course Home</a></li>
+			<li><a href="@routes.LessonsController.listLessons(course.vidCourse.get)">Syllabus</a></li>
+			<li><a href="@routes.GradedEventAMSController.list(course.vidCourse.get)">Graded Events</a></li>
+			<li><a href="@routes.GradedEventAMSLinksController.list(idGradedEventAMS)">Files and Links</a></li>
+			<li><a href="@routes.SubEventAMSController.list(idGradedEventAMS)">Sub Events</a></li>
+			<li><a href="@routes.KSASubEventAMSController.list(idGradedEventAMS)">Link to Knowledge and Skills</a></li>
+		  </ul>
+
+	</div>
+	<div>
+		@content
+	</div>
+    }
+  }	
+}

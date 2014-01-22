@@ -1,0 +1,27 @@
+@(content: Html)
+@import persistence._
+
+
+@main("Systems Net", "Upload Data Files") {
+
+	<div class="column span-4 colborder">
+
+		  <ul id="menu">
+			<li><a href="@routes.StudentsController.list(0)">Students</a></li>
+			<li><a href="@routes.StudentsController.uploadStudents">Upload Students File</a></li>
+			<li><a href="@routes.GradedEventAMSController.listAll">Graded Events</a></li>
+			<li><a href="@routes.GradedEventAMSController.uploadGradedEventsAMS">Upload Graded Events File</a></li>
+			<li><a href="@routes.SubEventAMSController.listAll">Sub Events</a></li>
+			<li><a href="@routes.SubEventAMSController.uploadSubEventsAMS">Upload Sub Events File</a></li>
+			<li><a href="@routes.GradesAMSController.listAll">AMS Event Grades</a></li>
+			<li><a href="@routes.GradesAMSController.uploadGradesAMS">Upload AMS Event Grades</a></li>
+			<li><a href="@routes.GradesSubEventAMSController.listAll("noerrors")">AMS Sub-Event Grades</a></li>
+			<li><a href="@routes.GradesSubEventAMSController.uploadGradesSubEventAMS">Upload AMS Sub-Event Grades</a></li>
+		  </ul>
+
+	</div>
+
+	<div>
+		@content
+	</div>
+}

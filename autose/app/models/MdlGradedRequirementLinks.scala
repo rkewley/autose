@@ -15,7 +15,7 @@
     
 	  def validationErrors: String = ""
     
-      def selectIdentifier: (String, String) = vidGradedRequirementLinks.get.toString -> vidGradedRequirementLinks.get.toString
+      def selectIdentifier: (String, String) = vidGradedRequirementLinks.get.toString -> vDescription
     
       def compare(a: MdlGradedRequirementLinks, b: MdlGradedRequirementLinks) = a.vidGradedRequirementLinks.get.compareTo(b.vidGradedRequirementLinks.get)
         

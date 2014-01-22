@@ -1,0 +1,42 @@
+
+@(vGradedEventAMSLinks: MdlGradedEventAMSLinks)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>GradedEventAMSLinks Information</h3>
+		  <dl>
+
+		  	<dt>idGradedEventAMSLinks</dt>
+		  	<dd>@Html(vGradedEventAMSLinks.vidGradedEventAMSLinks.toString)</dd>
+
+		  	<dt>Link</dt>
+		  	<dd>@Html(vGradedEventAMSLinks.vLink.toString)</dd>
+
+		  	<dt>Description</dt>
+		  	<dd>@Html(vGradedEventAMSLinks.vDescription.toString)</dd>
+
+		  	<dt>IsFileLink</dt>
+		  	<dd>@Html(vGradedEventAMSLinks.vIsFileLink.toString)</dd>
+
+    		@defining(AppDB.dal.GradedEventAMS.select(vGradedEventAMSLinks.vvGradedEventAMS).get){pkModel =>
+      		  <dt>vGradedEventAMS</dt>
+      		  <dd><a href="@routes.GradedEventAMSController.show(vGradedEventAMSLinks.vvGradedEventAMS)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+	       </dl>
+     <div>
+       <a href="@routes.GradedEventAMSLinksController.list(vGradedEventAMSLinks.vvGradedEventAMS)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

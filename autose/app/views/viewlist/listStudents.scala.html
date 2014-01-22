@@ -1,0 +1,60 @@
+
+@(listStudents: List[MdlStudents])
+    
+    @import slick.AppDB
+    
+    
+    @uploadPage {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-18 last">
+		  <h3>Students Listing</h3>
+		  <table>
+			<tr>
+				<th>idStudents</th>
+				<th>StudentId</th>
+				<th>Lastname</th>
+				<th>Firstname</th>
+				<th>MajorAMS</th>
+				<th>GradYear</th>
+				<th>Program</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listStudents.map { vStudents =>
+    			
+    		<tr>
+				<td>@vStudents.vidStudents</td>
+				<td>@vStudents.vStudentId</td>
+				<td>@vStudents.vLastname</td>
+				<td>@vStudents.vFirstname</td>
+				<td>@vStudents.vMajorAMS</td>
+				<td>@vStudents.vGradYear</td>
+
+    		@defining(AppDB.dal.Programs.select(vStudents.vProgram).get){pkModel =>
+      		  <td><a href="@routes.ProgramsController.show(vStudents.vProgram)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    			<td><a href="@routes.StudentsController.show(vStudents.vidStudents.get)">Show</a></td>
+    			<td><a href="@routes.StudentsController.edit(vStudents.vidStudents.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.StudentsController.delete(vStudents.vidStudents.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.StudentsController.create(0)">Create new Students</a>
+    </div>
+  </div>
+  }

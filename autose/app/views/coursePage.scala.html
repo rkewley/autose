@@ -14,11 +14,14 @@
 			<li><a href="@routes.CourseLinksController.listCourseLinks(course.vidCourse.get)">Course Links and Files</a></li>
 			<li><a href="@routes.LessonsController.listLessons(course.vidCourse.get)">Syllabus</a></li>
 			<li><a href="@routes.GradedRequirementsController.list(course.vidCourse.get)">Graded Events</a></li>
+			<li><a href="@routes.GradedEventAMSController.list(course.vidCourse.get)">Graded Events AMS</a></li>
 			<li><a href="@routes.CourseTopicsController.showCourseTopics(course.vidCourse.get)">Topics</a></li> 
 			<li><a href="@routes.CoursesController.abet(course.vidCourse.get, ProgramsController.seId)">ABET Syllabus SE</a></li>
 			<li><a href="@routes.CoursesController.publish(course.vidCourse.get, ProgramsController.seId)">ABET Syllabus PDF SE</a></li>
 			<li><a href="@routes.CoursesController.abet(course.vidCourse.get, ProgramsController.emId)">ABET Syllabus EM</a></li>
 			<li><a href="@routes.CoursesController.publish(course.vidCourse.get, ProgramsController.emId)">ABET Syllabus PDF EM</a></li>
+			<li><a href="@routes.MappingGradedEventController.list(course.vidCourse.get)">Map Graded Events</a></li>
+			<li><a href="@routes.MappingSubEventController.list(course.vidCourse.get)">Map Sub Events</a></li>
 		  </ul>
 
 	</div>

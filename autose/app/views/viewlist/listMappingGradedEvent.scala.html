@@ -1,0 +1,55 @@
+
+@(listMappingGradedEvent: List[MdlMappingGradedEvent], course: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>MappingGradedEvent Listing</h3>
+		  <table>
+			<tr>
+				<th>idMappingGradedEvent</th>
+				<th>GradedEvent</th>
+				<th>GradedEventAMS</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listMappingGradedEvent.map { vMappingGradedEvent =>
+    			
+    		<tr>
+				<td>@vMappingGradedEvent.vidMappingGradedEvent</td>
+
+    		@defining(AppDB.dal.GradedRequirements.select(vMappingGradedEvent.vGradedEvent).get){pkModel =>
+      		  <td><a href="@routes.GradedRequirementsController.show(vMappingGradedEvent.vGradedEvent)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    		@defining(AppDB.dal.GradedEventAMS.select(vMappingGradedEvent.vGradedEventAMS).get){pkModel =>
+      		  <td><a href="@routes.GradedEventAMSController.show(vMappingGradedEvent.vGradedEventAMS)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    			<td><a href="@routes.MappingGradedEventController.show(vMappingGradedEvent.vidMappingGradedEvent.get)">Show</a></td>
+    			<td><a href="@routes.MappingGradedEventController.edit(vMappingGradedEvent.vidMappingGradedEvent.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.MappingGradedEventController.delete(vMappingGradedEvent.vidMappingGradedEvent.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.MappingGradedEventController.createNewMapping(course)">Create new MappingGradedEvent</a>
+    </div>
+  </div>
+  }

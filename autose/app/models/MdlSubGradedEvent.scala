@@ -1,5 +1,7 @@
     
  package models
+ 
+ import slick.AppDB
     
  case class MdlSubGradedEvent (
  	vidSubGradedEvent : Option[Long],
@@ -14,7 +16,10 @@
     
 	  def validationErrors: String = ""
     
-      def selectIdentifier: (String, String) = vidSubGradedEvent.get.toString -> vDescription
+      def selectIdentifier: (String, String) = vidSubGradedEvent.get.toString -> {
+        val gradedEventName = AppDB.dal.GradedRequirements.select(vGradedEvent).get.vGradedEventName
+        gradedEventName + ", " + vDescription
+      }
     
       def compare(a: MdlSubGradedEvent, b: MdlSubGradedEvent) = a.vidSubGradedEvent.get.compareTo(b.vidSubGradedEvent.get)
         

@@ -59,9 +59,9 @@ object GradedRequirementLinksController extends ControllerTrait[Long, MdlGradedR
     super.delete(id)
   }
 
-  def uploadGradedEventFile(gradedEventId: Long) = compositeAction(NormalUser) { user =>
+  def uploadGradedEventFile(gradedEventAMSId: Long) = compositeAction(NormalUser) { user =>
     implicit template => implicit request =>
-      val vGradedEventLinks = new MdlGradedRequirementLinks(Option(0), "http:/", "", true, gradedEventId)
+      val vGradedEventLinks = new MdlGradedRequirementLinks(Option(0), "http:/", "", true, 0)
       Ok(views.html.viewforms.formGradedRequirementFiles(form.fill(vGradedEventLinks), 1))
   }
 

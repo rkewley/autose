@@ -73,5 +73,18 @@ trait SubGradedEventComponent  {
 	    }
 	  }
 
+    def selectByCourse(idCourse: Long) = {
+
+	    AppDB.database.withSession { implicit session: Session =>
+	      val result1 = for {
+	        (subEvent, gradedEvent) <- AppDB.dal.SubGradedEvent innerJoin AppDB.dal.GradedRequirements on (_.vGradedEvent === _.vGradedEventIndex)
+	           if gradedEvent.vCourse === idCourse
+	      } yield (subEvent.vidSubGradedEvent, subEvent.vGradedEvent, subEvent.vDescription, subEvent.vPoints)
+	      result1.elements.toList.map { element =>
+	        MdlSubGradedEvent(Some(element._1), element._2, element._3, element._4)
+	      }
+ 
+      }
+	}
 	}
 }

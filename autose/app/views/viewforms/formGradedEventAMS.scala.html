@@ -1,0 +1,67 @@
+
+@(f: Form[MdlGradedEventAMS], newEntry: Int)
+
+@import helper._
+@import slick.AppDB
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fCourse").value.get.toLong) { vCourse =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.GradedEventAMSController.save(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidGradedEventAMS")) { fidGradedEventAMS =>
+                <input type="hidden" name="@fidGradedEventAMS.name" id="@fidGradedEventAMS.id" value="@fidGradedEventAMS.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidGradedEventAMS")) { fidGradedEventAMS =>
+                <input type="hidden" name="@fidGradedEventAMS.name" id="@fidGradedEventAMS.id" value="@fidGradedEventAMS.value">
+			}
+    
+     	}
+
+            @inputText(f("fEventNumberAMS"), '_label -> "EventNumberAMS")
+
+            @defining(f("fCourse")) { fCourse =>
+                <input type="hidden" name="@fCourse.name" id="@fCourse.id" value="@fCourse.value">
+			}
+    
+            @textarea(field = f("fName"), args = 'rows -> 2, 'cols -> 100, '_label-> "Name")
+        	@*@inputText(f("fName"), '_label -> "Name")*@
+
+            @textarea(field = f("fDescription"), args = 'rows -> 2, 'cols -> 100, '_label-> "Description")
+        	@*@inputText(f("fDescription"), '_label -> "Description")*@
+
+            @textarea(field = f("fDetailedDescription"), args = 'rows -> 2, 'cols -> 100, '_label-> "Detailed Description")
+        	@*@inputText(f("fDetailedDescription"), '_label -> "Detailed Description")*@
+
+            @textarea(field = f("fType"), args = 'rows -> 2, 'cols -> 100, '_label-> "Type")
+        	@*@inputText(f("fType"), '_label -> "Type")*@
+
+            @inputText(f("fMaxPoints"), '_label -> "MaxPoints")
+
+            @inputText(f("fLesson"), '_label -> "Lesson")
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.GradedEventAMSController.list(vCourse)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

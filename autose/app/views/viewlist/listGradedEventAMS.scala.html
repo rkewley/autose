@@ -1,0 +1,49 @@
+
+@(listGradedEventAMS: List[MdlGradedEventAMS], idCourses: Long)
+    
+    @import slick.AppDB
+    
+    
+    @coursePage(slick.AppDB.dal.Courses.select(idCourses).get) {
+
+    
+    <div class="column span-18 last">
+		  <h3>GradedEventAMS Listing</h3>
+		  <table>
+			<tr>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Description</th>
+				<th>Type</th>
+				<th>Max Points</th>
+				<th>Lesson</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listGradedEventAMS.map { vGradedEventAMS =>
+    			
+    		<tr>
+				<td><a href="@routes.GradedEventAMSController.show(vGradedEventAMS.vidGradedEventAMS.get)">@vGradedEventAMS.vName</a></td>
+				<td>@vGradedEventAMS.vDescription</td>
+				<td>@Html(vGradedEventAMS.vDetailedDescription)</td>
+				<td>@vGradedEventAMS.vType</td>
+				<td>@vGradedEventAMS.vMaxPoints</td>
+				<td>@vGradedEventAMS.vLesson</td>
+
+    			<td><a href="@routes.GradedEventAMSController.edit(vGradedEventAMS.vidGradedEventAMS.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.GradedEventAMSController.delete(vGradedEventAMS.vidGradedEventAMS.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.GradedEventAMSController.create(idCourses)">Create new GradedEventAMS</a>
+    </div>
+  </div>
+  }

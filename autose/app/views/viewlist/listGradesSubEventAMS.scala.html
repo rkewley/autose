@@ -1,0 +1,63 @@
+
+@(listGradesSubEventAMS: List[MdlGradesSubEventAMS], idSubEventAMS: Long, uploadErrors: String)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+    	  @if(!uploadErrors.isEmpty)	{
+    	  	<h3>File upload errors:</h3>
+    	  	@uploadErrors
+    	  }
+		  <h3>GradesSubEventAMS Listing</h3>
+		  <table>
+			<tr>
+				<th>idGradesSubEventAMS</th>
+				<th>Student</th>
+				<th>SubEventAMS</th>
+				<th>Points</th>
+				<th>StudentID</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listGradesSubEventAMS.map { vGradesSubEventAMS =>
+    			
+    		<tr>
+				<td>@vGradesSubEventAMS.vidGradesSubEventAMS</td>
+
+    		@defining(AppDB.dal.Students.select(vGradesSubEventAMS.vStudent).get){pkModel =>
+      		  <td><a href="@routes.StudentsController.show(vGradesSubEventAMS.vStudent)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    		@defining(AppDB.dal.SubEventAMS.select(vGradesSubEventAMS.vSubEventAMS).get){pkModel =>
+      		  <td><a href="@routes.SubEventAMSController.show(vGradesSubEventAMS.vSubEventAMS)">@pkModel.selectIdentifier._2</a></td>
+    		}
+				<td>@vGradesSubEventAMS.vPoints</td>
+				<td>@vGradesSubEventAMS.vStudentID</td>
+
+    			<td><a href="@routes.GradesSubEventAMSController.show(vGradesSubEventAMS.vidGradesSubEventAMS.get)">Show</a></td>
+    			<td><a href="@routes.GradesSubEventAMSController.edit(vGradesSubEventAMS.vidGradesSubEventAMS.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.GradesSubEventAMSController.delete(vGradesSubEventAMS.vidGradesSubEventAMS.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.GradesSubEventAMSController.create(idSubEventAMS)">Create new GradesSubEventAMS</a>
+    </div>
+  </div>
+  }

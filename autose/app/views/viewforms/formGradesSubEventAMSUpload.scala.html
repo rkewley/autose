@@ -1,0 +1,28 @@
+@(f: Form[MdlGradesSubEventAMS])
+
+@main("Systems Net", "Systems Body of Knowledge") {
+	
+	@helper.form(action = routes.GradesSubEventAMSController.saveGradesSubEventAMSUpload, 'enctype -> "multipart/form-data") {
+		
+		Select the AMS quary file that contains the student information.  It should be a comma-separated value file with the following columns in order
+		<ol>
+		  <li>USMA ID</li>
+		  <li>Graded Event Number</li>
+		  <li>Sub Event Number</li>
+		  <li>Sub Event Description</li>
+		  <li>Course Number</li>
+		  <li>Academic Year</li>
+		  <li>Academic Term (1 or 2)</li>		  
+		  <li>Points Earned</li>
+		</ol>
+	    
+	    <input type="file" name="gradesSubEventAMSFile">
+	    
+	    <p>
+	        <input type="submit">
+	    </p>
+	    
+	}	
+	
+	
+}

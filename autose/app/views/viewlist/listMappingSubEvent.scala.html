@@ -1,0 +1,55 @@
+
+@(listMappingSubEvent: List[MdlMappingSubEvent], course: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>MappingSubEvent Listing</h3>
+		  <table>
+			<tr>
+				<th>idMappingSubEvent</th>
+				<th>SubEvent</th>
+				<th>SubEventAMS</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listMappingSubEvent.map { vMappingSubEvent =>
+    			
+    		<tr>
+				<td>@vMappingSubEvent.vidMappingSubEvent</td>
+
+    		@defining(AppDB.dal.SubGradedEvent.select(vMappingSubEvent.vSubEvent).get){pkModel =>
+      		  <td><a href="@routes.SubGradedEventController.show(vMappingSubEvent.vSubEvent)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    		@defining(AppDB.dal.SubEventAMS.select(vMappingSubEvent.vSubEventAMS).get){pkModel =>
+      		  <td><a href="@routes.SubEventAMSController.show(vMappingSubEvent.vSubEventAMS)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    			<td><a href="@routes.MappingSubEventController.show(vMappingSubEvent.vidMappingSubEvent.get)">Show</a></td>
+    			<td><a href="@routes.MappingSubEventController.edit(vMappingSubEvent.vidMappingSubEvent.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.MappingSubEventController.delete(vMappingSubEvent.vidMappingSubEvent.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.MappingSubEventController.createNewSubEventMapping(course)">Create new MappingSubEvent</a>
+    </div>
+  </div>
+  }

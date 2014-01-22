@@ -1,0 +1,52 @@
+
+@(f: Form[MdlKSASubEventAMS], newEntry: Int)
+
+@import helper._
+@import slick.AppDB
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fSubEventAMS").value.get.toLong) { vSubEventAMS =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.KSASubEventAMSController.save(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidKSASubEventAMS")) { fidKSASubEventAMS =>
+                <input type="hidden" name="@fidKSASubEventAMS.name" id="@fidKSASubEventAMS.id" value="@fidKSASubEventAMS.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidKSASubEventAMS")) { fidKSASubEventAMS =>
+                <input type="hidden" name="@fidKSASubEventAMS.name" id="@fidKSASubEventAMS.id" value="@fidKSASubEventAMS.value">
+			}
+    
+     	}
+
+            @{val selectvTopicObjectives = AppDB.dal.KSA.all.map(vTopicObjectives => vTopicObjectives.selectIdentifier).toSeq
+            select(field = f("fKSA"), options = selectvTopicObjectives, args = '_label-> "KSA")}
+
+            @defining(f("fSubEventAMS")) { fSubEventAMS =>
+                <input type="hidden" name="@fSubEventAMS.name" id="@fSubEventAMS.id" value="@fSubEventAMS.value">
+			}
+    
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.KSASubEventAMSController.list(vSubEventAMS)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

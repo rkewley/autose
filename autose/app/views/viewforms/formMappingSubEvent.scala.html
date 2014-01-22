@@ -1,0 +1,49 @@
+
+@(f: Form[MdlMappingSubEvent], newEntry: Int, course: Long)
+
+@import helper._
+@import slick.AppDB
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.MappingSubEventController.save(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidMappingSubEvent")) { fidMappingSubEvent =>
+                <input type="hidden" name="@fidMappingSubEvent.name" id="@fidMappingSubEvent.id" value="@fidMappingSubEvent.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidMappingSubEvent")) { fidMappingSubEvent =>
+                <input type="hidden" name="@fidMappingSubEvent.name" id="@fidMappingSubEvent.id" value="@fidMappingSubEvent.value">
+			}
+    
+     	}
+
+            @{val selectvSubGradedEvent = AppDB.dal.SubGradedEvent.selectByCourse(course).map(vSubGradedEvent => vSubGradedEvent.selectIdentifier).toSeq
+            select(field = f("fSubEvent"), options = selectvSubGradedEvent, args = '_label-> "SubEvent")}
+
+            @{val selectvSubEventAMS = AppDB.dal.SubEventAMS.selectByCourse(course).map(vSubEventAMS => vSubEventAMS.selectIdentifier).toSeq
+            select(field = f("fSubEventAMS"), options = selectvSubEventAMS, args = '_label-> "SubEventAMS")}
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.MappingSubEventController.list(course)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }

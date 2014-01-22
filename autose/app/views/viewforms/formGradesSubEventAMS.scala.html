@@ -1,0 +1,57 @@
+
+@(f: Form[MdlGradesSubEventAMS], newEntry: Int)
+
+@import helper._
+@import slick.AppDB
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fSubEventAMS").value.get.toLong) { vSubEventAMS =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.GradesSubEventAMSController.save(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidGradesSubEventAMS")) { fidGradesSubEventAMS =>
+                <input type="hidden" name="@fidGradesSubEventAMS.name" id="@fidGradesSubEventAMS.id" value="@fidGradesSubEventAMS.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidGradesSubEventAMS")) { fidGradesSubEventAMS =>
+                <input type="hidden" name="@fidGradesSubEventAMS.name" id="@fidGradesSubEventAMS.id" value="@fidGradesSubEventAMS.value">
+			}
+    
+     	}
+
+            @{val selectvStudents = AppDB.dal.Students.all.map(vStudents => vStudents.selectIdentifier).toSeq
+            select(field = f("fStudent"), options = selectvStudents, args = '_label-> "Student")}
+
+            @defining(f("fSubEventAMS")) { fSubEventAMS =>
+                <input type="hidden" name="@fSubEventAMS.name" id="@fSubEventAMS.id" value="@fSubEventAMS.value">
+			}
+    
+            @inputText(f("fPoints"), '_label -> "Points")
+
+            @textarea(field = f("fStudentID"), args = 'rows -> 2, 'cols -> 100, '_label-> "StudentID")
+        	@*@inputText(f("fStudentID"), '_label -> "StudentID")*@
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.GradesSubEventAMSController.list(vSubEventAMS)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

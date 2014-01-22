@@ -5,6 +5,7 @@ import play.api._
 import play.api.mvc._
 import play.api.data._
 import models._
+import models.NormalUser;
 import persistence._
 import play.Logger
 import play.api.data._
@@ -23,7 +24,7 @@ object CourseReferencesController extends Base {
       
 
   def listCourseReferences(courseId: Long) = Action {
-    Ok(viewlist.html.listCourseReferences(SqlCourseReferences.selectWhere("Course = " + courseId).sortWith(MdlCourseReferences.compare), courseId))
+    Ok(viewlist.html.listCourseReferences(SqlCourseReferences.selectWhere("Course = " + courseId).sortWith(CourseReferencesCompare.compare), courseId))
   }
 
    def editCourseReferences(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>

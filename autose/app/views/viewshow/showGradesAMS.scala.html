@@ -1,0 +1,44 @@
+
+@(vGradesAMS: MdlGradesAMS)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>GradesAMS Information</h3>
+		  <dl>
+
+		  	<dt>idGradesAMS</dt>
+		  	<dd>@Html(vGradesAMS.vidGradesAMS.toString)</dd>
+
+    		@defining(AppDB.dal.Students.select(vGradesAMS.vStudent).get){pkModel =>
+      		  <dt>Student</dt>
+      		  <dd><a href="@routes.StudentsController.show(vGradesAMS.vStudent)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+    		@defining(AppDB.dal.GradedEventAMS.select(vGradesAMS.vGradedEventAMS).get){pkModel =>
+      		  <dt>GradedEventAMS</dt>
+      		  <dd><a href="@routes.GradedEventAMSController.show(vGradesAMS.vGradedEventAMS)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+		  	<dt>Points</dt>
+		  	<dd>@Html(vGradesAMS.vPoints.toString)</dd>
+
+		  	<dt>StudentId</dt>
+		  	<dd>@Html(vGradesAMS.vStudentId.toString)</dd>
+	       </dl>
+     <div>
+       <a href="@routes.GradesAMSController.list(vGradesAMS.vGradedEventAMS)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

@@ -2,11 +2,16 @@
 package persistence
 
 import models.MdlCourseReferences
+import models.MdlReference;
 import anorm._
 import anorm.SqlParser._
 import play.api.db._
 import play.api.Play.current
 import play.Logger
+
+object CourseReferencesCompare {
+   def compare(a: MdlCourseReferences, b: MdlCourseReferences) = MdlReference.compare(SqlReference.select(a.vReference), SqlReference.select(b.vReference))
+ }
 
 object SqlCourseReferences {
 

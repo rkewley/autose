@@ -1,0 +1,58 @@
+
+@(listSubEventAMS: List[MdlSubEventAMS], idGradedEventAMS: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4"> 
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>SubEventAMS Listing</h3>
+		  <table>
+			<tr>
+				<th>GradedEvent</th>
+				<th>Sub Event Name</th>
+				<th>Description</th>
+				<th>Points</th>
+				<th>Average</th>
+				<th>Percentage</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listSubEventAMS.map { vSubEventAMS =>
+    			
+    		<tr>
+
+    		@defining(AppDB.dal.GradedEventAMS.select(vSubEventAMS.vGradedEvent).get){pkModel =>
+      		  <td><a href="@routes.GradedEventAMSController.show(vSubEventAMS.vGradedEvent)">@pkModel.selectIdentifier._2</a></td>
+    		}
+				<td>@vSubEventAMS.vName</td>
+				<td>@vSubEventAMS.vDescription</td>
+				<td>@vSubEventAMS.vPoints</td>
+				<td>@Utils.formatDouble2Places(AppDB.dal.SubEventAMS.getAverage(vSubEventAMS.vidSubEventAMS.get))</td>
+				<td>@Utils.formatDouble2Places(AppDB.dal.SubEventAMS.getPercentage(vSubEventAMS.vidSubEventAMS.get))</td>
+
+    			<td><a href="@routes.SubEventAMSController.show(vSubEventAMS.vidSubEventAMS.get)">Show</a></td>
+    			<td><a href="@routes.SubEventAMSController.edit(vSubEventAMS.vidSubEventAMS.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.SubEventAMSController.delete(vSubEventAMS.vidSubEventAMS.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.SubEventAMSController.create(idGradedEventAMS)">Create new SubEventAMS</a>
+    </div>
+  </div>
+  }

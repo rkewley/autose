@@ -1,0 +1,53 @@
+
+@(listGradedEventAMSLinks: List[MdlGradedEventAMSLinks], idGradedEventAMS: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>GradedEventAMSLinks Listing</h3>
+		  <table>
+			<tr>
+				<th>Link</th>
+				<th>IsFileLink</th>
+				<th>vGradedEventAMS</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listGradedEventAMSLinks.map { vGradedEventAMSLinks =>
+    			
+    		<tr>
+				<td><a href="@vGradedEventAMSLinks.vLink">@@vGradedEventAMSLinks.vDescription</a></td>
+				<td>@vGradedEventAMSLinks.vIsFileLink</td>
+
+    		@defining(AppDB.dal.GradedEventAMS.select(vGradedEventAMSLinks.vvGradedEventAMS).get){pkModel =>
+      		  <td><a href="@routes.GradedEventAMSController.show(vGradedEventAMSLinks.vvGradedEventAMS)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    			<td><a href="@routes.GradedEventAMSLinksController.show(vGradedEventAMSLinks.vidGradedEventAMSLinks.get)">Show</a></td>
+    			<td><a href="@routes.GradedEventAMSLinksController.edit(vGradedEventAMSLinks.vidGradedEventAMSLinks.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.GradedEventAMSLinksController.delete(vGradedEventAMSLinks.vidGradedEventAMSLinks.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.GradedEventAMSLinksController.create(idGradedEventAMS)">Create new graded event lin</a>
+      <p><a href="@routes.GradedEventAMSLinksController.uploadGradedEventFile(idGradedEventAMS)">Upload new graded event file</a></p>
+    </div>
+  </div>
+  }

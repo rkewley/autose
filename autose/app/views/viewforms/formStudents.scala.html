@@ -1,0 +1,60 @@
+
+@(f: Form[MdlStudents], newEntry: Int)
+
+@import helper._
+@import slick.AppDB
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.StudentsController.save(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidStudents")) { fidStudents =>
+                <input type="hidden" name="@fidStudents.name" id="@fidStudents.id" value="@fidStudents.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidStudents")) { fidStudents =>
+                <input type="hidden" name="@fidStudents.name" id="@fidStudents.id" value="@fidStudents.value">
+			}
+    
+     	}
+
+            @textarea(field = f("fStudentId"), args = 'rows -> 2, 'cols -> 100, '_label-> "StudentId")
+        	@*@inputText(f("fStudentId"), '_label -> "StudentId")*@
+
+            @textarea(field = f("fLastname"), args = 'rows -> 2, 'cols -> 100, '_label-> "Lastname")
+        	@*@inputText(f("fLastname"), '_label -> "Lastname")*@
+
+            @textarea(field = f("fFirstname"), args = 'rows -> 2, 'cols -> 100, '_label-> "Firstname")
+        	@*@inputText(f("fFirstname"), '_label -> "Firstname")*@
+
+            @textarea(field = f("fMajorAMS"), args = 'rows -> 2, 'cols -> 100, '_label-> "MajorAMS")
+        	@*@inputText(f("fMajorAMS"), '_label -> "MajorAMS")*@
+
+            @inputText(f("fGradYear"), '_label -> "GradYear")
+
+            @{val selectvPrograms = AppDB.dal.Programs.all.map(vPrograms => vPrograms.selectIdentifier).toSeq
+            select(field = f("fProgram"), options = selectvPrograms, args = '_label-> "Program")}
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.StudentsController.list(0)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }

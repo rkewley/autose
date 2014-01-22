@@ -3,9 +3,6 @@ package models
 
 import persistence.SqlReference
  
-object MdlCourseReferences {
-   def compare(a: MdlCourseReferences, b: MdlCourseReferences) = MdlReference.compare(SqlReference.select(a.vReference), SqlReference.select(b.vReference))
- }
     
  case class MdlCourseReferences (
  	vidCourseReferences : Long,

@@ -340,3 +340,94 @@ GET 	/createElectiveGroupCourse/:idElectiveGroup					controllers.ElectiveGroupCo
 POST	/deleteElectiveGroupCourse/:id				controllers.ElectiveGroupCourseController.delete(id: Long)
 POST 	/saveElectiveGroupCourse/:newEntry			controllers.ElectiveGroupCourseController.save(newEntry: Int)
 
+# GradedEventAMS Routes
+GET     /listGradedEventAMS/:idCourses						controllers.GradedEventAMSController.list(idCourses: Long)
+GET     /listAllGradedEventAMS						controllers.GradedEventAMSController.listAll
+GET		/showGradedEventAMS/:id					controllers.GradedEventAMSController.show(id: Long)
+GET 	/editGradedEventAMS/:id					controllers.GradedEventAMSController.edit(id: Long)
+GET 	/createGradedEventAMS/:idCourses					controllers.GradedEventAMSController.create(idCourses: Long)
+POST	/deleteGradedEventAMS/:id				controllers.GradedEventAMSController.delete(id: Long)
+POST 	/saveGradedEventAMS/:newEntry			controllers.GradedEventAMSController.save(newEntry: Int)
+GET		/uploadGradedEventAMS					controllers.GradedEventAMSController.uploadGradedEventsAMS
+POST	/saveGradedEventAMSUpload				controllers.GradedEventAMSController.saveGradedEventAMSUpload
+
+# GradesAMS Routes
+GET     /listGradesAMS/:idGradedEventAMS						controllers.GradesAMSController.list(idGradedEventAMS: Long)
+GET     /listAllGradesAMS						controllers.GradesAMSController.listAll
+GET		/showGradesAMS/:id					controllers.GradesAMSController.show(id: Long)
+GET 	/editGradesAMS/:id					controllers.GradesAMSController.edit(id: Long)
+GET 	/createGradesAMS/:idGradedEventAMS					controllers.GradesAMSController.create(idGradedEventAMS: Long)
+POST	/deleteGradesAMS/:id				controllers.GradesAMSController.delete(id: Long)
+GET 	/uploadGradesAMS					controllers.GradesAMSController.uploadGradesAMS
+POST 	/saveGradesAMS/:newEntry			controllers.GradesAMSController.save(newEntry: Int)
+POST	/sameGradesAMSUpload				controllers.GradesAMSController.saveGradesAMSUpload
+
+# GradesSubEventAMS Routes
+GET     /listGradesSubEventAMS/:idSubEventAMS						controllers.GradesSubEventAMSController.list(idSubEventAMS: Long)
+GET     /listAllGradesSubEventAMS/:errors						controllers.GradesSubEventAMSController.listAll(errors: String)
+GET		/showGradesSubEventAMS/:id					controllers.GradesSubEventAMSController.show(id: Long)
+GET 	/editGradesSubEventAMS/:id					controllers.GradesSubEventAMSController.edit(id: Long)
+GET 	/createGradesSubEventAMS/:idSubEventAMS					controllers.GradesSubEventAMSController.create(idSubEventAMS: Long)
+POST	/deleteGradesSubEventAMS/:id				controllers.GradesSubEventAMSController.delete(id: Long)
+GET 	/uploadGradesSubEventAMS					controllers.GradesSubEventAMSController.uploadGradesSubEventAMS
+POST 	/saveGradesSubEventAMS/:newEntry			controllers.GradesSubEventAMSController.save(newEntry: Int)
+POST	/saveGradesSubEventAMSUpload				controllers.GradesSubEventAMSController.saveGradesSubEventAMSUpload
+
+# Students Routes
+GET     /listStudents/:id						controllers.StudentsController.list(id: Long)
+GET		/showStudents/:id					controllers.StudentsController.show(id: Long)
+GET 	/editStudents/:id					controllers.StudentsController.edit(id: Long)
+GET 	/createStudents/:id					controllers.StudentsController.create(id: Long)
+POST	/deleteStudents/:id				controllers.StudentsController.delete(id: Long)
+POST 	/saveStudents/:newEntry			controllers.StudentsController.save(newEntry: Int)
+GET		/uploadStudents					controllers.StudentsController.uploadStudents
+POST	/saveStudentUpload				controllers.StudentsController.saveStudentUpload
+GET		/selectUploadType				controllers.StudentsController.selectUploadType
+
+# SubEventAMS Routes
+GET     /listSubEventAMS/:idGradedEventAMS						controllers.SubEventAMSController.list(idGradedEventAMS: Long)
+GET     /listAllSubEventAMS					 	controllers.SubEventAMSController.listAll
+GET		/showSubEventAMS/:id					controllers.SubEventAMSController.show(id: Long)
+GET 	/editSubEventAMS/:id					controllers.SubEventAMSController.edit(id: Long)
+GET 	/createSubEventAMS/:idGradedEventAMS					controllers.SubEventAMSController.create(idGradedEventAMS: Long)
+POST	/deleteSubEventAMS/:id				controllers.SubEventAMSController.delete(id: Long)
+POST 	/saveSubEventAMS/:newEntry			controllers.SubEventAMSController.save(newEntry: Int)
+GET		/uploadSubEventsAMS					controllers.SubEventAMSController.uploadSubEventsAMS
+POST	/saveSubEventAMSUpload				controllers.SubEventAMSController.saveSubEventAMSUpload
+
+# MappingGradedEvent Routes
+GET     /listMappingGradedEvent/:id						controllers.MappingGradedEventController.list(id: Long)
+GET		/showMappingGradedEvent/:id					controllers.MappingGradedEventController.show(id: Long)
+GET 	/editMappingGradedEvent/:id					controllers.MappingGradedEventController.edit(id: Long)
+GET 	/createMappingGradedEvent/:id					controllers.MappingGradedEventController.create(id: Long)
+GET 	/createNewMappingGradedEvent/:id					controllers.MappingGradedEventController.createNewMapping(id: Long)
+POST	/deleteMappingGradedEvent/:id				controllers.MappingGradedEventController.delete(id: Long)
+POST 	/saveMappingGradedEvent/:newEntry			controllers.MappingGradedEventController.save(newEntry: Int)
+
+# MappingSubEvent Routes
+GET     /listMappingSubEvent/:id						controllers.MappingSubEventController.list(id: Long)
+GET		/showMappingSubEvent/:id					controllers.MappingSubEventController.show(id: Long)
+GET 	/editMappingSubEvent/:id					controllers.MappingSubEventController.edit(id: Long)
+GET 	/createMappingSubEvent/:id					controllers.MappingSubEventController.create(id: Long)
+GET 	/createNewMappingSubEvent/:id					controllers.MappingSubEventController.createNewSubEventMapping(id: Long)
+POST	/deleteMappingSubEvent/:id				controllers.MappingSubEventController.delete(id: Long)
+POST 	/saveMappingSubEvent/:newEntry			controllers.MappingSubEventController.save(newEntry: Int)
+
+# KSASubEventAMS Routes
+GET     /listKSASubEventAMS/:idSubEventAMS						controllers.KSASubEventAMSController.list(idSubEventAMS: Long)
+GET		/showKSASubEventAMS/:id					controllers.KSASubEventAMSController.show(id: Long)
+GET 	/editKSASubEventAMS/:id					controllers.KSASubEventAMSController.edit(id: Long)
+GET 	/createKSASubEventAMS/:idSubEventAMS					controllers.KSASubEventAMSController.create(idSubEventAMS: Long)
+POST	/deleteKSASubEventAMS/:id				controllers.KSASubEventAMSController.delete(id: Long)
+POST 	/saveKSASubEventAMS/:newEntry			controllers.KSASubEventAMSController.save(newEntry: Int)
+
+
+# GradedEventAMSLinks Routes
+GET     /listGradedEventAMSLinks/:idGradedEventAMS						controllers.GradedEventAMSLinksController.list(idGradedEventAMS: Long)
+GET		/showGradedEventAMSLinks/:id					controllers.GradedEventAMSLinksController.show(id: Long)
+GET 	/editGradedEventAMSLinks/:id					controllers.GradedEventAMSLinksController.edit(id: Long)
+GET 	/createGradedEventAMSLinks/:idGradedEventAMS					controllers.GradedEventAMSLinksController.create(idGradedEventAMS: Long)
+POST	/deleteGradedEventAMSLinks/:id				controllers.GradedEventAMSLinksController.delete(id: Long)
+POST 	/saveGradedEventAMSLinks/:newEntry			controllers.GradedEventAMSLinksController.save(newEntry: Int)
+GET 	/uploadGradedEventAMSFile/:idGradedEventAMS					controllers.GradedEventAMSLinksController.uploadGradedEventFile(idGradedEventAMS: Long)
+POST 	/postGradedEventAMSFile/:newEntry				controllers.GradedEventAMSLinksController.postFile(newEntry: Int)

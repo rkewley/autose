@@ -1,0 +1,55 @@
+
+@(listKSASubEventAMS: List[MdlKSASubEventAMS], idSubEventAMS: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>KSASubEventAMS Listing</h3>
+		  <table>
+			<tr>
+				<th>idKSASubEventAMS</th>
+				<th>KSA</th>
+				<th>SubEventAMS</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listKSASubEventAMS.map { vKSASubEventAMS =>
+    			
+    		<tr>
+				<td>@vKSASubEventAMS.vidKSASubEventAMS</td>
+
+    		@defining(AppDB.dal.KSA.select(vKSASubEventAMS.vKSA).get){pkModel =>
+      		  <td><a href="@routes.TopicObjectivesController.showTopicObjectives(vKSASubEventAMS.vKSA)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    		@defining(AppDB.dal.SubEventAMS.select(vKSASubEventAMS.vSubEventAMS).get){pkModel =>
+      		  <td><a href="@routes.SubEventAMSController.show(vKSASubEventAMS.vSubEventAMS)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    			<td><a href="@routes.KSASubEventAMSController.show(vKSASubEventAMS.vidKSASubEventAMS.get)">Show</a></td>
+    			<td><a href="@routes.KSASubEventAMSController.edit(vKSASubEventAMS.vidKSASubEventAMS.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.KSASubEventAMSController.delete(vKSASubEventAMS.vidKSASubEventAMS.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.KSASubEventAMSController.create(idSubEventAMS)">Create new KSASubEventAMS</a>
+    </div>
+  </div>
+  }

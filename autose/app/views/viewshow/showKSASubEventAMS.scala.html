@@ -1,0 +1,38 @@
+
+@(vKSASubEventAMS: MdlKSASubEventAMS)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>KSASubEventAMS Information</h3>
+		  <dl>
+
+		  	<dt>idKSASubEventAMS</dt>
+		  	<dd>@Html(vKSASubEventAMS.vidKSASubEventAMS.toString)</dd>
+
+    		@defining(AppDB.dal.KSA.select(vKSASubEventAMS.vKSA).get){pkModel =>
+      		  <dt>KSA</dt>
+      		  <dd><a href="@routes.TopicObjectivesController.showTopicObjectives(vKSASubEventAMS.vKSA)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+    		@defining(AppDB.dal.SubEventAMS.select(vKSASubEventAMS.vSubEventAMS).get){pkModel =>
+      		  <dt>SubEventAMS</dt>
+      		  <dd><a href="@routes.SubEventAMSController.show(vKSASubEventAMS.vSubEventAMS)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+	       </dl>
+     <div>
+       <a href="@routes.KSASubEventAMSController.list(vKSASubEventAMS.vSubEventAMS)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }
