@@ -1,16 +1,14 @@
 
-@(listGradedEventAMS: List[MdlGradedEventAMS], idCourses: Long)
+@(listGradedEventAMS: List[MdlGradedEventAMS])
     
     @import slick.AppDB
     
     
-    @coursePage(slick.AppDB.dal.Courses.select(idCourses).get) {
+    @uploadPage {
 
     
     <div class="column span-18 last">
-		  <h3>Graded Event Listing</h3>
-		  <a href="#" title="@AppDB.dal.Definitions.getDefinition("Graded Event AMS Guidance")">Graded Events Guidance</a> 		  
-		  
+		  <h3>Graded Event Listing</h3>		  
 		  <table>
 			<tr>
 				<th>Graded Event Page</th>

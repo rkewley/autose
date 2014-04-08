@@ -4,15 +4,12 @@
     @import slick.AppDB
     
     
-    @main("Systems Net", "Systems Body of Knowledge") {
-	<div>
-	  <div class="column span-4">
-		 
-	  </div>
+    @gradedEventAMSPage(idGradedEventAMS) {
+
 
     
-    <div class="column span-20 last">
-		  <h3>GradedEventAMSLinks Listing</h3>
+    <div class="column span-18 last">
+		  <h3>Graded Event Links Listing</h3>
 		  <table>
 			<tr>
 				<th>Link</th>
@@ -26,7 +23,7 @@
             @listGradedEventAMSLinks.map { vGradedEventAMSLinks =>
     			
     		<tr>
-				<td><a href="@vGradedEventAMSLinks.vLink">@@vGradedEventAMSLinks.vDescription</a></td>
+				<td><a href="@vGradedEventAMSLinks.vLink">@vGradedEventAMSLinks.vDescription</a></td>
 				<td>@vGradedEventAMSLinks.vIsFileLink</td>
 
     		@defining(AppDB.dal.GradedEventAMS.select(vGradedEventAMSLinks.vvGradedEventAMS).get){pkModel =>
@@ -46,7 +43,7 @@
       		}
 
       	</table>
-      <a href="@routes.GradedEventAMSLinksController.create(idGradedEventAMS)">Create new graded event lin</a>
+      <a href="@routes.GradedEventAMSLinksController.create(idGradedEventAMS)">Create new graded event link</a>
       <p><a href="@routes.GradedEventAMSLinksController.uploadGradedEventFile(idGradedEventAMS)">Upload new graded event file</a></p>
     </div>
   </div>

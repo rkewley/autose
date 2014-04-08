@@ -32,7 +32,7 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
         case item: Some[D] =>
           Ok(showFunction(item.get))
         case None =>
-          badRequest("Programs with key " + id + " not found in database", request)
+          badRequest("Item with key " + id + " not found in database", request)
       }
 	}
 	

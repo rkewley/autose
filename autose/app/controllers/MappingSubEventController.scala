@@ -58,5 +58,7 @@ object MappingSubEventController extends ControllerTrait[Long, MdlMappingSubEven
       }
   	}
 
+	override def getAll(item: MdlMappingSubEvent) = getAll(getCourseForItem(item))
+	
 	def newItem(fkId: Long) = new MdlMappingSubEvent
   }

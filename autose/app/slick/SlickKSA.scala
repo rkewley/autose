@@ -73,14 +73,34 @@ trait KSAComponent  {
 	    }	    
 	  }
 	  
-	  class KSALessonData(val lessonIndex: Long, val lessonNumber: Long)
-	  class KSASubEventData(val gradedEventIndex: Long, val description: String)
-	  class KSAGradedEventData(val eventIndex: Long, val eventName: String, val subEvents: List[KSASubEventData])
-	  class KSATeachData(val courseIndex: Long, val courseNumber: String, val lessons: List[KSALessonData], val gradedEvents: List[KSAGradedEventData])
+	  case class KSALessonData(val lessonIndex: Long, val lessonNumber: Long)
+	  case class KSASubEventData(val gradedEventIndex: Long, val description: String)
+	  case class KSAGradedEventData(val eventIndex: Long, val eventName: String, val subEvents: List[KSASubEventData])
+	  case class KSATeachData(val courseIndex: Long, val courseNumber: String, val lessons: List[KSALessonData], val gradedEvents: List[KSAGradedEventData])
+	  case class KSAGradedEventResultsAMS(val eventName: String, val eventId: Long, val subEventDescription: String, val subEventId: Long, val score: Double)
+	  case class KSATeachDataAMS(val courseIndex: Long, val courseNumber: String, val lessons: List[KSALessonData], val gradedEventResults: List[KSAGradedEventResultsAMS])
 
-	  def buildKSATeachData(idKSA: Long) = {
-	    val subEventsResults = AppDB.dal.KSASubGradedEvent.joinSubGradedEventByKSA(idKSA)
+	  def buildKSATeachDataAMSByProgramAndKSA(idProgram: Long, idKSA: Long): List[KSA.KSATeachDataAMS] = {
+	    val subEventResults = AppDB.dal.KSASubEventAMS.joinSubEventAMSByKSA(idKSA)
+	    val lessonResults = AppDB.dal.LessonKSA.joinLessonsByKSA(idKSA)
+	    val courseList: List[Long] = (subEventResults.map(_._4) ::: lessonResults.map(_._3)).distinct
+	    val teachData = courseList.map { courseId =>
+	      val gradedEvents = subEventResults.filter(result => result._4 == courseId).map { subEventResult =>
+	        new KSAGradedEventResultsAMS(subEventResult._5, subEventResult._6, subEventResult._2, subEventResult._1, AppDB.dal.SubEventAMS.getPercentageForEventAndProgram(subEventResult._1, idProgram))
+	      }
+	      val lessons = lessonResults.filter(result => result._3 == courseId).map { lessonResult =>
+	        new KSALessonData(lessonResult._1, lessonResult._2)
+	      }
+	      val courseNumber = AppDB.dal.Courses.select(courseId).get.vCourseIDNumber
+	      new KSATeachDataAMS(courseId, courseNumber, lessons, gradedEvents)
+	    }
+	    teachData
+	  }
+	
+
+	  def buildKSATeachData(idKSA: Long): List[KSA.KSATeachData] = {
 	    val gradedEventResults = AppDB.dal.KSAGradedEvent.joinGradedEventByKSA(idKSA)
+	    val subEventsResults = AppDB.dal.KSASubGradedEvent.joinSubGradedEventByKSA(idKSA)
 	    val lessonResults = AppDB.dal.LessonKSA.joinLessonsByKSA(idKSA)
 	    val courseList: List[Long] = (gradedEventResults.map(_._3) ::: lessonResults.map(_._3)).distinct
 	    val teachData = courseList.map { courseId =>

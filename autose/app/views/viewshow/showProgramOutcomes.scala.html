@@ -3,6 +3,7 @@
 
 
   @import slick.AppDB
+  @import persistence.SqlTopics
 		  
   @defining(AppDB.dal.Programs.select(vProgramOutcomes.vProgram).get) { vProgram =>
     @programPage(AppDB.dal.Programs.select(vProgramOutcomes.vProgram).get) {
@@ -33,7 +34,9 @@
 		  	      @AppDB.dal.KSAPerfIndicator.joinKSAByPerfIndicator(perfInd.vidPerformanceIndicator.get).map { ksa =>
 		  	           	
 		  	        <tr>
-		  	          <td>@ksa._3:  @ksa._2</td>
+		  	          @defining(SqlTopics.select((AppDB.dal.KSA.select(ksa._1).get).vTopic).vTopic) { topicName =>
+		  	            <td><b>@topicName</b><br>@ksa._3:  @ksa._2</td>
+		  	          }
 		  	          <td>  
 		  	            <table>
 		  	              <tr>
@@ -41,7 +44,7 @@
 		  	                <th>Lessons</th>
 		  	                <th>Graded Events</th>
 		  	              </tr>		  	            
-		  	              @AppDB.dal.KSA.buildKSATeachData(ksa._1).map { teachData =>
+		  	              @AppDB.dal.KSA.buildKSATeachDataAMSByProgramAndKSA(vProgram.vidPrograms.get, ksa._1).map { teachData =>
 
 		  	              <tr>  
 		  	                <td><a href="@routes.CoursesController.homeCourses(teachData.courseIndex)">@teachData.courseNumber</a></td>
@@ -52,18 +55,15 @@
 		  	                  <table>
 		  	                    <tr>
 		  	                      <th>Graded Event</th>
-		  	                      <th>Grade</th>
-		  	                      <th>Sub Events</th>
+		  	                      <th>Sub Event</th>
 		  	                      <th>Grade</th>
 		  	                    </tr>		  	                
-		  	                	@teachData.gradedEvents.map { gradedEvent =>
+		  	                	@teachData.gradedEventResults.map { gradedEvent =>
 
 		  	                      <tr>
-		  	                        <td><a href="@routes.GradedRequirementsController.show(gradedEvent.eventIndex)">@gradedEvent.eventName</a></td>
-		  	                        <td>
-		  	                          @gradedEvent.subEvents.map { subEvent =>
-		  	                          @subEvent.description <br>
-		  	                        }</td>
+		  	                        <td><a href="@routes.GradedEventAMSController.show(gradedEvent.eventId)">@gradedEvent.eventName</a></td>
+		  	                        <td><a href="@routes.SubEventAMSController.show(gradedEvent.subEventId)">@gradedEvent.subEventDescription</a></td>
+		  	                        <td>@Utils.formatDouble2Places(gradedEvent.score)
 		  	                      </tr>
 		  	                    }    
 		  	                  </table>

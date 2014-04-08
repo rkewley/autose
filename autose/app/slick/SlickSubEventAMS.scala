@@ -47,6 +47,13 @@ trait SubEventAMSComponent  {
 	    }
 	  }
 	  
+      def selectByGradedEventAMS(gradedEventAMS: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val q = Query(SubEventAMS)
+	      q.filter(p => p.vGradedEvent === gradedEventAMS).elements.toList
+	    }
+	  }
+	  
 	  def delete(pk: Long) {
 	    AppDB.database.withSession { implicit session: Session =>
 	      selectQuery(pk).delete
@@ -70,17 +77,45 @@ trait SubEventAMSComponent  {
 	  }
 
     def getAverage(id: Long) = {
-      val event = select(id).get
-      val grades = AppDB.dal.GradesSubEventAMS.getGradesForSubEvent(id)
-      val total: Double = grades.foldLeft(0.0) { (total, event) =>
-        total + event.vPoints
-      }
-      total / grades.length
+	  AppDB.database.withSession { implicit session: Session =>
+	      val event = select(id).get
+	      val grades = AppDB.dal.GradesSubEventAMS.getGradesForSubEvent(id)
+	      val total: Double = grades.foldLeft(0.0) { (total, event) =>
+	        total + event.vPoints
+	      }
+	      total / grades.length
+	  }
+    }
+    
+    def getAverageForEventandProgram(eventId: Long, programId: Long) = {
+	  AppDB.database.withSession { implicit session: Session =>
+	      val cadets = AppDB.dal.Students.all
+	      val grades = AppDB.dal.GradesSubEventAMS.getGradesForSubEvent(eventId).filter{grade => 
+	        val cadet = cadets.find{cadet => cadet.vStudentId == grade.vStudentID}
+	        cadet match {
+	          case Some(c) => c.vProgram == programId
+	          case None => false
+	        }
+	      }
+	      val total: Double = grades.foldLeft(0.0) { (total, event) =>
+	        total + event.vPoints
+	      }
+	      total / grades.length
+		  }
+    }
+    
+    def getPercentageForEventAndProgram(eventId: Long, programId: Long) = {
+	  AppDB.database.withSession { implicit session: Session =>
+	      val event = AppDB.dal.SubEventAMS.select(eventId).get
+	      (getAverageForEventandProgram(eventId, programId) / event.vPoints) * 100    
+	  }
     }
 
     def getPercentage(id: Long) = {
-      val event = AppDB.dal.SubEventAMS.select(id).get
-      (getAverage(id) / event.vPoints) * 100
+	  AppDB.database.withSession { implicit session: Session =>
+	      val event = AppDB.dal.SubEventAMS.select(id).get
+	      (getAverage(id) / event.vPoints) * 100
+	  }
     }
     
     def selectByCourse(idCourse: Long) = {
@@ -96,6 +131,15 @@ trait SubEventAMSComponent  {
  
       }
       
+    }
+    
+    def getSelectionString(idSubEvent: Long) = {
+	  AppDB.database.withSession { implicit session: Session =>
+	      val subEvent = select(idSubEvent).get
+	      val gradedEvent = AppDB.dal.GradedEventAMS.select(subEvent.vGradedEvent).get
+	      val course = AppDB.dal.Courses.select(gradedEvent.vCourse).get
+	      (course.selectIdentifier._2 + ", " + gradedEvent.vName + ", " + subEvent.vDescription)
+	  }
     }
 	  
 

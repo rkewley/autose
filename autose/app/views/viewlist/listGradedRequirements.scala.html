@@ -24,8 +24,10 @@
 				<th>Points</th>
 				<th>Lesson Assigned</th>
 				<th>Lesson Completed</th>
+				@*
 				<th>Edit</th>
 				<th>Delete</th>
+				*@
 			</tr>
 
             @listGradedRequirements.map { vGradedRequirements =>
@@ -44,20 +46,21 @@
 				<td>@vGradedRequirements.vPoints</td>
 				<td>@vGradedRequirements.vLessonassigned</td>
 				<td>@vGradedRequirements.vLessoncompleted</td>
-
+				@*
      			<td><a href="@routes.GradedRequirementsController.edit(vGradedRequirements.vGradedEventIndex.get)">Edit</a></td>
     	  		<td>
     	  			<form action="@routes.GradedRequirementsController.delete(vGradedRequirements.vGradedEventIndex.get)" method="POST">
     	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
     	  			</form>
     	  		</td>
+    	  		*@
     		</tr>
     
 
       		}
 
       	</table>
-      <a href="@routes.GradedRequirementsController.create(idCourses)">Create new graded events</a>
+      @*<a href="@routes.GradedRequirementsController.create(idCourses)">Create new graded events</a>*@
     </div>
   </div>
   }

@@ -11,26 +11,33 @@
 		 
 	  </div>
 
+    @defining(AppDB.dal.PerformanceIndicator.select(idPerformanceIndicator).get) { vPerformanceIndicator =>
+    @defining(AppDB.dal.ProgramOutcomes.select(vPerformanceIndicator.vProgramOutcome).get) { vProgramOutcomes =>
+    @defining(AppDB.dal.Programs.select(vProgramOutcomes.vProgram)get) { vProgram =>
     
     <div class="column span-20 last">
 		  <h4>
-		  	<p>Knowledge and skills linked to:</p> 
-		  	<p>@AppDB.dal.PerformanceIndicator.select(idPerformanceIndicator).get.vPerformanceIndicator</p>
+		  	<p>Knowledge and skills linked to:<br>
+		  	@vPerformanceIndicator.vPerformanceIndicator<br>
+		  	Assessed Average: @Utils.formatDouble2Places(AppDB.dal.PerfIndKSASubEventAMS.averageByPI(idPerformanceIndicator))</p>
+		  	
 		  </h4>
 		  <table>
 			<tr>
 				<th>KSA</th>
+				<th>Add Graded Event Assessment</th>
 				<th>Show</th>
 				<th>Delete</th>
+				<th>Avg Score</th>
 			</tr>
-
+			@defining(AppDB.dal.PerfIndKSASubEventAMS.all) { perfIndKSA =>
             @listKSAPerfIndicator.map { vKSAPerfIndicator =>
     			
     		<tr>
 
-    		@defining(SqlTopicObjectives.select(vKSAPerfIndicator.vKSA)){pkModel =>
-      		  <td><a href="@routes.TopicObjectivesController.showTopicObjectives(vKSAPerfIndicator.vKSA)">@pkModel.selectIdentifier._2</a></td>
-    		}
+    		@defining(SqlTopicObjectives.select(vKSAPerfIndicator.vKSA)){ksa =>
+      		  <td><a href="@routes.TopicObjectivesController.showTopicObjectives(vKSAPerfIndicator.vKSA)">@ksa.selectIdentifier._2</a></td>
+    		  <td><a href="@routes.PerfIndKSASubEventAMSController.create(vKSAPerfIndicator.vPerformanceIndicator, ksa.vTopicObjectiveNumber)">Add assessment event</a></td>
 
     			<td><a href="@routes.KSAPerfIndicatorController.show(vKSAPerfIndicator.vidKSAPerfIndicator.get)">Show</a></td>
     	  		<td>
@@ -38,13 +45,43 @@
     	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
     	  			</form>
     	  		</td>
+    	  		<td>@Utils.formatDouble2Places(AppDB.dal.PerfIndKSASubEventAMS.averageByKSBandPerfIndicator(ksa.vTopicObjectiveNumber, idPerformanceIndicator))</td>
     		</tr>
-    
+    		<tr>
+    		  
+    		  <td colspan="4"><table>
+    		    <tr>
+    		      <td><u>Course</u></td>
+    		      <td><u>Graded Event</u></td>
+    		      <td><u>Sub Event</u></td>
+    		      <td><u>Delete</u></td>
+    		      <td><u>Avg Score</u></td>
+    		    </tr>  
+    		    @AppDB.dal.PerfIndKSASubEventAMS.selectByKSBandPI(ksa.vTopicObjectiveNumber, idPerformanceIndicator).map { subEvent =>
+    		    <tr>	
+    		      <td><a href="@routes.CoursesController.show(subEvent.courseId)">@subEvent.courseName</a></td>
+    		      <td><a href="@routes.GradedEventAMSController.show(subEvent.gradedEventId)">@subEvent.gradedEventName</a></td>
+    		      <td>@subEvent.subEventDescription</td>
+    	  		  <td>
+    	  			<form action="@routes.PerfIndKSASubEventAMSController.delete(subEvent.idPerfIndKSASubEventAMS)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		  </td>
+    	  		  <td>@Utils.formatDouble2Places(AppDB.dal.SubEventAMS.getPercentageForEventAndProgram(subEvent.subEventId, vProgram.vidPrograms.get))</td>
+    	  		</tr>  
+    		    }
+    		  </table></td>
+    		</tr>
+    		}
 
+      		}
       		}
 
       	</table>
       <a href="@routes.KSAPerfIndicatorController.create(idPerformanceIndicator)">Link new knowledge and skills to this performance indicator</a>
     </div>
   </div>
+    }
+    }
+    }
   }

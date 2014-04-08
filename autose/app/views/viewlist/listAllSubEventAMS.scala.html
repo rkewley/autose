@@ -1,10 +1,10 @@
 
-@(listSubEventAMS: List[MdlSubEventAMS], idGradedEventAMS: Long)
+@(listSubEventAMS: List[MdlSubEventAMS])
     
     @import slick.AppDB
     
     
-    @gradedEventAMSPage(idGradedEventAMS) {
+    @uploadPage {
 	<div>
 	  <div class="column span-4"> 
 		 
@@ -12,14 +12,13 @@
 
     
     <div class="column span-18 last">
-		  <h3>Sub-Events for @AppDB.dal.GradedEventAMS.select(idGradedEventAMS).get.vDescription</h3>
+		  <h3>Sub-Events Listing</h3>
 		  <table>
 			<tr>
 				<th>GradedEvent</th>
 				<th>Sub Event Name</th>
 				<th>Description</th>
 				<th>Points</th>
-				<th>Link to Knowledge and Skills</th>
 				<th>Average</th>
 				<th>Percentage</th>
 				<th>Show</th>
@@ -37,7 +36,6 @@
 				<td>@vSubEventAMS.vName</td>
 				<td>@vSubEventAMS.vDescription</td>
 				<td>@vSubEventAMS.vPoints</td>
-				<td><a href="@routes.KSASubEventAMSController.list(vSubEventAMS.vidSubEventAMS.get)">Link to Knowledge and Skills</a></td>
 				<td>@Utils.formatDouble2Places(AppDB.dal.SubEventAMS.getAverage(vSubEventAMS.vidSubEventAMS.get))</td>
 				<td>@Utils.formatDouble2Places(AppDB.dal.SubEventAMS.getPercentage(vSubEventAMS.vidSubEventAMS.get))</td>
 

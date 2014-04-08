@@ -28,9 +28,13 @@ object SubEventAMSController extends ControllerTrait[Long, MdlSubEventAMS, Long]
   )
       
   val fileUploadForm = CoursesController.form
+
+	override def list(ffk: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+	  Ok(views.html.viewlist.listSubEventAMS(getAll(ffk), ffk))
+	}
   
     def listAll  = StackAction { implicit request => 
-	  Ok(views.html.viewlist.listSubEventAMS(crud.all, 0))
+	  Ok(views.html.viewlist.listAllSubEventAMS(crud.all))
 	}
 
 	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
@@ -83,15 +87,16 @@ object SubEventAMSController extends ControllerTrait[Long, MdlSubEventAMS, Long]
       val courseData = values(0).trim
       val courseIdNumber = courseData match {
         case "SE300" => "SE300-SE301"
+        case "SE301" => "SE300-SE301"
         case _ => courseData
       }
-      val year: Int = 2014
-      val term: Int = 1
-      val gradedEventNumberAMS = values(2).toInt
-      val subEventNumberAMS = values(1).toInt
-      val name = values(3)
-      val description = values(4)
-      val maxPoints = values(5).toDouble
+      val year: Int = values(1).toInt
+      val term: Int = values(2).toInt
+      val gradedEventNumberAMS = values(4).toInt
+      val subEventNumberAMS = values(3).toInt
+      val name = values(5)
+      val description = values(6)
+      val maxPoints = values(7).toDouble
       val courseId = courses.filter { course =>
         course.vCourseIDNumber == courseIdNumber && course.vAcademicYear == year && course.vAcademicTerm == term 
       }.headOption
@@ -108,11 +113,17 @@ object SubEventAMSController extends ControllerTrait[Long, MdlSubEventAMS, Long]
               val eventIdDatabase = event.vidGradedEventAMS.get
               val mdlSubEvent = MdlSubEventAMS(Option(0), gradedEventNumberAMS, subEventNumberAMS, eventIdDatabase, name, description, maxPoints)
               //println("Sub Event: " + mdlSubEvent)
-              if (AppDB.dal.SubEventAMS.all.find { subEvent =>
+              val subEvent = AppDB.dal.SubEventAMS.all.find { subEvent =>
                 subEvent.vGradedEvent == mdlSubEvent.vGradedEvent && subEvent.vSubEventNumberAMS == mdlSubEvent.vSubEventNumberAMS
-              }.isEmpty) {
+              }
+              if (subEvent.isEmpty) {
                 //println("Inserting subEvent")
                 AppDB.dal.SubEventAMS.insert(mdlSubEvent)
+              } else {
+                val currentSubEvent = subEvent.get
+                val newSubEvent = MdlSubEventAMS(currentSubEvent.primaryKey, mdlSubEvent.vGradedEventNumberAMS, mdlSubEvent.vSubEventNumberAMS, mdlSubEvent.vGradedEvent,
+                									mdlSubEvent.vName, mdlSubEvent.vDescription, mdlSubEvent.vPoints)
+                AppDB.dal.SubEventAMS.update(newSubEvent)
               }
               errorList
             }

@@ -12,12 +12,19 @@
 
     
     <div class="column span-20 last">
-		  <h3>KSASubEventAMS Listing</h3>
+		  <h3>
+		    <a href="#" title="@AppDB.dal.Definitions.getDefinition("Knowledge")">Knowledge</a>,
+		    <a href="#" title="@AppDB.dal.Definitions.getDefinition("Skill")">Skills</a>, and
+			<a href="#" title="@AppDB.dal.Definitions.getDefinition("Behavior")">Behaviors</a> (KSB)			
+            for @AppDB.dal.SubEventAMS.select(idSubEventAMS).get.vDescription
+          </h3>
+          <h4>These linkages will allow program directors to see where key elements of learning, needed to achieve student outcomes,
+          are evaluated during the program.  Some of these graded events will be used as direct assessment of those outcomes.</h4>
+	      <a href="#" title="@AppDB.dal.Definitions.getDefinition("KSB Guidance")">KSB Guidance</a>		
+
 		  <table>
 			<tr>
-				<th>idKSASubEventAMS</th>
 				<th>KSA</th>
-				<th>SubEventAMS</th>
 				<th>Show</th>
 				<th>Edit</th>
 				<th>Delete</th>
@@ -26,15 +33,11 @@
             @listKSASubEventAMS.map { vKSASubEventAMS =>
     			
     		<tr>
-				<td>@vKSASubEventAMS.vidKSASubEventAMS</td>
 
     		@defining(AppDB.dal.KSA.select(vKSASubEventAMS.vKSA).get){pkModel =>
       		  <td><a href="@routes.TopicObjectivesController.showTopicObjectives(vKSASubEventAMS.vKSA)">@pkModel.selectIdentifier._2</a></td>
     		}
 
-    		@defining(AppDB.dal.SubEventAMS.select(vKSASubEventAMS.vSubEventAMS).get){pkModel =>
-      		  <td><a href="@routes.SubEventAMSController.show(vKSASubEventAMS.vSubEventAMS)">@pkModel.selectIdentifier._2</a></td>
-    		}
 
     			<td><a href="@routes.KSASubEventAMSController.show(vKSASubEventAMS.vidKSASubEventAMS.get)">Show</a></td>
     			<td><a href="@routes.KSASubEventAMSController.edit(vKSASubEventAMS.vidKSASubEventAMS.get)">Edit</a></td>
@@ -49,7 +52,7 @@
       		}
 
       	</table>
-      <a href="@routes.KSASubEventAMSController.create(idSubEventAMS)">Create new KSASubEventAMS</a>
+      <a href="@routes.KSASubEventAMSController.create(idSubEventAMS)">Link new knowlege and skills to this sub-event</a>
     </div>
   </div>
   }

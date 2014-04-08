@@ -27,7 +27,19 @@ object StudentsController extends ControllerTrait[Long, MdlStudents, Long] with 
     )(MdlStudents.apply)(MdlStudents.unapply)
   )
       
-
+	override def list(ffk: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+	  Ok(views.html.viewlist.listStudents(getAll(ffk)))
+	}
+  
+    override def show(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+	  crud.select(id) match {
+        case item: Some[MdlStudents] =>
+          Ok(views.html.viewshow.showStudents(item.get))
+        case None =>
+          badRequest("Item with key " + id + " not found in database", request)
+      }
+	}
+	
 	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
 	  views.html.viewlist.listStudents(getAll(ffk))
  
@@ -75,11 +87,13 @@ object StudentsController extends ControllerTrait[Long, MdlStudents, Long] with 
       if (values.length == 5) {
         val student = new MdlStudents(Option(0), values(0), values(1), values(2), values(4), values(3).toInt, 0)
         println("Student: " + student)
+        val programs = AppDB.dal.Programs.all
         if (!allStudents.contains(student.vStudentId)) {
-          val major = student.vMajorAMS match {
+          val major: Long = student.vMajorAMS match {
             case x if x.startsWith("Engineering Management") => 2
             case x if x.startsWith("Systems Engineering") => 3
             case x if x.startsWith("Systems Management") => 5
+            case x if x.startsWith("Systems Design") => 5
             case x if x.startsWith("Operations Research") => 7
             case _ => 8
           }

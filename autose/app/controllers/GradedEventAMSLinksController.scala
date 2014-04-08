@@ -48,9 +48,31 @@ object GradedEventAMSLinksController extends ControllerTrait[Long, MdlGradedEven
 
   def uploadGradedEventFile(gradedEventAMSId: Long) = compositeAction(NormalUser) { user =>
     implicit template => implicit request =>
-      val vGradedEventLinks = new MdlGradedEventAMSLinks(Option(0), "http:/", "", true, 0)
+      val vGradedEventLinks = new MdlGradedEventAMSLinks(Option(0), "http:/", "", true, gradedEventAMSId)
       Ok(views.html.viewforms.formGradedEventAMSFiles(form.fill(vGradedEventLinks), 1))
   }
+  
+    def importLinksFromOnlineGradedEvents = compositeAction(NormalUser){ user => implicit template => implicit request =>
+      // pull all KSA mappings from sub-events
+      val gradedEventMappings = AppDB.dal.MappingGradedEvent.all
+      val gradedRequiementLinks = AppDB.dal.GradedRequirementLinks.all
+      val gradedEventAMSLinks = AppDB.dal.GradedEventAMSLinks.all
+      
+      gradedRequiementLinks.foreach { gradedRequiementLink =>
+        // see if there is a mapping for this graded event in the mappings file
+        gradedEventMappings.find {mapping => mapping.vGradedEvent == gradedRequiementLink.vGradedRequirement} match {
+          case Some(mapping) => {
+            // Make sure we don't insert a duplicate record
+            if (gradedEventAMSLinks.find{g => g.vvGradedEventAMS == mapping.vGradedEventAMS && g.vLink == gradedRequiementLink.vLink}.isEmpty) {
+              AppDB.dal.GradedEventAMSLinks.insert(MdlGradedEventAMSLinks(Some(0), gradedRequiementLink.vLink, gradedRequiementLink.vDescription, gradedRequiementLink.vIsFileLink, mapping.vGradedEventAMS))       
+            }
+          }
+          case None =>
+        }
+      }
+      Redirect(routes.FacultyController.listFaculty)
+    }
+  
 
   def postFile(newEntry: Int): Action[MultipartFormData[TemporaryFile]] = Action(parse.multipartFormData) { implicit request =>
     form.bindFromRequest().fold(
@@ -62,7 +84,7 @@ object GradedEventAMSLinksController extends ControllerTrait[Long, MdlGradedEven
       vGradedEventAMSLinks => {
         request.body.file("gradedEventAMSFile").map { gradedEventAMSFile =>
           if (vGradedEventAMSLinks.validate) {
-            val vGradedEventAMS = AppDB.dal.GradedRequirements.select(vGradedEventAMSLinks.vvGradedEventAMS).get
+            val vGradedEventAMS = AppDB.dal.GradedEventAMS.select(vGradedEventAMSLinks.vvGradedEventAMS).get
             val course = slick.AppDB.dal.Courses.select(vGradedEventAMS.vCourse).get
             val courseIdNumber = course.vCourseIDNumber
             val term = "AT" + (course.vAcademicYear - 2000) + "-" + course.vAcademicTerm

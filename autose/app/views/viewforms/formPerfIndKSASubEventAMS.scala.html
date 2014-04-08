@@ -1,0 +1,70 @@
+
+@(f: Form[MdlPerfIndKSASubEventAMS], newEntry: Int, ksa: Long)
+
+@import helper._
+@import slick.AppDB
+
+
+ @main("Systems Net", "Systems Body of Knowledge") {
+  <script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fPerformanceIndicator").value.get.toLong) { vPerformanceIndicator =>  
+	
+		<script type-"text/javascript">
+		$(document).ready(function(){
+			var checkboxdiv = $('#ksaGradedEventCheckBoxList')
+			getNewCheckboxes('/getKSASubEventJsonByKSA/' + @ksa, checkboxdiv, 'fKSASubEventAMS');
+		});
+		</script> 
+	
+	
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.PerfIndKSASubEventAMSController.saveList) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidPerfIndKSASubEventAMS")) { fidPerfIndKSASubEventAMS =>
+                <input type="hidden" name="@fidPerfIndKSASubEventAMS.name" id="@fidPerfIndKSASubEventAMS.id" value="@fidPerfIndKSASubEventAMS.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidPerfIndKSASubEventAMS")) { fidPerfIndKSASubEventAMS =>
+                <input type="hidden" name="@fidPerfIndKSASubEventAMS.name" id="@fidPerfIndKSASubEventAMS.id" value="@fidPerfIndKSASubEventAMS.value">
+			}
+    
+     	}
+
+            @defining(f("fPerformanceIndicator")) { fPerformanceIndicator =>
+                <input type="hidden" name="@fPerformanceIndicator.name" id="@fPerformanceIndicator.id" value="@fPerformanceIndicator.value">
+			}
+    
+    		@*
+            @{val selectvKSASubEventAMS = AppDB.dal.KSASubEventAMS.selectByKSA(ksa).map(vKSASubEventAMS => vKSASubEventAMS.vSubEventAMS.toString -> AppDB.dal.SubEventAMS.getSelectionString(vKSASubEventAMS.vSubEventAMS)).toSeq
+            select(field = f("fKSASubEventAMS"), options = selectvKSASubEventAMS, args = '_label-> "KSASubEventAMS")}
+            *@
+            @defining(AppDB.dal.KSA.select(ksa)) { ksb =>
+            Select the graded events you would like to evaluate for the KSB: @ksb.get.vObjective
+            If there are not graded events listed below, it means that no course directors have mapped them to an event.
+			<div id="ksaGradedEventCheckBoxList">
+			</div>                        
+            }
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.PerfIndKSASubEventAMSController.list(vPerformanceIndicator)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

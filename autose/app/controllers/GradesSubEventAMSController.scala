@@ -89,12 +89,12 @@ object GradesSubEventAMSController extends ControllerTrait[Long, MdlGradesSubEve
         case "SE300" => "SE300-SE301"
         case _ => courseData
       }
-      val year: Int = 2014
-      val term: Int = 1
+      val year: Int = values(5).toInt
+      val term: Int = values(6).toInt
       val gradedEventNumberAMS = values(1).toInt
       val subEventNumberAMS = values(2).toInt
       val description = values(3)
-      val pointsEarned = values(5).toDouble
+      val pointsEarned = values(7).toDouble
       val courseId = courses.find { course =>
         course.vCourseIDNumber == courseIdNumber && course.vAcademicYear == year && course.vAcademicTerm == term 
       }

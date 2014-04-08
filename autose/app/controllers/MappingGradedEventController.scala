@@ -51,6 +51,8 @@ object MappingGradedEventController extends ControllerTrait[Long, MdlMappingGrad
         case None => false
       }
   	}
+	
+	override def getAll(item: MdlMappingGradedEvent) = getAll(getCourseForItem(item))
   
     def getCourseForItem(item: MdlMappingGradedEvent) = AppDB.dal.GradedRequirements.select(item.vGradedEvent).get.vCourse
 

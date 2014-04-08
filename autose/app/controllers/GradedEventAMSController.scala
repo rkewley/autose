@@ -32,7 +32,7 @@ object GradedEventAMSController extends ControllerTrait[Long, MdlGradedEventAMS,
   val fileUploadForm = CoursesController.form
   
   	def listAll  = StackAction { implicit request => 
-	  Ok(views.html.viewlist.listGradedEventAMS(crud.all.sortWith(GradedEventAMS.compare), 0))
+	  Ok(views.html.viewlist.listAllGradedEventAMS(crud.all.sortWith(GradedEventAMS.compare)))
 	}
 
 	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = {
@@ -76,6 +76,36 @@ object GradedEventAMSController extends ControllerTrait[Long, MdlGradedEventAMS,
   		BadRequest(viewforms.html.formError("File upload error", request.headers("REFERRER")))
   	}
   }
+  
+    def importDescriptionsFromOnlineGradedEvents = compositeAction(NormalUser){ user => implicit template => implicit request =>
+      // pull all graded event mappings
+      val gradedEventMappings = AppDB.dal.MappingGradedEvent.all
+      val gradedEvents = AppDB.dal.GradedRequirements.all
+      val gradedEventsAMS = AppDB.dal.GradedEventAMS.all
+
+      
+      gradedEventMappings.foreach { gradedEventMapping =>
+        // see if there is a mapping for this graded event in the mappings file
+        gradedEvents.find {ge => ge.vGradedEventIndex.get == gradedEventMapping.vGradedEvent} match {
+          case Some(gradedEvent) => {
+            // Get the associated AMS graded event
+            gradedEventsAMS.find(ge => ge.vidGradedEventAMS.get == gradedEventMapping.vGradedEventAMS) match {
+              case Some(gradedEventAMS) => {
+                val update = new MdlGradedEventAMS(gradedEventAMS.vidGradedEventAMS, gradedEventAMS.vEventNumberAMS, gradedEventAMS.vCourse, gradedEventAMS.vName,
+                    gradedEventAMS.vDescription, gradedEvent.vEventDescription, gradedEventAMS.vType, gradedEventAMS.vMaxPoints, gradedEventAMS.vLesson)
+                println(gradedEvent.selectIdentifier._2 + " = " + gradedEventAMS.selectIdentifier)
+                AppDB.dal.GradedEventAMS.update(update)
+              }
+              case None =>
+            }
+          }
+          case None =>
+        }
+      }
+      Redirect(routes.GradedEventAMSController.listAll)
+    }
+  
+  
 
   def addGradedEventsFromFile(gradedEventsFile: java.io.File): List[String] = { 
     val lines = scala.io.Source.fromFile(gradedEventsFile).getLines.toList.tail
@@ -86,6 +116,7 @@ object GradedEventAMSController extends ControllerTrait[Long, MdlGradedEventAMS,
       val courseData = values(0).trim
       val courseIdNumber = courseData match {
         case "SE300" => "SE300-SE301"
+        case "SE301" => "SE300-SE301"
         case _ => courseData
       }
       val date = new java.util.Date
@@ -113,11 +144,17 @@ object GradedEventAMSController extends ControllerTrait[Long, MdlGradedEventAMS,
           println(mdlGradedEvent)
           println("Events:")
           //allEvents.foreach(println(_))
-          if(allEvents.filter{ event =>
+          val event = allEvents.find { event =>
             event.vCourse == courseIdDatabase && event.vEventNumberAMS == eventNumberAMS
-          }.isEmpty) {  // if there is not already a record for this event in the database
+          }
+          if(event.isEmpty) {  // if there is not already a record for this event in the database
             //println("Inserting data")
             AppDB.dal.GradedEventAMS.insert(mdlGradedEvent)
+          } else {
+            val currentEvent = event.get
+            val newEvent = MdlGradedEventAMS(currentEvent.vidGradedEventAMS, mdlGradedEvent.vEventNumberAMS, mdlGradedEvent.vCourse, mdlGradedEvent.vName, mdlGradedEvent.vDescription, 
+                currentEvent.vDetailedDescription, mdlGradedEvent.vType, mdlGradedEvent.vMaxPoints, mdlGradedEvent.vLesson)
+            AppDB.dal.GradedEventAMS.update(newEvent)
           }
           errorList
         }

@@ -35,7 +35,7 @@
 				<td>@vGradesSubEventAMS.vidGradesSubEventAMS</td>
 
     		@defining(AppDB.dal.Students.select(vGradesSubEventAMS.vStudent).get){pkModel =>
-      		  <td><a href="@routes.StudentsController.show(vGradesSubEventAMS.vStudent)">@pkModel.selectIdentifier._2</a></td>
+      		  <td>@pkModel.selectIdentifier._2</td>
     		}
 
     		@defining(AppDB.dal.SubEventAMS.select(vGradesSubEventAMS.vSubEventAMS).get){pkModel =>

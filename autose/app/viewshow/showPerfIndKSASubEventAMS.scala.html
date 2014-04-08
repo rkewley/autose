@@ -1,0 +1,38 @@
+
+@(vPerfIndKSASubEventAMS: MdlPerfIndKSASubEventAMS)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>PerfIndKSASubEventAMS Information</h3>
+		  <dl>
+
+		  	<dt>idPerfIndKSASubEventAMS</dt>
+		  	<dd>@Html(vPerfIndKSASubEventAMS.vidPerfIndKSASubEventAMS.toString)</dd>
+
+    		@defining(AppDB.dal.PerformanceIndicator.select(vPerfIndKSASubEventAMS.vPerformanceIndicator).get){pkModel =>
+      		  <dt>PerformanceIndicator</dt>
+      		  <dd><a href="@routes.PerformanceIndicatorController.show(vPerfIndKSASubEventAMS.vPerformanceIndicator)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+    		@defining(AppDB.dal.KSASubEventAMS.select(vPerfIndKSASubEventAMS.vKSASubEventAMS).get){pkModel =>
+      		  <dt>KSASubEventAMS</dt>
+      		  <dd><a href="@routes.KSASubEventAMSController.show(vPerfIndKSASubEventAMS.vKSASubEventAMS)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+	       </dl>
+     <div>
+       <a href="@routes.PerfIndKSASubEventAMSController.list(vPerfIndKSASubEventAMS.vPerformanceIndicator)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

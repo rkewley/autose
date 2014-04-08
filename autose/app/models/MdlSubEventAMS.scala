@@ -2,6 +2,14 @@
  package models
  
  import slick.AppDB
+ 
+ object SubEventAMS {
+   def compare(a: MdlSubEventAMS, b: MdlSubEventAMS): Boolean = {
+     val lessonA = AppDB.dal.GradedEventAMS.select(a.vGradedEvent).get.vLesson
+     val lessonB = AppDB.dal.GradedEventAMS.select(b.vGradedEvent).get.vLesson
+     lessonA < lessonB
+   }
+ }
     
  case class MdlSubEventAMS (
  	vidSubEventAMS : Option[Long],

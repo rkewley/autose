@@ -35,7 +35,7 @@
             @{val selectvSubGradedEvent = AppDB.dal.SubGradedEvent.selectByCourse(course).map(vSubGradedEvent => vSubGradedEvent.selectIdentifier).toSeq
             select(field = f("fSubEvent"), options = selectvSubGradedEvent, args = '_label-> "SubEvent")}
 
-            @{val selectvSubEventAMS = AppDB.dal.SubEventAMS.selectByCourse(course).map(vSubEventAMS => vSubEventAMS.selectIdentifier).toSeq
+            @{val selectvSubEventAMS = AppDB.dal.SubEventAMS.selectByCourse(course).sortWith(SubEventAMS.compare).map(vSubEventAMS => vSubEventAMS.selectIdentifier).toSeq
             select(field = f("fSubEventAMS"), options = selectvSubEventAMS, args = '_label-> "SubEventAMS")}
 
        		<fieldset style="margin-top: 10px;">

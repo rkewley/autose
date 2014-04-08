@@ -16,7 +16,7 @@
     
 	  def validationErrors: String = ""
     
-      def selectIdentifier: (String, String) = vTopicObjectiveNumber.get.toString -> vTopicObjectiveNumber.get.toString
+      def selectIdentifier: (String, String) = vTopicObjectiveNumber.get.toString -> vObjective
     
       def compare(a: MdlKSA, b: MdlKSA) = a.vTopicObjectiveNumber.get.compareTo(b.vTopicObjectiveNumber.get)
         

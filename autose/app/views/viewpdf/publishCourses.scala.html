@@ -69,11 +69,12 @@
 				
 		  	<li><em>Specific course information</em><br>
 		  		<ol class="alpha">
-		  			<li><em>Brief descriptio of the content of the course (catalog description)</em><br>
-		  				@vCourses.vCourseDescriptionRedbook
+		  			<li><em>Brief description of the content of the course (catalog description)</em><br>
+		  				@Html(vCourses.vCourseDescriptionRedbook)
 		  			</li>
-		  			<li><em>Pre-requesites or co-requisites</em><br>
-		  				Pre-requisites: @vCourses.vPrerequisites; Co-requesities: @vCourses.vCorequisites
+		  			<li><em>Pre-requIsites or co-requisites</em><br>
+		  				Pre-requisites: @vCourses.vPrerequisites<br>
+		  				Co-requisities: @vCourses.vCorequisites
 		  			</li>
 		  			<li><em>Indicate whether a required, elective, or selected elective (as per Table 5-1) course in the program</em><br>
 
@@ -124,7 +125,7 @@
 				</ol>
 			</li>
 			
-			<li><em>Breif list of topics to be covered</em>
+			<li><em>Brief list of topics to be covered</em>
 				<ul>
 				@ProgramOutcomesController.courseTopics(vCourses.vidCourse.get).map { courseTopic =>
 					<li>@courseTopic.vTopic</li>

@@ -24,8 +24,10 @@
 				<th>KSB</th>
 				<th>GradedEvent</th>
 				<th>Show</th>
+				@*
 				<th>Edit</th>
 				<th>Delete</th>
+				*@
 			</tr>
 
             @listKSAGradedEvent.map { vKSAGradedEvent =>
@@ -41,19 +43,22 @@
     		}
 
     			<td><a href="@routes.KSAGradedEventController.show(vKSAGradedEvent.vidKSAGradedEvent.get)">Show</a></td>
+    			@*
     			<td><a href="@routes.KSAGradedEventController.edit(vKSAGradedEvent.vidKSAGradedEvent.get)">Edit</a></td>
     	  		<td>
     	  			<form action="@routes.KSAGradedEventController.delete(vKSAGradedEvent.vidKSAGradedEvent.get)" method="POST">
     	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
     	  			</form>
     	  		</td>
+    	  		*@
     		</tr>
     
 
       		}
 
       	</table>
-      <a href="@routes.KSAGradedEventController.create(idGradedRequirements)">Link new knowledge and skills to the graded event</a>
+      @*<a href="@routes.KSAGradedEventController.create(idGradedRequirements)">Link new knowledge and skills to the graded event</a>*@
+      The ability to link graded events to KSB's on this page has been deprecated.  Return to the course home page and follow the Graded Event AMS link to link sub-events in AMS to KSB's.
     </div>
   </div>
   }

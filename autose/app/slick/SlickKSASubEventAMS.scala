@@ -42,6 +42,20 @@ trait KSASubEventAMSComponent  {
 	      selectQuery(pk).elements.toList.headOption
 	    }
 	  }
+      
+      def selectByKSA(ksa: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+          val q = Query(KSASubEventAMS)
+	      q.filter(p => p.vKSA === ksa).elements.toList   
+	    }
+      }
+	  
+      def selectBySubEvent(subEvent: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	        val q = Query(KSASubEventAMS)
+		    q.filter(p => p.vSubEventAMS === subEvent).elements.toList        
+        }
+      }
 	  
 	  def delete(pk: Long) {
 	    AppDB.database.withSession { implicit session: Session =>
@@ -65,5 +79,21 @@ trait KSASubEventAMSComponent  {
 	    }
 	  }
 
+      def joinSubEventAMSByKSA(idKSA: Long) = {
+	    AppDB.database.withSession { implicit session: Session =>
+	      val result1 = for {
+	        (sge, ksage) <- AppDB.dal.SubEventAMS innerJoin AppDB.dal.KSASubEventAMS on (_.vidSubEventAMS === _.vSubEventAMS)
+	           if ksage.vKSA === idKSA
+	      } yield (sge.vidSubEventAMS, sge.vDescription, sge.vGradedEvent)
+	      val r1List = result1.elements.toList
+	      r1List.map{r1 =>
+	      	val ge = AppDB.dal.GradedEventAMS.select(r1._3).get
+	      	(r1._1, r1._2, r1._3, ge.vCourse, ge.vName, ge.vidGradedEventAMS.get)
+	      }
+	    }	
+      }      
+
+      
+	  
 	}
 }

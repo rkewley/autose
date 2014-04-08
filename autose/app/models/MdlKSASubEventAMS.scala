@@ -1,6 +1,10 @@
     
  package models
-    
+ 
+ import play.api.data.Forms._
+ import play.api.data._
+ import play.api.data.format.Formats._
+
  case class MdlKSASubEventAMS (
  	vidKSASubEventAMS : Option[Long],
 	vKSA : Long,
@@ -19,4 +23,26 @@
         
       def primaryKey = vidKSASubEventAMS
 }
+
+ object MdlKSASubEventAMSList {
+  val formList = Form[MdlKSASubEventAMSList](
+    mapping (
+	"fidKSASubEventAMS" -> optional(of[Long]),
+	"fKSA" -> list(of[Long]),
+	"fSubEventAMS" -> of[Long]
+    )(MdlKSASubEventAMSList.apply)(MdlKSASubEventAMSList.unapply)
+  )    
+  }
+ 
+ case class MdlKSASubEventAMSList (
+ 	vidKSASubEventAMS : Option[Long],
+	vKSA : List[Long],
+	vSubEventAMS : Long
+    ) {
     
+    def getList = {
+      vKSA.map(ksa => 
+        new MdlKSASubEventAMS(vidKSASubEventAMS, ksa, vSubEventAMS))
+    }
+ }
+ 

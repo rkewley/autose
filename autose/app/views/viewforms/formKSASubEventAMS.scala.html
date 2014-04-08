@@ -3,9 +3,11 @@
 
 @import helper._
 @import slick.AppDB
+@import persistence._
 
 
     @main("Systems Net", "Systems Body of Knowledge") {
+  <script type="text/javascript" src="@routes.Assets.at("javascripts/dynamicTopicOptions.js")"></script>
 	<div>
 	  <div class="column span-4">
 		 
@@ -13,29 +15,47 @@
 
 
 @defining(f("fSubEventAMS").value.get.toLong) { vSubEventAMS =>  
+
+		<script type-"text/javascript">
+		$(document).ready(function(){
+			var checkboxdiv = $('#ksaCheckBoxList')
+			$("#topicSelect").change(function() {
+				var topicIndex = $("#topicSelect").val();
+				var subEventIndex = @vSubEventAMS
+				getNewCheckboxes('/getKSASubEventJsonByTopic/' + subEventIndex + '/' + topicIndex, checkboxdiv, 'fKSA');
+			});
+		});
+		</script> 
+
 <div class="column span-20 last">
+
+		  <h4>
+		    Link <a href="#" title="@AppDB.dal.Definitions.getDefinition("KSB Guidance").">Knowledge, Skills, and Behaviors</a>
+		    to this graded event.  These linkages will allow program directors to see where key elements of learning, needed to achieve student outcomes,
+          	are evaluated during the program.  Some of these graded events will be used as direct assessment of those outcomes.
+		  </h4>
+
     <fieldset>
-    @helper.form(routes.KSASubEventAMSController.save(newEntry)) {
+    @helper.form(routes.KSASubEventAMSController.saveList) {
 
-
-        @if(newEntry == 0) {
-		  
-            @defining(f("fidKSASubEventAMS")) { fidKSASubEventAMS =>
-                <input type="hidden" name="@fidKSASubEventAMS.name" id="@fidKSASubEventAMS.id" value="@fidKSASubEventAMS.value">
-			}
-    
-		}
-		@if(newEntry != 0) {
      		
             @defining(f("fidKSASubEventAMS")) { fidKSASubEventAMS =>
                 <input type="hidden" name="@fidKSASubEventAMS.name" id="@fidKSASubEventAMS.id" value="@fidKSASubEventAMS.value">
 			}
-    
-     	}
 
-            @{val selectvTopicObjectives = AppDB.dal.KSA.all.map(vTopicObjectives => vTopicObjectives.selectIdentifier).toSeq
-            select(field = f("fKSA"), options = selectvTopicObjectives, args = '_label-> "KSA")}
-
+			<p>First select the topic for the knowledge and skills you will link to this sub-event.</p>
+			@defining(SqlTopics.all.sortWith((v1: MdlTopics, v2: MdlTopics) => v1.vTopic < v2.vTopic)) { topicList =>
+			  <select id="topicSelect">
+			    <option value=""></option>
+			  @topicList.map { topic =>
+			    <option value="@topic.vTopicsIndex">@topic.vTopic</option>
+			  }
+			  </select>
+			}
+				
+			<div id="ksaCheckBoxList">
+			</div>                        
+			
             @defining(f("fSubEventAMS")) { fSubEventAMS =>
                 <input type="hidden" name="@fSubEventAMS.name" id="@fSubEventAMS.id" value="@fSubEventAMS.value">
 			}

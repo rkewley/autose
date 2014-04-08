@@ -68,9 +68,8 @@ trait GradedEventAMSComponent  {
 
 	    }
 	  }
-    
 
-	  def update(vGradedEventAMS: MdlGradedEventAMS) {
+	  def update(vGradedEventAMS: MdlGradedEventAMS) = {
 	    AppDB.database.withSession { implicit session: Session =>
 	      val q = selectQuery(vGradedEventAMS.vidGradedEventAMS.get)
 	      val q2 = q.map(vGradedEventAMS => vGradedEventAMS.vEventNumberAMS ~ vGradedEventAMS.vCourse ~ vGradedEventAMS.vName ~ vGradedEventAMS.vDescription ~ vGradedEventAMS.vDetailedDescription ~ vGradedEventAMS.vType ~ vGradedEventAMS.vMaxPoints ~ vGradedEventAMS.vLesson)
