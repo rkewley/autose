@@ -26,8 +26,9 @@
 				@if(loggedIn.isDefined) {
 				  <th>Edit</th>
 				  <th>Copy to Next Semester</th>
+				  <th>Copy to STAP</th>
 				}
-				@*<th>Delete</th>*@
+				<th>Delete</th>
 			</tr>
 
             @listCourses.map { vCourses =>
@@ -51,12 +52,13 @@
     			<td><a href="@routes.CoursesController.homeCourses(vCourses.vidCourse.get)">Course Home Page</a></td>
     			@if(loggedIn.isDefined) {
     			  <td><a href="@routes.CoursesController.edit(vCourses.vidCourse.get)">Edit</a></td>
-    			  <td><a href="@routes.CoursesController.copyCourses(vCourses.vidCourse.get)">Copy</a></td>
-    	  		  @*<td>
-    	  			<form action="@routes.CoursesController.deleteCourses(vCourses.vidCourse)" method="POST">
+    			  <td><a href="@routes.CoursesController.copyCourses(vCourses.vidCourse.get)">Copy to Next Semester</a></td>
+    			  <td><a href="@routes.CoursesController.copyCoursesToStap(vCourses.vidCourse.get)">Copy to STAP</a></td>
+    	  		  <td>
+    	  			<form action="@routes.CoursesController.delete(vCourses.vidCourse.get)" method="POST">
     	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
     	  			</form>
-    	  		  </td>*@
+    	  		  </td>
     	  		}  
     		</tr>
     

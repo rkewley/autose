@@ -24,7 +24,10 @@
 				<td>@vFaculty.vOfficePhone</td>
 				<td>@vFaculty.vBranchofService</td>
 				<td>@vFaculty.vEmail</td>
-				<td><img src="@vFaculty.vFacultyPhotoFile" alt="Smiley face" height="50">
+				<td>
+				    @defining(Globals.updateLink(vFaculty.vFacultyPhotoFile)) { newLink =>
+         				<img src="@newLink" alt="Smiley face" height="50">
+         			}
 				    <p><a href="@routes.FacultyController.newFacultyPhoto(vFaculty.vidFaculty)">Upload new photo</a></p>
 				</td>
 

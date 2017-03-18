@@ -23,7 +23,11 @@
             @listGradedEventAMSLinks.map { vGradedEventAMSLinks =>
     			
     		<tr>
-				<td><a href="@vGradedEventAMSLinks.vLink">@vGradedEventAMSLinks.vDescription</a></td>
+				<td>
+       				@defining(Globals.updateLink(vGradedEventAMSLinks.vLink)) { newLink =>
+         				<a href="@newLink">@vGradedEventAMSLinks.vDescription</a>
+         			}
+				</td>
 				<td>@vGradedEventAMSLinks.vIsFileLink</td>
 
     		@defining(AppDB.dal.GradedEventAMS.select(vGradedEventAMSLinks.vvGradedEventAMS).get){pkModel =>

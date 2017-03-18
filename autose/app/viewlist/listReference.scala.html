@@ -25,7 +25,11 @@
             @listReference.map { vReference =>
     			
     		<tr>
-				<td><a href="@vReference.vLink">@vReference.vTitle</a></td>
+				<td>
+					@defining(Globals.updateLink(vReference.vLink)) { newLink =>
+         				<a href="@newLink">@vReference.vTitle</a>
+         			}
+				</td>
 				<td>@vReference.vText</td>
 
     			<td><a href="@routes.ReferenceController.showReference(vReference.vidReference)">Show</a></td>

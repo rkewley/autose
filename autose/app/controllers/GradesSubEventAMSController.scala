@@ -87,6 +87,7 @@ object GradesSubEventAMSController extends ControllerTrait[Long, MdlGradesSubEve
       val courseData = values(4).trim
       val courseIdNumber = courseData match {
         case "SE300" => "SE300-SE301"
+        case "SE301" => "SE300-SE301"  
         case _ => courseData
       }
       val year: Int = values(5).toInt

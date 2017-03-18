@@ -26,7 +26,11 @@
     		@defining(SqlTopics.select(vTopicPicture.vTopic)){pkModel =>
       		  <td><a href="@routes.TopicsController.showTopics(vTopicPicture.vTopic)">@pkModel.selectIdentifier._2</a></td>
     		}
-				<td><img src="@vTopicPicture.vHyperlink" alt="@vTopicPicture.vAlternateText" width="150>"</td>
+				<td>
+       				@defining(Globals.updateLink(vTopicPicture.vHyperlink)) { newLink =>
+         				<img src="@newLink" alt="@vTopicPicture.vAlternateText" width="150>"
+         			}				
+				</td>
 				<td>@vTopicPicture.vAlternateText</td>
 				<td>@vTopicPicture.vCaption</td>
 

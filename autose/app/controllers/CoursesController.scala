@@ -72,6 +72,15 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
   def abet(idCourse: Long, idProgram: Long) = StackAction  { implicit request =>
     Ok(views.html.viewpdf.publishCourses.render(AppDB.dal.Courses.select(idCourse).get, AppDB.dal.Programs.select(idProgram).get))
   } 
+  
+  def copyCoursesToStap(id: Long) = compositeAction(NormalUser) { user =>
+    implicit template => implicit request =>
+      val course = AppDB.dal.Courses.select(id).get
+      val yearTerm = (course.vAcademicYear, 3)
+      println("Copying " + course.vCourseIDNumber + " " + yearTerm._1 + "-" + yearTerm._2 + " to STAP")
+      val newCourse = course.newCourse(yearTerm._1, yearTerm._2)
+      Ok(views.html.viewforms.formCourses(form.fill(newCourse), 1, 1, id))
+  }
 
   def copyCourses(id: Long) = compositeAction(NormalUser) { user =>
     implicit template => implicit request =>
@@ -173,10 +182,28 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
   } 
   
   def createCourseDirectoryStructure(vCourses: MdlCourses) {
+    println("Creating course directory structure")
+    val sardine = SardineFactory.begin("seweb", "G0Systems!")
+    
+    // See if academic term directory exists.  If not create it
+    val academicTermDir = Globals.webDavServer + "Courses/AT" + String.valueOf(vCourses.vAcademicYear).substring(2) + "-" +
+      String.valueOf(vCourses.vAcademicTerm)
+    val academicTermPath = academicTermDir.replaceAll(" ", "%20")  
+    try {
+      println("Checking AT path")
+      if (!sardine.exists(academicTermPath)) {
+        println("Creating new AT path " + academicTermPath)
+        Logger.debug("Creating directory " + academicTermPath)
+        sardine.createDirectory(academicTermPath)  
+      }
+    }
+      
+    // Create course directory structure  
+    println("Creating course directory structure")
     val directory = Globals.webDavServer + "Courses/AT" + String.valueOf(vCourses.vAcademicYear).substring(2) + "-" +
       String.valueOf(vCourses.vAcademicTerm) + "/" + vCourses.vCourseIDNumber
     val dirPath = directory.replaceAll(" ", "%20")
-    val sardine = SardineFactory.begin("seweb", "G0Systems!")
+
     try {
       if (!sardine.exists(dirPath)) {
         Logger.debug("Creating directory " + dirPath)
@@ -217,6 +244,7 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
               vCourses.vidCourse.get
             }
             case _ => {
+              println("Copying new course")
               val newId = AppDB.dal.Courses.insert(vCourses)
               createCourseDirectoryStructure(vCourses)
               if (copyEntry != 0) {

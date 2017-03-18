@@ -43,6 +43,7 @@ object CourseLinksController extends Base {
     implicit template => implicit request =>
       val vCourseLinks = SqlCourseLinks.select(id)
       SqlCourseLinks.delete(id)
+      /*
       if (vCourseLinks.vIsFileLink) {
         val sardine = SardineFactory.begin("seweb", "G0Systems!")
         try {
@@ -55,6 +56,8 @@ object CourseLinksController extends Base {
           }
         }
       }
+      * 
+      */
       Redirect(routes.CourseLinksController.listCourseLinks(vCourseLinks.vCourse))
   }
 

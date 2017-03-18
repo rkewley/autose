@@ -34,10 +34,14 @@ object LessonTopicObjectivesController extends Base {
      Ok(viewlist.html.listLessonTopicObjectives(SqlLessonTopicObjectives.selectWhere("`Lesson` = " + idLessons), idLessons))
   }
 
+   //def editLessonTopicObjectives(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   // Ok(viewforms.html.formLessonTopicObjectives(formLessonTopicObjectives.fill(SqlLessonTopicObjectives.select(id)), 0)).withHeaders(CACHE_CONTROL -> "no-chache")
+  //}
+   
    def editLessonTopicObjectives(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
     Ok(viewforms.html.formLessonTopicObjectives(formLessonTopicObjectives.fill(SqlLessonTopicObjectives.select(id)), 0))
   }
-
+    
    def showLessonTopicObjectives(id: Long) = Action {
     Ok(viewshow.html.showLessonTopicObjectives(SqlLessonTopicObjectives.select(id)))
   }

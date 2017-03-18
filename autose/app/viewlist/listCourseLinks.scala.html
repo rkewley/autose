@@ -31,7 +31,11 @@
     		@defining(slick.AppDB.dal.Courses.select(vCourseLinks.vCourse).get){pkModel =>
       		  <td><a href="@routes.CoursesController.show(vCourseLinks.vCourse)">@pkModel.selectIdentifier._2</a></td>
     		}
-				<td><a href="@vCourseLinks.vLink">@vCourseLinks.vDisplayDescription</td>
+				<td>
+					@defining(Globals.updateLink(vCourseLinks.vLink)) { newLink =>
+         				<a href="@newLink">@vCourseLinks.vDisplayDescription
+         			}
+				</td>
 				<td>@vCourseLinks.vIsFileLink</td>
     	    	<td>
     	    	@{vCourseLinks.vFaculty match {

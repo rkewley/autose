@@ -98,13 +98,17 @@
          		@if(fileGroup.owner == "Course level file") {
          			  <li id="label">Course level files</li>
          			  @fileGroup.links.map { fgLink =>
-         			    <li><a href="@fgLink.href">@fgLink.description</a></li>
+         			 	@defining(Globals.updateLink(fgLink.href)) { newLink =>
+         			    	<li><a href=@newLink>@fgLink.description</a></li>
+         			    }
          			  } 
          		} else {
          			  <li>< @fileGroup.owner
          			    <ul>
          			      @fileGroup.links.map { fgLink =>
-         			        <li><a href="@fgLink.href">@fgLink.description</a></li>
+         			      	@defining(Globals.updateLink(fgLink.href)) { newLink =>
+         			    		<li><a href=@newLink>@fgLink.description</a></li>
+         			    	}
          			      }
          			    </ul>
          			  </li>    
@@ -124,13 +128,13 @@
          		@if(fileGroup.owner == "Course level file") {
          			  <li id="label">Course level links</li>
          			  @fileGroup.links.map { fgLink =>
-         			    <li><a href="@fgLink.href">@fgLink.description</a></li>
+         			    <li><a href=@fgLink.href>@fgLink.description</a></li>
          			  } 
          		} else {
          			  <li>< @fileGroup.owner
          			    <ul>
          			      @fileGroup.links.map { fgLink =>
-         			        <li><a href="@fgLink.href">@fgLink.description</a></li>
+         			    	<li><a href=@fgLink.href>@fgLink.description</a></li>
          			      }
          			    </ul>
          			  </li>    

@@ -27,7 +27,11 @@
     		@defining(SqlTopics.select(vTopicLink.vTopic)){pkModel =>
       		  <td><a href="@routes.TopicsController.showTopics(vTopicLink.vTopic)">@pkModel.selectIdentifier._2</a></td>
     		}
-				<td><a href="@vTopicLink.vLink">@vTopicLink.vLink</a></td>
+				<td>
+       				@defining(Globals.updateLink(vTopicLink.vLink)) { newLink =>
+         				<a href="@newLink">@vTopicLink.vLink</a>
+         			}
+				</td>
 				<td>@vTopicLink.vDescription</td>
 
     			<td><a href="@routes.TopicLinkController.showTopicLink(vTopicLink.vidTopicLink)">Show</a></td>

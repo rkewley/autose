@@ -47,6 +47,7 @@ object LessonLinksController extends ControllerTrait[Long, MdlLessonLinks, Long]
   override def delete(id: Long) = {
     val vLessonLinks = crud.select(id).get
     val returnVal = super.delete(id)
+    /*
       if (vLessonLinks.vIsFileLiink) {
         val sardine = SardineFactory.begin("seweb", "G0Systems!")
         try {
@@ -59,6 +60,8 @@ object LessonLinksController extends ControllerTrait[Long, MdlLessonLinks, Long]
           }
         }
       }
+      * 
+      */
     returnVal
   }
 

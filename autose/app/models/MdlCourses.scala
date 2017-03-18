@@ -43,16 +43,16 @@
    
       def this() = this(Option(0), "", 0, 0, "", 0, 0, "", 0.0, "", "", 0.0, "", "", "", 0, false, "")
 
-  	  def validate: Boolean = vAcademicYear >= 2012 && vAcademicYear <= 2020 && vAcademicTerm >= 1 && vAcademicTerm <= 2
+  	  def validate: Boolean = vAcademicYear >= 2012 && vAcademicYear <= 2020 && vAcademicTerm >= 1 && vAcademicTerm <= 3
     
 	  def validationErrors: String = {
   	    val ayError = (vAcademicYear >= 2012 && vAcademicYear <= 2020) match {
   	      case true => ""
   	      case false=> "Academic year should be between 2012 and 2020"
   	    } 
-  	    val atError = (vAcademicTerm >= 1 && vAcademicTerm <= 2) match {
+  	    val atError = (vAcademicTerm >= 1 && vAcademicTerm <= 3) match {
   	      case true => ""
-  	      case false=> "Academic term should be 1 (for Fall) or 2 (for Spring)"  	      
+  	      case false=> "Academic term should be 1 (for Fall) or 2 (for Spring) or 3 (for STAP)"  	      
   	    }
   	    ayError + atError
   	  }

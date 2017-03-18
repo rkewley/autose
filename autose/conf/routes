@@ -16,7 +16,8 @@ GET		/abet/:idCourse:idProgram								controllers.CoursesController.abet(idCours
 GET 	/editCourses/:id						controllers.CoursesController.edit(id: Long)
 GET 	/createCourses/:id						controllers.CoursesController.create(id: Long)
 GET 	/copyCourses/:id						controllers.CoursesController.copyCourses(id: Long)
-POST	/deleteCourses/:id						controllers.CoursesController.delete(id: Long)
+GET 	/copyCoursesToStap/:id						controllers.CoursesController.copyCoursesToStap(id: Long)
+POST	/delete/:id						controllers.CoursesController.delete(id: Long)
 POST 	/saveCourses/:newEntry/:copyEntry/:originalCourse		controllers.CoursesController.saveCourses(newEntry: Int, copyEntry: Int, originalCourse: Long)
 
 
@@ -350,17 +351,7 @@ POST	/deleteGradedEventAMS/:id				controllers.GradedEventAMSController.delete(id
 POST 	/saveGradedEventAMS/:newEntry			controllers.GradedEventAMSController.save(newEntry: Int)
 GET		/uploadGradedEventAMS					controllers.GradedEventAMSController.uploadGradedEventsAMS
 POST	/saveGradedEventAMSUpload				controllers.GradedEventAMSController.saveGradedEventAMSUpload
-
-# GradesAMS Routes
-GET     /listGradesAMS/:idGradedEventAMS						controllers.GradesAMSController.list(idGradedEventAMS: Long)
-GET     /listAllGradesAMS						controllers.GradesAMSController.listAll
-GET		/showGradesAMS/:id					controllers.GradesAMSController.show(id: Long)
-GET 	/editGradesAMS/:id					controllers.GradesAMSController.edit(id: Long)
-GET 	/createGradesAMS/:idGradedEventAMS					controllers.GradesAMSController.create(idGradedEventAMS: Long)
-POST	/deleteGradesAMS/:id				controllers.GradesAMSController.delete(id: Long)
-GET 	/uploadGradesAMS					controllers.GradesAMSController.uploadGradesAMS
-POST 	/saveGradesAMS/:newEntry			controllers.GradesAMSController.save(newEntry: Int)
-POST	/sameGradesAMSUpload				controllers.GradesAMSController.saveGradesAMSUpload
+GET		/importDescriptionsFromOnlineGradedEvents				controllers.GradedEventAMSController.importDescriptionsFromOnlineGradedEvents
 
 # GradesSubEventAMS Routes
 GET     /listGradesSubEventAMS/:idSubEventAMS						controllers.GradesSubEventAMSController.list(idSubEventAMS: Long)
@@ -420,6 +411,10 @@ GET 	/editKSASubEventAMS/:id					controllers.KSASubEventAMSController.edit(id: L
 GET 	/createKSASubEventAMS/:idSubEventAMS					controllers.KSASubEventAMSController.create(idSubEventAMS: Long)
 POST	/deleteKSASubEventAMS/:id				controllers.KSASubEventAMSController.delete(id: Long)
 POST 	/saveKSASubEventAMS/:newEntry			controllers.KSASubEventAMSController.save(newEntry: Int)
+GET		/importFromOnlineSubEvents				controllers.KSASubEventAMSController.importFromOnlineSubEvents
+GET		/importFromOnlineGradedEvents				controllers.KSASubEventAMSController.importFromOnlineGradedEvents
+GET 	/getKSASubEventJsonByTopic/:idSubEvent/:idTopic	controllers.KSASubEventAMSController.getKSASubEventJsonByTopic(idSubEvent: Long, idTopic: Long)
+POST 	/saveKSASubEventAMSList/				controllers.KSASubEventAMSController.saveList
 
 
 # GradedEventAMSLinks Routes
@@ -431,3 +426,14 @@ POST	/deleteGradedEventAMSLinks/:id				controllers.GradedEventAMSLinksController
 POST 	/saveGradedEventAMSLinks/:newEntry			controllers.GradedEventAMSLinksController.save(newEntry: Int)
 GET 	/uploadGradedEventAMSFile/:idGradedEventAMS					controllers.GradedEventAMSLinksController.uploadGradedEventFile(idGradedEventAMS: Long)
 POST 	/postGradedEventAMSFile/:newEntry				controllers.GradedEventAMSLinksController.postFile(newEntry: Int)
+GET		/importLinksFromOnlineGradedEvents				controllers.GradedEventAMSLinksController.importLinksFromOnlineGradedEvents
+
+# PerfIndKSASubEventAMS Routes
+GET     /listPerfIndKSASubEventAMS/:idPerformanceIndicator						controllers.PerfIndKSASubEventAMSController.list(idPerformanceIndicator: Long)
+GET		/showPerfIndKSASubEventAMS/:id					controllers.PerfIndKSASubEventAMSController.show(id: Long)
+GET 	/editPerfIndKSASubEventAMS/:id					controllers.PerfIndKSASubEventAMSController.edit(id: Long)
+GET 	/createPerfIndKSASubEventAMS/:idPerformanceIndicator/:idKSA					controllers.PerfIndKSASubEventAMSController.create(idPerformanceIndicator: Long, idKSA: Long)
+POST	/deletePerfIndKSASubEventAMS/:id				controllers.PerfIndKSASubEventAMSController.delete(id: Long)
+POST 	/savePerfIndKSASubEventAMS/:newEntry			controllers.PerfIndKSASubEventAMSController.save(newEntry: Int)
+POST 	/savePerfIndKSASubEventAMSList					controllers.PerfIndKSASubEventAMSController.saveList
+GET 	/getKSASubEventJsonByKSA/:idKSA					controllers.PerfIndKSASubEventAMSController.getKSASubEventJsonByKSA(idKSA: Long)
