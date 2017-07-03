@@ -16,7 +16,7 @@ object ApplicationBuild extends Build {
         "jp.t2v" %% "play2.auth.test" % "0.10.1" % "test",
         "com.typesafe.slick" %% "slick" % "1.0.0",
         "com.typesafe.play" %% "play-slick" % "0.3.2",
-        "pdf" % "pdf_2.10" % "0.5"
+        "org.apache.camel" % "maven-html-to-pdf" % "2.10.1"
   )
 
 

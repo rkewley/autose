@@ -364,6 +364,18 @@ GET 	/uploadGradesSubEventAMS					controllers.GradesSubEventAMSController.upload
 POST 	/saveGradesSubEventAMS/:newEntry			controllers.GradesSubEventAMSController.save(newEntry: Int)
 POST	/saveGradesSubEventAMSUpload				controllers.GradesSubEventAMSController.saveGradesSubEventAMSUpload
 
+# GradesAMS Routes
+GET     /listGradesAMS/:idGradesAMS					controllers.GradesAMSController.list(idGradesAMS: Long)
+GET     /listAllGradesAMS/					        controllers.GradesAMSController.listAll
+GET		/showGradesAMS/:id					        controllers.GradesAMSController.show(id: Long)
+GET 	/editGradesAMS/:id					        controllers.GradesAMSController.edit(id: Long)
+GET 	/createGradesAMS/:idGradesAMS				controllers.GradesAMSController.create(idGradesAMS: Long)
+POST	/deleteGradesAMS/:id				        controllers.GradesAMSController.delete(id: Long)
+POST 	/saveGradesAMS/:newEntry			        controllers.GradesAMSController.save(newEntry: Int)
+GET     /uploadGradesAMS                            controllers.GradesAMSController.uploadGradesAMS
+POST    /saveGradesAMSUpload                        controllers.GradesAMSController.saveGradesAMSUpload
+
+
 # Students Routes
 GET     /listStudents/:id						controllers.StudentsController.list(id: Long)
 GET		/showStudents/:id					controllers.StudentsController.show(id: Long)

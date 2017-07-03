@@ -10,7 +10,7 @@ import models._
 import models.NormalUser;
 import views._
 import slick.AppDB
-import util.pdf.PDF
+//import util.pdf.PDF
 import scala.slick.driver.MySQLDriver.simple._
 import play.api.mvc._
 import com.googlecode.sardine._
@@ -65,12 +65,13 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
     Ok(views.html.viewlist.listCourses(crud.all.filter(vCourses => vCourses.vAcademicYear == Globals.currentYear && vCourses.vAcademicTerm == Globals.currentTerm).sortWith(Courses.compare)))
   }
   
-  def publish(idCourse: Long, idProgram: Long) = { 
-    PDF.ok(views.html.viewpdf.publishCourses.render(AppDB.dal.Courses.select(idCourse).get, AppDB.dal.Programs.select(idProgram).get))
-  } 
+  def publish(idCourse: Long, idProgram: Long) = StackAction  { implicit request =>
+    //OK(views.html.viewpdf.publishCourses(AppDB.dal.Courses.select(idCourse).get, AppDB.dal.Programs.select(idProgram).get))
+    Ok(views.html.viewpdf.publishCourses(AppDB.dal.Courses.select(idCourse).get, AppDB.dal.Programs.select(idProgram).get))
+  }
 
   def abet(idCourse: Long, idProgram: Long) = StackAction  { implicit request =>
-    Ok(views.html.viewpdf.publishCourses.render(AppDB.dal.Courses.select(idCourse).get, AppDB.dal.Programs.select(idProgram).get))
+    Ok(views.html.viewpdf.publishCourses(AppDB.dal.Courses.select(idCourse).get, AppDB.dal.Programs.select(idProgram).get))
   } 
   
   def copyCoursesToStap(id: Long) = compositeAction(NormalUser) { user =>

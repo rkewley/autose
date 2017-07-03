@@ -10,6 +10,7 @@ import play.api.data.format.Formats._
 import models._
 import views._
 import slick.AppDB
+
 import scala.slick.driver.MySQLDriver.simple._
 import jp.t2v.lab.play2.auth._
 
