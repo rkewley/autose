@@ -1,10 +1,10 @@
-@(vCourses: MdlCourses)(implicit userOption: Option[MdlUser])
+@(vCourses: MdlCourses)(implicit user: MdlUser)
 
 @import persistence._
 @import utilities.FileGroup
 @import play.api.mvc._
 
-@coursePage(vCourses, userOption) { 
+@coursePage(vCourses) {
    <div>
 	<div class="column span-14 colborder">
 		<h3>@vCourses.vCourseName</h3>
@@ -19,9 +19,14 @@
 		       @if(whereClause.length > 0) {
 		         @defining(SqlReference.selectWhere(whereClause).sortWith(MdlReference.compare)) { listReferences =>
 		           @listReferences.map { vReference =>
-		                @defining(Globals.updateLink(vReference.vLink)) { newLink =>
-         			    	<li><a href="@newLink">@vReference.vTitle.</a>  @vReference.vText</li>
+		                @defining(Globals.stripLink(vReference.vLink)) { newLink =>
+							@if(newLink.startsWith("http")) {
+								<li><a href="@vReference.vLink">@vReference.vTitle.</a>  @vReference.vText</li>
+							} else {
+
+								<li><a href="@routes.AmazonS3Controller.sendS3File(newLink)">@vReference.vTitle.</a>  @vReference.vText</li>
          			    }
+				   }
 			         
 			       }
 			     }
@@ -32,7 +37,7 @@
 	</div>
 	
 	<div class="column span-4 last">
-	  	@if(userOption.isDefined){<form method="GET" action="@routes.CourseLinksController.uploadCourseFile(vCourses.vidCourse.get)">
+	  	@if(user.hasEditPermission){<form method="GET" action="@routes.CourseLinksController.uploadCourseFile(vCourses.vidCourse.get)">
 			<input type="submit" value="Upload Course File">
 		</form>}
 
@@ -42,16 +47,16 @@
          		@if(fileGroup.owner == "Course level file") {
          			  <li id="label">Course level files</li>
          			  @fileGroup.links.map { fgLink =>
-         			 	@defining(Globals.updateLink(fgLink.href)) { newLink =>
-         			    	<li><a href=@newLink>@fgLink.description</a></li>
+         			 	@defining(Globals.stripLink(fgLink.href)) { newLink =>
+         			    	<li><a href="@routes.AmazonS3Controller.sendS3File(newLink)">@fgLink.description</a></li>
          			    }
          			  } 
          		} else {
          			  <li>"< "@fileGroup.owner
          			    <ul>
          			      @fileGroup.links.map { fgLink =>
-         			 		@defining(Globals.updateLink(fgLink.href)) { newLink =>
-         			    		<li><a href=@newLink>@fgLink.description</a></li>
+         			 		@defining(Globals.stripLink(fgLink.href)) { newLink =>
+         			    		<li><a href="@routes.AmazonS3Controller.sendS3File(newLink)">@fgLink.description</a></li>
          			    	}
          			      }
          			    </ul>
@@ -61,7 +66,7 @@
 	   	}
 	  </ul>
 
-	  	@if(userOption.isDefined){<form method="GET" action="@routes.CourseLinksController.createCourseLinks(vCourses.vidCourse.get)">
+	  	@if(user.hasEditPermission){<form method="GET" action="@routes.CourseLinksController.createCourseLinks(vCourses.vidCourse.get)">
 			<input type="submit" value="Create Course Link">
 		</form>}
 		

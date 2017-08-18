@@ -13,21 +13,22 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
 	this: Base with OptionalAuthElement =>
 	
 	def form: Form[D]
-	def listFunction(ffk: FFK)(implicit maybeUser: Option[MdlUser]): Html
-	def listFunction(item: D)(implicit maybeUser: Option[MdlUser]): Html
-	def showFunction(item: D)(implicit maybeUser: Option[MdlUser] = None): Html
+	def listFunction(ffk: FFK)(implicit user: MdlUser): Html
+	def listFunction(item: D)(implicit user: MdlUser): Html
+	def showFunction(item: D): Html
 	def editFunction(aForm: Form[D]): Html
 	def createFunction(aForm: Form[D]): Html
 	def crud: slick.Crud[D, K]
 	def newItem(fkId: FFK): D
 	def getAll(item: D):List[D] = crud.all
 	def getAll(ffk: FFK):List[D] = crud.all
+  def redirect(item: D): Call = routes.CoursesController.listCourses()
 
-	def list(id: FFK) = StackAction { implicit request => 
+	def list(id: FFK) = compositeAction(NormalUser) {implicit user => implicit template => implicit request =>
 	  Ok(listFunction(id))
 	}
 	
-    def show(id: K) = StackAction { implicit request =>
+    def show(id: K) = compositeAction(NormalUser) {implicit user => implicit template => implicit request =>
 	  crud.select(id) match {
         case item: Some[D] =>
           Ok(showFunction(item.get))
@@ -36,7 +37,7 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
       }
 	}
 	
-	def edit(id: K) = compositeAction(NormalUser) {user => implicit template => implicit request =>
+	def edit(id: K) = compositeAction(Faculty) {implicit user => implicit template => implicit request =>
       crud.select(id) match {
         case item: Some[D] =>
           Ok(editFunction(form.fill(item.get)))
@@ -45,7 +46,7 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
       }    
     }
 	
-   def delete(id: K) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def delete(id: K) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
 	  crud.select(id) match {
         case item: Some[D] =>
           crud.delete(id)
@@ -56,7 +57,7 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
       }
   }
 
-  def create(id: FFK) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def create(id: FFK) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(createFunction(form.fill(newItem(id))))
   }
 
@@ -64,7 +65,7 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
   	form.bindFromRequest.fold(
   	  form => {
         val errorMessage = formErrorMessage(form.errors)
-        Logger.debug(errorMessage)
+        Logger.debug("Form Error " + errorMessage)
         BadRequest(viewforms.html.formError(errorMessage, request.headers("REFERER")))
       },
       formItem => {
@@ -79,10 +80,10 @@ trait ControllerTrait[K, D <: Mdl[K], FFK]  {
               println("inserting item")
               crud.insert(item)
           }
-          Ok(listFunction(item))
+          Redirect(redirect(item))
         } else {
           val validationErrors = item.validationErrors
-          Logger.debug(validationErrors)
+          Logger.debug("Validation error " + validationErrors)
           BadRequest(viewforms.html.formError(validationErrors, request.headers("REFERER")))
         }
       })

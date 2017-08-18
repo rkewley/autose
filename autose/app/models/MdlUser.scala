@@ -9,9 +9,16 @@
    
 	  def permission: Permission = vpermissions match {
 	    case "Administrator" => Administrator
+			case "Faculty" => Faculty
 	    case "NormalUser" => NormalUser
 	    case (_) => throw new Exception("Cannot map permission type " + vpermissions)
 	  }
+
+	  def hasEditPermission: Boolean = permission match {
+				case Administrator => true
+				case Faculty => true
+				case _ => false
+		}
     
       def this() = this("", "", "NormalUser")
 

@@ -34,6 +34,11 @@ class DAL(override val profile: ExtendedProfile) extends ProgramsComponent
 	with GradedEventAMSLinksComponent
 	with PerfIndKSASubEventAMSComponent
 	with GradesAMSComponent
+  with LessonObjectiveComponent
+  with EvaluationComponent
+	with CourseObjPerfIndComponent
+  with EvalCourseObjSubEventComponent
+  with SubEventCourseObjComponent
 	with Profile {
  
   import profile.simple._

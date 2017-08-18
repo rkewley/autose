@@ -5,7 +5,7 @@ import play.Project._
 object ApplicationBuild extends Build {
 
   val appName         = "autose"
-  val appVersion      = "1.0-SNAPSHOT"
+  val appVersion      = "1.1-SNAPSHOT"
 
   val appDependencies = Seq(
     // Add your project dependencies here,
@@ -16,7 +16,8 @@ object ApplicationBuild extends Build {
         "jp.t2v" %% "play2.auth.test" % "0.10.1" % "test",
         "com.typesafe.slick" %% "slick" % "1.0.0",
         "com.typesafe.play" %% "play-slick" % "0.3.2",
-        "org.apache.camel" % "maven-html-to-pdf" % "2.10.1"
+        "org.apache.camel" % "maven-html-to-pdf" % "2.10.1",
+        "com.amazonaws" % "aws-java-sdk-s3" % "1.11.167"
   )
 
 

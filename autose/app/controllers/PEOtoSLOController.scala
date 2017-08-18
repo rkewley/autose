@@ -25,13 +25,13 @@ object PEOtoSLOController extends ControllerTrait[Long, MdlPEOtoSLO, Long] with 
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listPEOtoSLO(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlPEOtoSLO)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlPEOtoSLO)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listPEOtoSLO(getAll(item), item.vPEO)
  
-	override def showFunction(vPEOtoSLO: MdlPEOtoSLO)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vPEOtoSLO: MdlPEOtoSLO): Html =
 	  views.html.viewshow.showPEOtoSLO(vPEOtoSLO)
 	
 	override def editFunction(mdlPEOtoSLOForm: Form[MdlPEOtoSLO]): Html = 

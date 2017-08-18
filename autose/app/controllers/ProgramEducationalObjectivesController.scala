@@ -23,13 +23,13 @@ object ProgramEducationalObjectivesController extends ControllerTrait[Long, MdlP
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listProgramEducationalObjectives(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlProgramEducationalObjectives)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlProgramEducationalObjectives)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listProgramEducationalObjectives(getAll(item), item.vProgram)
  
-	override def showFunction(vProgramEducationalObjectives: MdlProgramEducationalObjectives)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vProgramEducationalObjectives: MdlProgramEducationalObjectives): Html =
 	  views.html.viewshow.showProgramEducationalObjectives(vProgramEducationalObjectives)
 	
 	override def editFunction(mdlProgramEducationalObjectivesForm: Form[MdlProgramEducationalObjectives]): Html = 

@@ -25,24 +25,24 @@ object CourseOfferingsController extends Base {
   )
       
 
-  def listCourseOfferings = Action {
+  def listCourseOfferings = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listCourseOfferings(SqlCourseOfferings.all))
   }
 
-   def editCourseOfferings(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editCourseOfferings(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formCourseOfferings(formCourseOfferings.fill(SqlCourseOfferings.select(id)), 0))
   }
 
-   def showCourseOfferings(id: Long) = Action {
+   def showCourseOfferings(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showCourseOfferings(SqlCourseOfferings.select(id)))
   }
 
-   def deleteCourseOfferings(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteCourseOfferings(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     SqlCourseOfferings.delete(id)
     Ok(viewlist.html.listCourseOfferings(SqlCourseOfferings.all))
   }
 
-  def createCourseOfferings = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createCourseOfferings = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formCourseOfferings(formCourseOfferings.fill(new MdlCourseOfferings()), 1))
   }
 

@@ -23,24 +23,24 @@ object PictureController extends Base {
   )
       
 
-  def listPicture = Action {
+  def listPicture = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listPicture(SqlPicture.all))
   }
 
-   def editPicture(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editPicture(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formPicture(formPicture.fill(SqlPicture.select(id)), 0))
   }
 
-   def showPicture(id: Long) = Action {
+   def showPicture(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showPicture(SqlPicture.select(id)))
   }
 
-   def deletePicture(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deletePicture(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     SqlPicture.delete(id)
     Ok(viewlist.html.listPicture(SqlPicture.all))
   }
 
-  def createPicture = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createPicture = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formPicture(formPicture.fill(new MdlPicture()), 1))
   }
 

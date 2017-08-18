@@ -7,13 +7,12 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 import models._
-import models.NormalUser;
+import models.NormalUser
 import views._
 import slick.AppDB
 //import util.pdf.PDF
 import scala.slick.driver.MySQLDriver.simple._
 import play.api.mvc._
-import com.googlecode.sardine._
 import persistence._
 import jp.t2v.lab.play2.auth._
 
@@ -40,13 +39,15 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
       "fCourseWebsite" -> of[Boolean],
       "fCourseDescriptionWebsite" -> text)(MdlCourses.apply)(MdlCourses.unapply))
 
-  override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+  override def listFunction(ffk: Long)(implicit user: MdlUser): Html = {
     views.html.viewlist.listCourses(getAll(ffk))
+  }
 
-  override def listFunction(item: MdlCourses)(implicit maybeUser: Option[MdlUser]): Html =
+  override def listFunction(item: MdlCourses)(implicit user: MdlUser): Html = {
     views.html.viewlist.listCourses(getAll(item))
+  }
 
-  override def showFunction(vCourses: MdlCourses)(implicit maybeUser: Option[MdlUser]): Html =
+  override def showFunction(vCourses: MdlCourses): Html =
     views.html.viewshow.showCourses(vCourses)
 
   override def editFunction(mdlCoursesForm: Form[MdlCourses]): Html =
@@ -57,24 +58,35 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
 
   def crud = slick.AppDB.dal.Courses
 
-  def listAllCourses = StackAction { implicit request =>
+  override def redirect(item: MdlCourses) = routes.CoursesController.listCourses()
+
+  def untrail(path: String) = Action {
+    MovedPermanently("/" + path)
+  }
+
+
+  def listAllCourses = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
+    implicit val userOption = Some(user)
     Ok(views.html.viewlist.listCourses(crud.all.sortWith(Courses.compare)))
   }
 
-  def listCourses = StackAction { implicit request =>
+  def listCourses = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
+    implicit val userOption = Some(user)
     Ok(views.html.viewlist.listCourses(crud.all.filter(vCourses => vCourses.vAcademicYear == Globals.currentYear && vCourses.vAcademicTerm == Globals.currentTerm).sortWith(Courses.compare)))
   }
+
+  def home = listCourses
   
-  def publish(idCourse: Long, idProgram: Long) = StackAction  { implicit request =>
+  def publish(idCourse: Long, idProgram: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     //OK(views.html.viewpdf.publishCourses(AppDB.dal.Courses.select(idCourse).get, AppDB.dal.Programs.select(idProgram).get))
     Ok(views.html.viewpdf.publishCourses(AppDB.dal.Courses.select(idCourse).get, AppDB.dal.Programs.select(idProgram).get))
   }
 
-  def abet(idCourse: Long, idProgram: Long) = StackAction  { implicit request =>
+  def abet(idCourse: Long, idProgram: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(views.html.viewpdf.publishCourses(AppDB.dal.Courses.select(idCourse).get, AppDB.dal.Programs.select(idProgram).get))
   } 
   
-  def copyCoursesToStap(id: Long) = compositeAction(NormalUser) { user =>
+  def copyCoursesToStap(id: Long) = compositeAction(Faculty) { user =>
     implicit template => implicit request =>
       val course = AppDB.dal.Courses.select(id).get
       val yearTerm = (course.vAcademicYear, 3)
@@ -83,7 +95,7 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
       Ok(views.html.viewforms.formCourses(form.fill(newCourse), 1, 1, id))
   }
 
-  def copyCourses(id: Long) = compositeAction(NormalUser) { user =>
+  def copyCourses(id: Long) = compositeAction(Faculty) { user =>
     implicit template => implicit request =>
       val course = AppDB.dal.Courses.select(id).get
       val yearTerm = course.vAcademicTerm match {
@@ -178,57 +190,11 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
 	 
   }
 
-  def homeCourses(id: Long) = StackAction { implicit request => 
+  def homeCourses(id: Long) = compositeAction(NormalUser) {implicit user => implicit template => implicit request =>
     Ok(viewhome.html.homeCourses(AppDB.dal.Courses.select(id).get))
-  } 
-  
-  def createCourseDirectoryStructure(vCourses: MdlCourses) {
-    println("Creating course directory structure")
-    val sardine = SardineFactory.begin("seweb", "G0Systems!")
-    
-    // See if academic term directory exists.  If not create it
-    val academicTermDir = Globals.webDavServer + "Courses/AT" + String.valueOf(vCourses.vAcademicYear).substring(2) + "-" +
-      String.valueOf(vCourses.vAcademicTerm)
-    val academicTermPath = academicTermDir.replaceAll(" ", "%20")  
-    try {
-      println("Checking AT path")
-      if (!sardine.exists(academicTermPath)) {
-        println("Creating new AT path " + academicTermPath)
-        Logger.debug("Creating directory " + academicTermPath)
-        sardine.createDirectory(academicTermPath)  
-      }
-    }
-      
-    // Create course directory structure  
-    println("Creating course directory structure")
-    val directory = Globals.webDavServer + "Courses/AT" + String.valueOf(vCourses.vAcademicYear).substring(2) + "-" +
-      String.valueOf(vCourses.vAcademicTerm) + "/" + vCourses.vCourseIDNumber
-    val dirPath = directory.replaceAll(" ", "%20")
-
-    try {
-      if (!sardine.exists(dirPath)) {
-        Logger.debug("Creating directory " + dirPath)
-        sardine.createDirectory(dirPath)
-
-        sardine.createDirectory(dirPath + "/CourseFiles")
-        sardine.createDirectory(dirPath + "/CoursePhotos")
-        sardine.createDirectory(dirPath + "/Lessons")
-        sardine.createDirectory(dirPath + "/GradedRequirementFiles")
-        def createLessonDirectory(i: Int) {
-          if (i <= 40) {
-            val lessonPath = i match {
-              case j if j <= 9 => "0" + String.valueOf(i)
-              case _ => String.valueOf(i)
-            }
-            sardine.createDirectory(dirPath + "/Lessons/Lesson" + lessonPath)
-            createLessonDirectory(i + 1)
-          }
-        }
-        createLessonDirectory(1)
-      }
-    }
-
   }
+  
+
 
   def saveCourses(newEntry: Int, copyEntry: Int, originalCourse: Long) = Action { implicit request =>
     form.bindFromRequest.fold(
@@ -247,7 +213,6 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
             case _ => {
               println("Copying new course")
               val newId = AppDB.dal.Courses.insert(vCourses)
-              createCourseDirectoryStructure(vCourses)
               if (copyEntry != 0) {
                 copyCourseData(originalCourse, newId)
               }
@@ -264,4 +229,5 @@ object CoursesController extends ControllerTrait[Long, MdlCourses, Long] with Ba
   }
 
   def newItem(fkId: Long) = new MdlCourses
+
 }

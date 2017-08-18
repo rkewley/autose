@@ -1,0 +1,38 @@
+
+@(vEvalCourseObjSubEvent: MdlEvalCourseObjSubEvent)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>EvalCourseObjSubEvent Information</h3>
+		  <dl>
+
+		  	<dt>idEvalCourseObjSubEvent</dt>
+		  	<dd>@Html(vEvalCourseObjSubEvent.vidEvalCourseObjSubEvent.toString)</dd>
+
+    		@defining(AppDB.dal.Evaluation.select(vEvalCourseObjSubEvent.vEvaluation).get){pkModel =>
+      		  <dt>Evaluation</dt>
+      		  <dd><a href="@routes.EvaluationController.show(vEvalCourseObjSubEvent.vEvaluation)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+    		@defining(AppDB.dal.SubEventCourseObj.select(vEvalCourseObjSubEvent.vCourseObjSubEvent).get){pkModel =>
+      		  <dt>CourseObjSubEvent</dt>
+      		  <dd><a href="@routes.SubEventCourseObjController.show(vEvalCourseObjSubEvent.vCourseObjSubEvent)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+	       </dl>
+     <div>
+       <a href="@routes.EvalCourseObjSubEventController.list(vEvalCourseObjSubEvent.vEvaluation)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

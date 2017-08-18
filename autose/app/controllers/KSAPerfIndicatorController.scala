@@ -27,13 +27,13 @@ object KSAPerfIndicatorController extends ControllerTrait[Long, MdlKSAPerfIndica
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listKSAPerfIndicator(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlKSAPerfIndicator)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlKSAPerfIndicator)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listKSAPerfIndicator(getAll(item), item.vPerformanceIndicator)
  
-	override def showFunction(vKSAPerfIndicator: MdlKSAPerfIndicator)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vKSAPerfIndicator: MdlKSAPerfIndicator): Html =
 	  views.html.viewshow.showKSAPerfIndicator(vKSAPerfIndicator)
 	
 	override def editFunction(mdlKSAPerfIndicatorForm: Form[MdlKSAPerfIndicator]): Html = 

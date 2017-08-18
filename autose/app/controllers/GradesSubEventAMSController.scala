@@ -25,7 +25,7 @@ object GradesSubEventAMSController extends ControllerTrait[Long, MdlGradesSubEve
     )(MdlGradesSubEventAMS.apply)(MdlGradesSubEventAMS.unapply)
   )
 
-  	def listAll(errors: String)  = StackAction { implicit request => 
+  	def listAll(errors: String)  = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
   	  val e = errors match {
   	    case "noerrors" => ""
   	    case _ => errors
@@ -33,13 +33,13 @@ object GradesSubEventAMSController extends ControllerTrait[Long, MdlGradesSubEve
 	  Ok(views.html.viewlist.listGradesSubEventAMS(crud.all, 0, e))
 	}
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listGradesSubEventAMS(getAll(ffk), ffk, "")
  
-	override def listFunction(item: MdlGradesSubEventAMS)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlGradesSubEventAMS)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listGradesSubEventAMS(getAll(item), item.vSubEventAMS, "")
  
-	override def showFunction(vGradesSubEventAMS: MdlGradesSubEventAMS)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vGradesSubEventAMS: MdlGradesSubEventAMS): Html =
 	  views.html.viewshow.showGradesSubEventAMS(vGradesSubEventAMS)
 	
 	override def editFunction(mdlGradesSubEventAMSForm: Form[MdlGradesSubEventAMS]): Html = 
@@ -61,7 +61,7 @@ object GradesSubEventAMSController extends ControllerTrait[Long, MdlGradesSubEve
       AppDB.dal.GradesSubEventAMS.allQuery.filter(v1GradesSubEventAMS => v1GradesSubEventAMS.vSubEventAMS === vGradesSubEventAMS.vSubEventAMS).elements.toList
     }
     
-  def uploadGradesSubEventAMS = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def uploadGradesSubEventAMS = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(views.html.viewforms.formGradesSubEventAMSUpload(form.fill(newItem(0))))
   }
 

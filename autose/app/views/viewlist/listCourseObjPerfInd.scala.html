@@ -1,0 +1,58 @@
+
+@(listCourseObjPerfInd: List[MdlCourseObjPerfInd], idPerformanceIndicator: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>CourseObjPerfInd Listing</h3>
+		  <table>
+			<tr>
+				<th>Course</th>
+				<th>Course Objective</th>
+				<th>Performance Indicator</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listCourseObjPerfInd.map { vCourseObjPerfInd =>
+    			
+    		<tr>
+
+
+    		@defining(AppDB.dal.CourseObjectives.select(vCourseObjPerfInd.vCourseObjective).get){pkModel =>
+				@defining(AppDB.dal.Courses.select(pkModel.vCourseIDNumber).get) { vCourse =>
+			<td><a href="@routes.CoursesController.show(pkModel.vCourseIDNumber)">@vCourse.selectIdentifier._2</a></td>td>
+				}
+      		  		<td><a href="@routes.CourseObjectivesController.show(vCourseObjPerfInd.vCourseObjective)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    		@defining(AppDB.dal.PerformanceIndicator.select(vCourseObjPerfInd.vPerformanceIndicator).get){pkModel =>
+      		  <td><a href="@routes.PerformanceIndicatorController.show(vCourseObjPerfInd.vPerformanceIndicator)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    			<td><a href="@routes.CourseObjPerfIndController.show(vCourseObjPerfInd.vidCourseObjPerfInd.get)">Show</a></td>
+    			<td><a href="@routes.CourseObjPerfIndController.edit(vCourseObjPerfInd.vidCourseObjPerfInd.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.CourseObjPerfIndController.delete(vCourseObjPerfInd.vidCourseObjPerfInd.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.CourseObjPerfIndController.create(idPerformanceIndicator)">Link to new course objective</a>
+    </div>
+  </div>
+  }

@@ -23,26 +23,26 @@ object CourseReferencesController extends Base {
   )
       
 
-  def listCourseReferences(courseId: Long) = Action {
+  def listCourseReferences(courseId: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listCourseReferences(SqlCourseReferences.selectWhere("Course = " + courseId).sortWith(CourseReferencesCompare.compare), courseId))
   }
 
-   def editCourseReferences(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editCourseReferences(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formCourseReferences(formCourseReferences.fill(SqlCourseReferences.select(id)), 0))
   }
 
-   def showCourseReferences(id: Long) = Action {
+   def showCourseReferences(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     println("In CourseReferenceController id = " + id)
     Ok(viewshow.html.showCourseReferences(SqlCourseReferences.select(id)))
   }
 
-   def deleteCourseReferences(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteCourseReferences(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vCourseReferences = SqlCourseReferences.select(id)
     SqlCourseReferences.delete(id)
     Redirect(routes.CourseReferencesController.listCourseReferences(vCourseReferences.vCourse))
   }
 
-  def createCourseReferences(courseId: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createCourseReferences(courseId: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vCourseReference = new MdlCourseReferences(0, courseId, 0)
     Ok(viewforms.html.formCourseReferences(formCourseReferences.fill(vCourseReference), 1))
   }

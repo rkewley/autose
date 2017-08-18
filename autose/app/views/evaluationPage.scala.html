@@ -1,0 +1,20 @@
+@(vEvaluation: MdlEvaluation)(content: Html)
+
+@main("Systems Net", vEvaluation.vName + " " + vEvaluation.vYear) {
+
+	<div class="column span-4 colborder">
+		   <ul id="menu">
+               <li><a href="@routes.ProgramsController.show(vEvaluation.vProgram)">Program Home</a></li>
+			   <li><a href="@routes.ProgramEducationalObjectivesController.list(vEvaluation.vidEvaluation.get)">Program Educational Objectives</a></li>
+			   <li><a href="@routes.ProgramOutcomesController.list(vEvaluation.vidEvaluation.get)">Student Learning Outcomes</a></li>
+			   <li><a href="@routes.EvaluationController.list(vEvaluation.vProgram)">Evaluations</a></li>
+		   </ul>
+
+	</div>
+
+	<div>
+		@content
+	</div>
+	
+	
+}

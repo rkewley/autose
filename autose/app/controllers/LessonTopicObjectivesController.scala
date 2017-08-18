@@ -30,34 +30,34 @@ object LessonTopicObjectivesController extends Base {
     )(MdlLessonTopicObjectivesList.apply)(MdlLessonTopicObjectivesList.unapply)
   )
 
-  def listLessonTopicObjectives(idLessons: Long) = Action {
+  def listLessonTopicObjectives(idLessons: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
      Ok(viewlist.html.listLessonTopicObjectives(SqlLessonTopicObjectives.selectWhere("`Lesson` = " + idLessons), idLessons))
   }
 
-   //def editLessonTopicObjectives(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   //def editLessonTopicObjectives(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
    // Ok(viewforms.html.formLessonTopicObjectives(formLessonTopicObjectives.fill(SqlLessonTopicObjectives.select(id)), 0)).withHeaders(CACHE_CONTROL -> "no-chache")
   //}
    
-   def editLessonTopicObjectives(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editLessonTopicObjectives(id: Long) = compositeAction(Faculty) {implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formLessonTopicObjectives(formLessonTopicObjectives.fill(SqlLessonTopicObjectives.select(id)), 0))
   }
     
-   def showLessonTopicObjectives(id: Long) = Action {
+   def showLessonTopicObjectives(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showLessonTopicObjectives(SqlLessonTopicObjectives.select(id)))
   }
 
-   def deleteLessonTopicObjectives(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteLessonTopicObjectives(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vLessonTopicObjectives = SqlLessonTopicObjectives.select(id)
     SqlLessonTopicObjectives.delete(id)
     Redirect(routes.LessonTopicObjectivesController.listLessonTopicObjectives(vLessonTopicObjectives.vLesson))
   }
 
-  def createLessonTopicObjectives(idLessons: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createLessonTopicObjectives(idLessons: Long) = compositeAction(Faculty) {implicit user => implicit template => implicit request =>
     val vLessonTopicObjectives = new MdlLessonTopicObjectives(0, idLessons, 0)
     Ok(viewforms.html.formLessonTopicObjectives(formLessonTopicObjectives.fill(vLessonTopicObjectives), 1))
   }
   
-  def createLessonTopicObjectivesList(idLessons: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createLessonTopicObjectivesList(idLessons: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vLessonTopicObjectivesList = new MdlLessonTopicObjectivesList(0, idLessons, List())
     Ok(viewforms.html.formLessonTopicObjectivesList(formLessonTopicObjectivesList.fill(vLessonTopicObjectivesList)))
   }

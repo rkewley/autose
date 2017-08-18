@@ -7,7 +7,9 @@
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Courses Routes
+GET     /*path/                                 controllers.CoursesController.untrail(path: String)
 GET     /homeCourses/:id						controllers.CoursesController.homeCourses(id: Long)
+GET     /							            controllers.CoursesController.home
 GET     /listCourses							controllers.CoursesController.listCourses
 GET     /listAllCourses							controllers.CoursesController.listAllCourses
 GET		/showCourses/:id						controllers.CoursesController.show(id: Long)
@@ -210,10 +212,10 @@ POST	/deleteLessonDate/:id				controllers.LessonDateController.deleteLessonDate(
 POST 	/saveLessonDate/:newEntry			controllers.LessonDateController.saveLessonDate(newEntry: Int)
 
 # ProgramOutcomes Routes
-GET     /listProgramOutcomes/:idPrograms						controllers.ProgramOutcomesController.list(idPrograms: Long)
+GET     /listProgramOutcomes/:idEvaluation						controllers.ProgramOutcomesController.list(idEvaluation: Long)
 GET		/showProgramOutcomes/:id					controllers.ProgramOutcomesController.show(id: Long)
 GET 	/editProgramOutcomes/:id					controllers.ProgramOutcomesController.edit(id: Long)
-GET 	/createProgramOutcomes/:idPrograms					controllers.ProgramOutcomesController.create(idPrograms: Long)
+GET 	/createProgramOutcomes/:idEvaluation					controllers.ProgramOutcomesController.create(idEvaluation: Long)
 POST	/deleteProgramOutcomes/:id				controllers.ProgramOutcomesController.delete(id: Long)
 POST 	/saveProgramOutcomes/:newEntry			controllers.ProgramOutcomesController.save(newEntry: Int)
 
@@ -316,6 +318,15 @@ GET 	/editCourseObjectives/:id					controllers.CourseObjectivesController.edit(i
 GET 	/createCourseObjectives/:idCourses					controllers.CourseObjectivesController.create(idCourses: Long)
 POST	/deleteCourseObjectives/:id				controllers.CourseObjectivesController.delete(id: Long)
 POST 	/saveCourseObjectives/:newEntry			controllers.CourseObjectivesController.save(newEntry: Int)
+
+
+# LessonObjective Routes
+GET     /listLessonObjective/:idLessons						controllers.LessonObjectiveController.list(idLessons: Long)
+GET		/showLessonObjective/:id					controllers.LessonObjectiveController.show(id: Long)
+GET 	/editLessonObjective/:id					controllers.LessonObjectiveController.edit(id: Long)
+GET 	/createLessonObjective/:idLessons					controllers.LessonObjectiveController.create(idLessons: Long)
+POST	/deleteLessonObjective/:id				controllers.LessonObjectiveController.delete(id: Long)
+POST 	/saveLessonObjective/:newEntry			controllers.LessonObjectiveController.save(newEntry: Int)
 
 # RequiredCourses Routes
 GET     /listRequiredCourses/:idPrograms						controllers.RequiredCoursesController.list(idPrograms: Long)
@@ -449,3 +460,40 @@ POST	/deletePerfIndKSASubEventAMS/:id				controllers.PerfIndKSASubEventAMSContro
 POST 	/savePerfIndKSASubEventAMS/:newEntry			controllers.PerfIndKSASubEventAMSController.save(newEntry: Int)
 POST 	/savePerfIndKSASubEventAMSList					controllers.PerfIndKSASubEventAMSController.saveList
 GET 	/getKSASubEventJsonByKSA/:idKSA					controllers.PerfIndKSASubEventAMSController.getKSASubEventJsonByKSA(idKSA: Long)
+
+# CourseObjPerfInd Routes
+GET     /listCourseObjPerfInd/:idPerformanceIndicator						controllers.CourseObjPerfIndController.list(idPerformanceIndicator: Long)
+GET		/showCourseObjPerfInd/:id					controllers.CourseObjPerfIndController.show(id: Long)
+GET 	/editCourseObjPerfInd/:id					controllers.CourseObjPerfIndController.edit(id: Long)
+GET 	/createCourseObjPerfInd/:idPerformanceIndicator					controllers.CourseObjPerfIndController.create(idPerformanceIndicator: Long)
+POST	/deleteCourseObjPerfInd/:id				controllers.CourseObjPerfIndController.delete(id: Long)
+POST 	/saveCourseObjPerfInd/:newEntry			controllers.CourseObjPerfIndController.save(newEntry: Int)
+GET    /getCourseObjJsonByCourse/:idPerfIndicator/:idCourse		controllers.CourseObjPerfIndController.getCourseObjJsonByCourse(idPerfIndicator: Long, idCourse: Long)
+
+# EvalCourseObjSubEvent Routes
+GET     /listEvalCourseObjSubEvent/:idEvaluation						controllers.EvalCourseObjSubEventController.list(idEvaluation: Long)
+GET		/showEvalCourseObjSubEvent/:id					controllers.EvalCourseObjSubEventController.show(id: Long)
+GET 	/editEvalCourseObjSubEvent/:id					controllers.EvalCourseObjSubEventController.edit(id: Long)
+GET 	/createEvalCourseObjSubEvent/:idEvaluation					controllers.EvalCourseObjSubEventController.create(idEvaluation: Long)
+POST	/deleteEvalCourseObjSubEvent/:id				controllers.EvalCourseObjSubEventController.delete(id: Long)
+POST 	/saveEvalCourseObjSubEvent/:newEntry			controllers.EvalCourseObjSubEventController.save(newEntry: Int)
+
+# Evaluation Routes
+GET     /listEvaluation/:idPrograms						controllers.EvaluationController.list(idPrograms: Long)
+GET		/showEvaluation/:id					controllers.EvaluationController.show(id: Long)
+GET 	/editEvaluation/:id					controllers.EvaluationController.edit(id: Long)
+GET 	/createEvaluation/:idPrograms					controllers.EvaluationController.create(idPrograms: Long)
+POST	/deleteEvaluation/:id				controllers.EvaluationController.delete(id: Long)
+POST 	/saveEvaluation/:newEntry			controllers.EvaluationController.save(newEntry: Int)
+
+
+# SubEventCourseObj Routes
+GET     /listSubEventCourseObj/:idSubEventAMS						controllers.SubEventCourseObjController.list(idSubEventAMS: Long)
+GET		/showSubEventCourseObj/:id					controllers.SubEventCourseObjController.show(id: Long)
+GET 	/editSubEventCourseObj/:id					controllers.SubEventCourseObjController.edit(id: Long)
+GET 	/createSubEventCourseObj/:idSubEventAMS					controllers.SubEventCourseObjController.create(idSubEventAMS: Long)
+POST	/deleteSubEventCourseObj/:id				controllers.SubEventCourseObjController.delete(id: Long)
+POST 	/saveSubEventCourseObj/:newEntry			controllers.SubEventCourseObjController.save(newEntry: Int)
+
+# AmazonS3 Routes
+GET     /sendS3File/:key_name						controllers.AmazonS3Controller.sendS3File(key_name: String)

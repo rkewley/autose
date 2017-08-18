@@ -28,8 +28,8 @@
       		  <td><a href="@routes.TopicsController.showTopics(vTopicLink.vTopic)">@pkModel.selectIdentifier._2</a></td>
     		}
 				<td>
-       				@defining(Globals.updateLink(vTopicLink.vLink)) { newLink =>
-         				<a href="@newLink">@vTopicLink.vLink</a>
+       				@defining(Globals.stripLink(vTopicLink.vLink)) { newLink =>
+						<a href="@routes.AmazonS3Controller.sendS3File(newLink)">@vTopicLink.vLink</a>
          			}
 				</td>
 				<td>@vTopicLink.vDescription</td>

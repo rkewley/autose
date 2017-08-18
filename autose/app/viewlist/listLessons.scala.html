@@ -1,5 +1,5 @@
 
-@(listLessons: List[MdlLessons], idCourses: Long)(implicit loggedIn: Option[MdlUser])
+@(listLessons: List[MdlLessons], idCourses: Long)(implicit user: MdlUser)
     
     @import persistence._
     
@@ -16,7 +16,7 @@
 				<th>Location</th>
 				<th>Duration</th>
 				<th>Lab</th>
-				@if(loggedIn.isDefined) {
+				@if(user.hasEditPermission) {
 				  <th>Edit</th>
 				  <th>Delete</th>
 				}
@@ -35,7 +35,7 @@
 
 				<td>@vLessons.vDuration</td>
 				<td>@{vLessons.vLab match {case true => "Yes" case false => "No"}}</td>
-				@if(loggedIn.isDefined) {
+				@if(user.hasEditPermission) {
     			  <td><a href="@routes.LessonsController.editLessons(vLessons.vLessonIndex)">Edit</a></td>
     	  		  <td>
     	  			<form action="@routes.LessonsController.deleteLessons(vLessons.vLessonIndex)" method="POST">

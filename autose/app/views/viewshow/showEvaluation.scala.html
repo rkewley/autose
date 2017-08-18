@@ -1,0 +1,39 @@
+
+@(vEvaluation: MdlEvaluation)
+
+    @import slick.AppDB
+		  
+    
+    @evaluationPage(vEvaluation) {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>Evaluation Information</h3>
+		  <dl>
+
+		  	<dt>idEvaluation</dt>
+		  	<dd>@Html(vEvaluation.vidEvaluation.toString)</dd>
+
+		  	<dt>Name</dt>
+		  	<dd>@Html(vEvaluation.vName.toString)</dd>
+
+    		@defining(AppDB.dal.Programs.select(vEvaluation.vProgram).get){pkModel =>
+      		  <dt>Program</dt>
+      		  <dd><a href="@routes.ProgramsController.show(vEvaluation.vProgram)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+		  	<dt>Year</dt>
+		  	<dd>@Html(vEvaluation.vYear.toString)</dd>
+	       </dl>
+     <div>
+       <a href="@routes.EvaluationController.list(vEvaluation.vProgram)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

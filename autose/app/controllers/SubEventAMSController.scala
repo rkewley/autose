@@ -10,6 +10,7 @@ import play.api.data.format.Formats._
 import models._
 import views._
 import slick.AppDB
+
 import scala.slick.driver.MySQLDriver.simple._
 import jp.t2v.lab.play2.auth._
 
@@ -29,21 +30,21 @@ object SubEventAMSController extends ControllerTrait[Long, MdlSubEventAMS, Long]
       
   val fileUploadForm = CoursesController.form
 
-	override def list(ffk: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+	override def list(ffk: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
 	  Ok(views.html.viewlist.listSubEventAMS(getAll(ffk), ffk))
 	}
   
-    def listAll  = StackAction { implicit request => 
+    def listAll  = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
 	  Ok(views.html.viewlist.listAllSubEventAMS(crud.all))
 	}
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listSubEventAMS(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlSubEventAMS)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlSubEventAMS)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listSubEventAMS(getAll(item), item.vGradedEvent)
  
-	override def showFunction(vSubEventAMS: MdlSubEventAMS)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vSubEventAMS: MdlSubEventAMS): Html =
 	  views.html.viewshow.showSubEventAMS(vSubEventAMS)
 	
 	override def editFunction(mdlSubEventAMSForm: Form[MdlSubEventAMS]): Html = 
@@ -65,7 +66,7 @@ object SubEventAMSController extends ControllerTrait[Long, MdlSubEventAMS, Long]
       AppDB.dal.SubEventAMS.allQuery.filter(v1SubEventAMS => v1SubEventAMS.vGradedEvent === vSubEventAMS.vGradedEvent).elements.toList
     }
     
-  def uploadSubEventsAMS = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def uploadSubEventsAMS = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(views.html.viewforms.formSubEventAMSUpload(fileUploadForm.fill(CoursesController.newItem(0))))
   }
 

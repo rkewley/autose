@@ -10,8 +10,12 @@ import play.Logger
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
-import com.googlecode.sardine._
 import java.io._
+
+import com.amazonaws.services.s3.model.CompleteMultipartUploadResult
+
+import scala.concurrent.Future
+import scala.util.{Failure, Success, Try}
 
 object CourseLinksController extends Base {
 
@@ -27,19 +31,19 @@ object CourseLinksController extends Base {
   )
       
 
-  def listCourseLinks(idCourses: Long) = Action {
+  def listCourseLinks(idCourses: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
      Ok(viewlist.html.listCourseLinks(SqlCourseLinks.selectWhere("`Course` = " + idCourses), idCourses))
   }
 
-   def editCourseLinks(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editCourseLinks(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formCourseLinks(formCourseLinks.fill(SqlCourseLinks.select(id)), 0))
   }
 
-   def showCourseLinks(id: Long) = Action {
+   def showCourseLinks(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showCourseLinks(SqlCourseLinks.select(id)))
   }
 
-  def deleteCourseLinks(id: Long) = compositeAction(NormalUser) { user =>
+  def deleteCourseLinks(id: Long) = compositeAction(Faculty) {implicit user =>
     implicit template => implicit request =>
       val vCourseLinks = SqlCourseLinks.select(id)
       SqlCourseLinks.delete(id)
@@ -61,12 +65,12 @@ object CourseLinksController extends Base {
       Redirect(routes.CourseLinksController.listCourseLinks(vCourseLinks.vCourse))
   }
 
-  def createCourseLinks(courseId: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createCourseLinks(courseId: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vCourseLinks = new MdlCourseLinks(0, courseId, "http://", "", false, -1)
     Ok(viewforms.html.formCourseLinks(formCourseLinks.fill(vCourseLinks), 1))
   }
 
-  def uploadCourseFile(courseId: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def uploadCourseFile(courseId: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vCourseLinks = new MdlCourseLinks(0, courseId, "http://", "", true, -1)
     Ok(viewforms.html.formCourseFiles(formCourseLinks.fill(vCourseLinks), 1))
   }
@@ -85,10 +89,12 @@ object CourseLinksController extends Base {
             val course = slick.AppDB.dal.Courses.select(courseId).get
             val courseIdNumber = course.vCourseIDNumber
             val term = "AT" + (course.vAcademicYear - 2000) + "-" + course.vAcademicTerm
-            val filename = Globals.webDavServer + "Courses/" + term + "/" + courseIdNumber + "/CourseFiles/" + courseFile.filename
-            val path = filename.replaceAll(" ", "%20")
-            Logger.debug(path)
-            val contentType = courseFile.contentType
+            val filename = "Courses/" + term + "/" + courseIdNumber + "/CourseFiles/" + courseFile.filename
+            //val path = filename.replaceAll(" ", "%20")
+            //Logger.debug(path)
+            val contentType = courseFile.contentType.getOrElse(Globals.defaultContentType)
+            val upload: Try[CompleteMultipartUploadResult] = AmazonS3Controller.uploadS3FileFuture(filename, courseFile.ref.file, contentType)
+            /*
             val sardine = SardineFactory.begin("seweb", "G0Systems!")
             val simpleResult = try {
               val inputStream = new FileInputStream(courseFile.ref.file)
@@ -97,19 +103,20 @@ object CourseLinksController extends Base {
                 case None => sardine.put(path, inputStream)
               }
               None
-            } 
+            }
             catch {
               case e: Exception => {
                 Logger.debug("Sardine Error")
                 Some(BadRequest(viewforms.html.formError("Sardine Error: " + e.getMessage, request.headers("REFERER"))))
               }
-            }
-            simpleResult match { // Only update the database if there is no file error
-              case None =>
+            }*/
+            upload match { // Only update the database if there is no file error
+              case Success(m) =>
+                println("Successful upload: \n" + m)
                 val v2CourseLinks = new MdlCourseLinks(
                   vCourseLinks.vidCourseLinks,
                   vCourseLinks.vCourse,
-                  path,
+                  filename,
                   vCourseLinks.vDisplayDescription,
                   vCourseLinks.vIsFileLink,
                   vCourseLinks.vFaculty)
@@ -118,9 +125,9 @@ object CourseLinksController extends Base {
                   case _ => SqlCourseLinks.insert(v2CourseLinks)
                 }           
               Redirect(routes.CoursesController.homeCourses(vCourseLinks.vCourse))
-              case Some(badResult) =>
-                Logger.debug("File Error")
-                badResult
+              case Failure(ex) =>
+                Logger.debug(ex.getMessage)
+                Results.NotImplemented(ex.getMessage)
             }
           } else {
               val validationErrors = vCourseLinks.validationErrors

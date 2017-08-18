@@ -1,5 +1,5 @@
 
-@(listGradedRequirements: List[MdlGradedRequirements], idCourses: Long)
+@(listGradedRequirements: List[MdlGradedRequirements], idCourses: Long)(implicit user: MdlUser)
     
     @import slick.AppDB
     @import persistence._

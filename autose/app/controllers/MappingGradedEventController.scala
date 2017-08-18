@@ -23,13 +23,13 @@ object MappingGradedEventController extends ControllerTrait[Long, MdlMappingGrad
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listMappingGradedEvent(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlMappingGradedEvent)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlMappingGradedEvent)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listMappingGradedEvent(getAll(item), getCourseForItem(item))
  
-	override def showFunction(vMappingGradedEvent: MdlMappingGradedEvent)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vMappingGradedEvent: MdlMappingGradedEvent): Html =
 	  views.html.viewshow.showMappingGradedEvent(vMappingGradedEvent)
 	
 	override def editFunction(mdlMappingGradedEventForm: Form[MdlMappingGradedEvent]): Html = 
@@ -38,7 +38,7 @@ object MappingGradedEventController extends ControllerTrait[Long, MdlMappingGrad
 	override def createFunction(mdlMappingGradedEventForm: Form[MdlMappingGradedEvent]): Html = 
 	  views.html.viewforms.formMappingGradedEvent(mdlMappingGradedEventForm, 1, 0)
 	  
-	def createNewMapping(course: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+	def createNewMapping(course: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
 	  Ok(views.html.viewforms.formMappingGradedEvent(form, 1, course))
 	}
 	  

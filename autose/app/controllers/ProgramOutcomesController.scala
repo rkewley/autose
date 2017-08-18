@@ -19,20 +19,21 @@ object ProgramOutcomesController extends ControllerTrait[Long, MdlProgramOutcome
     mapping (
 	"fProgramOutcomeNumber" -> optional(of[Long]),
 	"fProgram" -> of[Long],
-	"fProgramOutcome" -> text
+	"fProgramOutcome" -> text,
+      "fEvaluation" -> of[Long]
     )(MdlProgramOutcomes.apply)(MdlProgramOutcomes.unapply)
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = {
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html = {
 	  views.html.viewlist.listProgramOutcomes(getAll(ffk), ffk)
   	}
  
-	override def listFunction(item: MdlProgramOutcomes)(implicit maybeUser: Option[MdlUser]): Html = {
-	  views.html.viewlist.listProgramOutcomes(getAll(item), item.vProgram)
+	override def listFunction(item: MdlProgramOutcomes)(implicit user: MdlUser): Html = {
+	  views.html.viewlist.listProgramOutcomes(getAll(item), item.vEvaluation)
   	}
  
-	override def showFunction(vProgramOutcomes: MdlProgramOutcomes)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vProgramOutcomes: MdlProgramOutcomes): Html =
 	  views.html.viewshow.showProgramOutcomes(vProgramOutcomes)
 	
 	override def editFunction(mdlProgramOutcomesForm: Form[MdlProgramOutcomes]): Html = 
@@ -43,17 +44,18 @@ object ProgramOutcomesController extends ControllerTrait[Long, MdlProgramOutcome
 	  
 	def crud = slick.AppDB.dal.ProgramOutcomes
 
+  override def redirect(item: MdlProgramOutcomes) = routes.PerformanceIndicatorController.list(item.vEvaluation)
 
-    def newItem(fkId: Long): MdlProgramOutcomes = {
-	  println("Creating a new ProgramOutcome with Program index: " + fkId)
-	  new MdlProgramOutcomes(Some(0), fkId, "")
+  def newItem(fkId: Long): MdlProgramOutcomes = {
+	  println("Creating a new ProgramOutcome with Evaluation index: " + fkId)
+	  new MdlProgramOutcomes(Some(0), 0, "", fkId)
 	}
     override def getAll(fkId: Long): List[MdlProgramOutcomes] = AppDB.database.withSession { implicit session: Session =>
-	    AppDB.dal.ProgramOutcomes.allQuery.filter(po => po.vProgram === fkId).elements.toList
+	    AppDB.dal.ProgramOutcomes.allQuery.filter(po => po.vEvaluation === fkId).elements.toList
 	}
 
     override def getAll(vProgramOutcomes: MdlProgramOutcomes): List[MdlProgramOutcomes] = AppDB.database.withSession { implicit session: Session =>
-	    AppDB.dal.ProgramOutcomes.allQuery.filter(po => po.vProgram === vProgramOutcomes.vProgram).elements.toList
+	    AppDB.dal.ProgramOutcomes.allQuery.filter(po => po.vEvaluation === vProgramOutcomes.vEvaluation).elements.toList
 	}
     
     def ksaForOutcomeAndCourse(outcomeId: Long, courseId: Long): Long = {

@@ -10,8 +10,11 @@ import play.Logger
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
-import com.googlecode.sardine._
 import java.io._
+
+import com.amazonaws.services.s3.model.CompleteMultipartUploadResult
+
+import scala.util.{Failure, Success, Try}
 
 object TopicPictureController extends Base {
 
@@ -26,25 +29,25 @@ object TopicPictureController extends Base {
   )
       
 
-  def listSelectedTopicPicture(topicId: Long) = Action {
+  def listSelectedTopicPicture(topicId: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listTopicPicture(SqlTopicPicture.selectWhere("Topic = " + topicId), topicId))
   }
 
-   def editTopicPicture(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editTopicPicture(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formTopicPicture(formTopicPicture.fill(SqlTopicPicture.select(id)), 0))
   }
 
-   def showTopicPicture(id: Long) = Action {
+   def showTopicPicture(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showTopicPicture(SqlTopicPicture.select(id)))
   }
 
-   def deleteTopicPicture(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteTopicPicture(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vTopicPicture = SqlTopicPicture.select(id)
     SqlTopicPicture.delete(id)
     Redirect(routes.TopicPictureController.listSelectedTopicPicture(vTopicPicture.vTopic))
   }
 
-  def createTopicPicture(topicId: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createTopicPicture(topicId: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vTopicPicture = new MdlTopicPicture(0, topicId, "", "", "")
     Ok(viewforms.html.formTopicPicture(formTopicPicture.fill(vTopicPicture), 1))
   }
@@ -80,7 +83,7 @@ object TopicPictureController extends Base {
     errMess("Error Messages:\n", formTopicPicture.errors.toList)
   }
   
-  def uploadTopicPicture(topicId: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def uploadTopicPicture(topicId: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vTopicPicture = new MdlTopicPicture(0, topicId, "", "", "")
     Ok(viewforms.html.formTopicPictureFile(formTopicPicture.fill(vTopicPicture), 1))
   }
@@ -97,11 +100,12 @@ object TopicPictureController extends Base {
         request.body.file("topicPictureFile").map { topicPictureFile =>
           if (vTopicPicture.validate) {
         	val vTopics = SqlTopics.select(vTopicPicture.vTopic)
-        	val directory = Globals.webDavServer + "Topics/" + vTopics.vTopic
-            val filename = Globals.webDavServer + "Topics/" + vTopics.vTopic + "/" + topicPictureFile.filename
-            val path = filename.replaceAll(" ", "%20")
-            val dirPath = directory.replaceAll(" ", "%20")
-            val contentType = topicPictureFile.contentType
+        	val directory = "Topics/" + vTopics.vTopic
+            val path = "Topics/" + vTopics.vTopic + "/" + topicPictureFile.filename
+
+            val contentType = topicPictureFile.contentType.getOrElse(Globals.defaultContentType)
+
+            /*
             val sardine = SardineFactory.begin("seweb", "G0Systems!")
             val simpleResult = try {
               if (!sardine.exists(dirPath)) {
@@ -117,9 +121,11 @@ object TopicPictureController extends Base {
             } 
             catch {
               case e: Exception => Some(BadRequest(viewforms.html.formError(e.getMessage, request.headers("REFERER"))))
-            }
-            simpleResult match { // Only update the database if there is no file error
-              case None =>
+            }*/
+            val upload: Try[CompleteMultipartUploadResult] = AmazonS3Controller.uploadS3FileFuture(path, topicPictureFile.ref.file, contentType)
+
+            upload match { // Only update the database if there is no file error
+              case Success(m) =>
                 val v2TopicPicture = new MdlTopicPicture(
                   vTopicPicture.vidTopicPicture,
                   vTopicPicture.vTopic,
@@ -131,9 +137,9 @@ object TopicPictureController extends Base {
                   case _ => SqlTopicPicture.insert(v2TopicPicture)
                 }           
               Redirect(routes.TopicPictureController.listSelectedTopicPicture(vTopicPicture.vTopic))
-              case Some(badResult) =>
-                Logger.debug("WebDav upload error")
-                badResult
+              case Failure(ex) =>
+                Logger.debug(ex.getMessage)
+                Results.NotImplemented(ex.getMessage)
             }
           } else {
         	  Logger.debug("Got a validation error")

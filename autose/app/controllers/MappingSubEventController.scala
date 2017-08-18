@@ -23,13 +23,13 @@ object MappingSubEventController extends ControllerTrait[Long, MdlMappingSubEven
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listMappingSubEvent(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlMappingSubEvent)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlMappingSubEvent)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listMappingSubEvent(getAll(item), getCourseForItem(item))
  
-	override def showFunction(vMappingSubEvent: MdlMappingSubEvent)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vMappingSubEvent: MdlMappingSubEvent): Html =
 	  views.html.viewshow.showMappingSubEvent(vMappingSubEvent)
 	
 	override def editFunction(mdlMappingSubEventForm: Form[MdlMappingSubEvent]): Html = 
@@ -38,7 +38,7 @@ object MappingSubEventController extends ControllerTrait[Long, MdlMappingSubEven
 	override def createFunction(mdlMappingSubEventForm: Form[MdlMappingSubEvent]): Html = 
 	  views.html.viewforms.formMappingSubEvent(mdlMappingSubEventForm, 1, 0)
 	  
-	def createNewSubEventMapping(course: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+	def createNewSubEventMapping(course: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
 	  Ok(views.html.viewforms.formMappingSubEvent(form, 1, course))
 	}
 	def crud = slick.AppDB.dal.MappingSubEvent

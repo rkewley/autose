@@ -1,0 +1,55 @@
+
+@(listLessonObjective: List[MdlLessonObjective], idLessons: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>Lesson Objective Listing</h3>
+		  <table>
+			<tr>
+				<th>Lesson</th>
+				<th>Supported Course Objective</th>
+				<th>Lesson Objective</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listLessonObjective.map { vLessonObjective =>
+    			
+    		<tr>
+
+    		@defining(AppDB.dal.Lessons.select(vLessonObjective.vLesson).get){pkModel =>
+      		  <td><a href="@routes.LessonsController.showLessons(vLessonObjective.vLesson)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    		@defining(AppDB.dal.CourseObjectives.select(vLessonObjective.vSupportedCourseObjective).get){pkModel =>
+      		  <td><a href="@routes.CourseObjectivesController.show(vLessonObjective.vSupportedCourseObjective)">@pkModel.vObjective.substring(0, 20)</a></td>
+    		}
+				<td>@vLessonObjective.vLessonObjective</td>
+
+    			<td><a href="@routes.LessonObjectiveController.show(vLessonObjective.vidLessonObjective.get)">Show</a></td>
+    			<td><a href="@routes.LessonObjectiveController.edit(vLessonObjective.vidLessonObjective.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.LessonObjectiveController.delete(vLessonObjective.vidLessonObjective.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.LessonObjectiveController.create(idLessons)">Create new LessonObjective</a>
+    </div>
+  </div>
+  }

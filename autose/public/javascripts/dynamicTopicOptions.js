@@ -22,7 +22,7 @@
               	  var iterator = 0;
               	  checkboxdiv.empty();
               	  $.each(data, function(key, val) {
-              	    var cbString = '<input type = "checkbox" name="' + chckBoxGroupName + '[' + iterator + ']" value="' + key + '" />' + val + '<br />'
+              	    var cbString = '<input type = "checkbox" name="' + chckBoxGroupName + '[' + iterator + ']" value="' + key + '" />' + key + ' ' + val + '<br />'
 					checkboxdiv.append(cbString);              
 					iterator = iterator + 1;
           	      });

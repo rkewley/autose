@@ -25,8 +25,8 @@
 				<td>@vFaculty.vBranchofService</td>
 				<td>@vFaculty.vEmail</td>
 				<td>
-				    @defining(Globals.updateLink(vFaculty.vFacultyPhotoFile)) { newLink =>
-         				<img src="@newLink" alt="Smiley face" height="50">
+				    @defining(Globals.stripLink(vFaculty.vFacultyPhotoFile)) { newLink =>
+         				<img src="@routes.AmazonS3Controller.sendS3File(newLink)" alt="Smiley face" height="50">
          			}
 				    <p><a href="@routes.FacultyController.newFacultyPhoto(vFaculty.vidFaculty)">Upload new photo</a></p>
 				</td>

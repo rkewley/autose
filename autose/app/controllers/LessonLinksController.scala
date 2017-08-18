@@ -10,10 +10,15 @@ import play.api.data.format.Formats._
 import models._
 import views._
 import slick.AppDB
+
 import scala.slick.driver.MySQLDriver.simple._
-import com.googlecode.sardine._
 import java.io.FileInputStream
+
+import com.amazonaws.services.s3.model.CompleteMultipartUploadResult
 import jp.t2v.lab.play2.auth._
+import play.Logger
+
+import scala.util.{Failure, Success, Try}
 
 object LessonLinksController extends ControllerTrait[Long, MdlLessonLinks, Long] with Base with OptionalAuthElement {
 
@@ -29,13 +34,13 @@ object LessonLinksController extends ControllerTrait[Long, MdlLessonLinks, Long]
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listLessonLinks(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlLessonLinks)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlLessonLinks)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listLessonLinks(getAll(item), item.vLesson)
  
-	override def showFunction(vLessonLinks: MdlLessonLinks)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vLessonLinks: MdlLessonLinks): Html =
 	  views.html.viewshow.showLessonLinks(vLessonLinks)
 	
 	override def editFunction(mdlLessonLinksForm: Form[MdlLessonLinks]): Html = 
@@ -65,7 +70,7 @@ object LessonLinksController extends ControllerTrait[Long, MdlLessonLinks, Long]
     returnVal
   }
 
-  def uploadLessonFile(idLessons: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def uploadLessonFile(idLessons: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vLessonLinks = new MdlLessonLinks(Option(0), "", "", true, idLessons, -1)
     Ok(views.html.viewforms.formLessonFiles(form.fill(vLessonLinks), 1))
   }
@@ -91,11 +96,12 @@ object LessonLinksController extends ControllerTrait[Long, MdlLessonLinks, Long]
             val course = slick.AppDB.dal.Courses.select(vLesson.vidCourse).get
             val courseIdNumber = course.vCourseIDNumber
             val term = "AT" + (course.vAcademicYear - 2000) + "-" + course.vAcademicTerm
-            val filename = Globals.webDavServer + "Courses/" + term + "/" + 
+            val path = "Courses/" + term + "/" +
             		courseIdNumber + "/Lessons/Lesson" + lessonString + "/" + lessonFile.filename
-            val path = filename.replaceAll(" ", "%20")
-            Logger.debug(path)
-            val contentType = lessonFile.contentType
+            //val path = filename.replaceAll(" ", "%20")
+            //Logger.debug(path)
+            val contentType = lessonFile.contentType.getOrElse(Globals.defaultContentType)
+            /*
             val sardine = SardineFactory.begin("seweb", "G0Systems!")
             val simpleResult = try {
               val inputStream = new FileInputStream(lessonFile.ref.file)
@@ -107,9 +113,10 @@ object LessonLinksController extends ControllerTrait[Long, MdlLessonLinks, Long]
             } 
             catch {
               case e: Exception => Some(BadRequest(viewforms.html.formError(e.getMessage, request.headers("REFERER"))))
-            }
-            simpleResult match { // Only update the database if there is no file error
-              case None =>
+            }*/
+            val upload: Try[CompleteMultipartUploadResult] = AmazonS3Controller.uploadS3FileFuture(path, lessonFile.ref.file, contentType)
+            upload match { // Only update the database if there is no file error
+              case Success(m) =>
                 val v2LessonLinks = new MdlLessonLinks(
                   vLessonLinks.vLessonLinkNumber,
                   path,
@@ -123,9 +130,9 @@ object LessonLinksController extends ControllerTrait[Long, MdlLessonLinks, Long]
                   case _ => crud.insert(v2LessonLinks)
                 }           
               Redirect(routes.LessonLinksController.list(vLessonLinks.vLesson))
-              case Some(badResult) =>
-                Logger.debug("WebDav upload error")
-                badResult
+              case Failure(ex) =>
+                Logger.debug(ex.getMessage)
+                Results.NotImplemented(ex.getMessage)
             }
           } else {
         	  Logger.debug("Got a validation error")

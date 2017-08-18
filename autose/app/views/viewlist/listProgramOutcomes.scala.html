@@ -1,10 +1,10 @@
 
-@(listProgramOutcomes: List[MdlProgramOutcomes], idPrograms: Long)
+@(listProgramOutcomes: List[MdlProgramOutcomes], idEvaluation: Long)
     
     @import slick.AppDB
     
     
-    @programPage(AppDB.dal.Programs.select(idPrograms).get) {
+    @evaluationPage(AppDB.dal.Evaluation.select(idEvaluation).get) {
 
 	<div>
 	  <div class="column span-4">
@@ -16,6 +16,7 @@
 		  <h3>Student Learning Outcomes</h3>
 		  <table>
 			<tr>
+				<th>Evaluation</th>
 				<th>Program</th>
 				<th>Program Outcome</th>
 				<th>Performance Indicators</th>
@@ -28,8 +29,8 @@
     			
     		<tr>
 
-    		@defining(AppDB.dal.Programs.select(vProgramOutcomes.vProgram).get){pkModel =>
-      		  <td><a href="@routes.ProgramsController.show(vProgramOutcomes.vProgram)">@pkModel.selectIdentifier._2</a></td>
+    		@defining(AppDB.dal.Evaluation.select(idEvaluation).get){pkModel =>
+      		  <td><a href="@routes.EvaluationController.show(vProgramOutcomes.vEvaluation)">@pkModel.selectIdentifier._2</a></td>
     		}
 				<td>@vProgramOutcomes.vProgramOutcome</td>
 
@@ -47,7 +48,7 @@
       		}
 
       	</table>
-      <a href="@routes.ProgramOutcomesController.create(idPrograms)">Create new student learning outcomes</a>
+      <a href="@routes.ProgramOutcomesController.create(idEvaluation)">Create new student learning outcomes</a>
     </div>
   </div>
   }

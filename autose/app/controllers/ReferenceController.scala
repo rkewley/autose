@@ -10,8 +10,11 @@ import play.Logger
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
-import com.googlecode.sardine._
 import java.io._
+
+import com.amazonaws.services.s3.model.CompleteMultipartUploadResult
+
+import scala.util.{Failure, Success, Try}
 
 object ReferenceController extends Base {
 
@@ -25,28 +28,28 @@ object ReferenceController extends Base {
   )
       
 
-  def listReference = Action {
+  def listReference = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listReference(SqlReference.all.sortWith(MdlReference.compare)))
   }
 
-   def editReference(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editReference(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formReference(formReference.fill(SqlReference.select(id)), 0))
   }
 
-   def showReference(id: Long) = Action {
+   def showReference(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showReference(SqlReference.select(id)))
   }
 
-   def deleteReference(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteReference(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     SqlReference.delete(id)
     Ok(viewlist.html.listReference(SqlReference.all))
   }
 
-  def createReference = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createReference = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formReference(formReference.fill(new MdlReference(0, "", "", "http://")), 1))
   }
   
-  def uploadReferenceFile = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def uploadReferenceFile = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vReference = new MdlReference()
     Ok(viewforms.html.formReferenceFile(formReference.fill(vReference), 1))
   }
@@ -62,10 +65,12 @@ object ReferenceController extends Base {
       vReference => {
         request.body.file("referenceFile").map { referenceFile =>
           if (vReference.validate) {
-            val filename = Globals.webDavServer + "References/" + referenceFile.filename
-            val path = filename.replaceAll(" ", "%20")
-            Logger.debug(path)
-            val contentType = referenceFile.contentType
+            val path = "References/" + referenceFile.filename
+            //val path = filename.replaceAll(" ", "%20")
+            //Logger.debug(path)
+            val contentType = referenceFile.contentType.getOrElse(Globals.defaultContentType)
+
+            /*
             val sardine = SardineFactory.begin("seweb", "G0Systems!")
             val simpleResult = try {
               val inputStream = new FileInputStream(referenceFile.ref.file)
@@ -77,9 +82,10 @@ object ReferenceController extends Base {
             } 
             catch {
               case e: Exception => Some(BadRequest(viewforms.html.formError(e.getMessage, request.headers("REFERER"))))
-            }
-            simpleResult match { // Only update the database if there is no file error
-              case None =>
+            }*/
+            val upload: Try[CompleteMultipartUploadResult] = AmazonS3Controller.uploadS3FileFuture(path, referenceFile.ref.file, contentType)
+            upload match { // Only update the database if there is no file error
+              case Success(m) =>
                 val v2Reference = new MdlReference(
                   vReference.vidReference,
                   vReference.vTitle,
@@ -90,9 +96,9 @@ object ReferenceController extends Base {
                   case _ => SqlReference.insert(v2Reference)
                 }           
               Redirect(routes.ReferenceController.listReference)
-              case Some(badResult) =>
-                Logger.debug("WebDav upload error")
-                badResult
+              case Failure(ex) =>
+                Logger.debug(ex.getMessage)
+                Results.NotImplemented(ex.getMessage)
             }
           } else {
         	  Logger.debug("Got a validation error")

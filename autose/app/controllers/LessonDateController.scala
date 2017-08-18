@@ -27,24 +27,24 @@ object LessonDateController extends Base {
   )
       
 
-  def listLessonDate = Action {
+  def listLessonDate = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listLessonDate(SqlLessonDate.all))
   }
 
-   def editLessonDate(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editLessonDate(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formLessonDate(formLessonDate.fill(SqlLessonDate.select(id)), 0))
   }
 
-   def showLessonDate(id: Long) = Action {
+   def showLessonDate(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showLessonDate(SqlLessonDate.select(id)))
   }
 
-   def deleteLessonDate(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteLessonDate(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     SqlLessonDate.delete(id)
     Ok(viewlist.html.listLessonDate(SqlLessonDate.all))
   }
 
-  def createLessonDate = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createLessonDate = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formLessonDate(formLessonDate.fill(new MdlLessonDate(0, 0, 2013, 2, new Date(), new Date())), 1))
   }
 

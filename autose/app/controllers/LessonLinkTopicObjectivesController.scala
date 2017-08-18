@@ -31,30 +31,30 @@ object LessonLinkTopicObjectivesController extends Base {
   )
   
   
-  def listLessonLinkTopicObjectives(idLessonLinks: Long) = Action {
+  def listLessonLinkTopicObjectives(idLessonLinks: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
      Ok(viewlist.html.listLessonLinkTopicObjectives(SqlLessonLinkTopicObjectives.selectWhere("`LessonLink` = " + idLessonLinks), idLessonLinks))
   }
 
-   def editLessonLinkTopicObjectives(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editLessonLinkTopicObjectives(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formLessonLinkTopicObjectives(formLessonLinkTopicObjectives.fill(SqlLessonLinkTopicObjectives.select(id)), 0))
   }
 
-   def showLessonLinkTopicObjectives(id: Long) = Action {
+   def showLessonLinkTopicObjectives(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showLessonLinkTopicObjectives(SqlLessonLinkTopicObjectives.select(id)))
   }
 
-   def deleteLessonLinkTopicObjectives(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteLessonLinkTopicObjectives(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vLessonLinkTopicObjectives = SqlLessonLinkTopicObjectives.select(id)
     SqlLessonLinkTopicObjectives.delete(id)
     Redirect(routes.LessonLinkTopicObjectivesController.listLessonLinkTopicObjectives(vLessonLinkTopicObjectives.vLessonLink))
   }
 
-  def createLessonLinkTopicObjectives(idLessonLinks: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createLessonLinkTopicObjectives(idLessonLinks: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vLessonLinkTopicObjectives = new MdlLessonLinkTopicObjectives(0, idLessonLinks, 0)
     Ok(viewforms.html.formLessonLinkTopicObjectives(formLessonLinkTopicObjectives.fill(vLessonLinkTopicObjectives), 1))
   }
 
-  def createLessonLinkTopicObjectivesList(idLessonLinks: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createLessonLinkTopicObjectivesList(idLessonLinks: Long) = compositeAction(Faculty) {implicit user => implicit template => implicit request =>
     val vLessonLinkTopicObjectivesList = new MdlLessonLinkTopicObjectivesList(0, idLessonLinks, List())
     Ok(viewforms.html.formLessonLinkTopicObjectivesList(formLessonLinkTopicObjectivesList.fill(vLessonLinkTopicObjectivesList)))
   }

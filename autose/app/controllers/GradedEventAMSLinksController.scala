@@ -11,10 +11,15 @@ import models._
 import views._
 import play.api.libs.Files._
 import slick.AppDB
+
 import scala.slick.driver.MySQLDriver.simple._
 import jp.t2v.lab.play2.auth._
-import com.googlecode.sardine._
 import java.io._
+
+import com.amazonaws.services.s3.model.CompleteMultipartUploadResult
+import play.Logger
+
+import scala.util.{Failure, Success, Try}
 
 object GradedEventAMSLinksController extends ControllerTrait[Long, MdlGradedEventAMSLinks, Long] with Base with OptionalAuthElement {
 
@@ -29,13 +34,13 @@ object GradedEventAMSLinksController extends ControllerTrait[Long, MdlGradedEven
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listGradedEventAMSLinks(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlGradedEventAMSLinks)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlGradedEventAMSLinks)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listGradedEventAMSLinks(getAll(item), item.vvGradedEventAMS)
  
-	override def showFunction(vGradedEventAMSLinks: MdlGradedEventAMSLinks)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vGradedEventAMSLinks: MdlGradedEventAMSLinks): Html =
 	  views.html.viewshow.showGradedEventAMSLinks(vGradedEventAMSLinks)
 	
 	override def editFunction(mdlGradedEventAMSLinksForm: Form[MdlGradedEventAMSLinks]): Html = 
@@ -46,13 +51,13 @@ object GradedEventAMSLinksController extends ControllerTrait[Long, MdlGradedEven
 	  
 	def crud = slick.AppDB.dal.GradedEventAMSLinks
 
-  def uploadGradedEventFile(gradedEventAMSId: Long) = compositeAction(NormalUser) { user =>
+  def uploadGradedEventFile(gradedEventAMSId: Long) = compositeAction(Faculty) { user =>
     implicit template => implicit request =>
       val vGradedEventLinks = new MdlGradedEventAMSLinks(Option(0), "http:/", "", true, gradedEventAMSId)
       Ok(views.html.viewforms.formGradedEventAMSFiles(form.fill(vGradedEventLinks), 1))
   }
   
-    def importLinksFromOnlineGradedEvents = compositeAction(NormalUser){ user => implicit template => implicit request =>
+    def importLinksFromOnlineGradedEvents = compositeAction(Faculty){ implicit user => implicit template => implicit request =>
       // pull all KSA mappings from sub-events
       val gradedEventMappings = AppDB.dal.MappingGradedEvent.all
       val gradedRequiementLinks = AppDB.dal.GradedRequirementLinks.all
@@ -88,12 +93,13 @@ object GradedEventAMSLinksController extends ControllerTrait[Long, MdlGradedEven
             val course = slick.AppDB.dal.Courses.select(vGradedEventAMS.vCourse).get
             val courseIdNumber = course.vCourseIDNumber
             val term = "AT" + (course.vAcademicYear - 2000) + "-" + course.vAcademicTerm
-            val directory = Globals.webDavServer + "Courses/" + term + "/" + courseIdNumber + "/GradedRequirementFiles/"
-            val directorypath = directory.replaceAll(" ", "%20")
-            val filename = directory + gradedEventAMSFile.filename
-            val filepath = filename.replaceAll(" ", "%20")
+            val directorypath = "Courses/" + term + "/" + courseIdNumber + "/GradedRequirementFiles/"
+            //val directorypath = directory.replaceAll(" ", "%20")
+            val filepath = directorypath + gradedEventAMSFile.filename
+            //val filepath = filename.replaceAll(" ", "%20")
             Logger.debug(filepath)
-            val contentType = gradedEventAMSFile.contentType
+            val contentType = gradedEventAMSFile.contentType.getOrElse(Globals.defaultContentType)
+            /*
             val sardine = SardineFactory.begin("seweb", "G0Systems!")
             val simpleResult = try {
               if (!sardine.exists(directorypath)) sardine.createDirectory(directorypath)
@@ -105,9 +111,10 @@ object GradedEventAMSLinksController extends ControllerTrait[Long, MdlGradedEven
               None
             } catch {
               case e: Exception => Some(BadRequest(viewforms.html.formError(e.getMessage, request.headers("REFERER"))))
-            }
-            simpleResult match { // Only update the database if there is no file error
-              case None =>
+            }*/
+            val upload: Try[CompleteMultipartUploadResult] = AmazonS3Controller.uploadS3FileFuture(filepath, gradedEventAMSFile.ref.file, contentType)
+            upload match { // Only update the database if there is no file error
+              case Success(m) =>
                 val v2GradedEventAMSLinks = new MdlGradedEventAMSLinks(
                   vGradedEventAMSLinks.vidGradedEventAMSLinks,
                   filepath,
@@ -119,8 +126,9 @@ object GradedEventAMSLinksController extends ControllerTrait[Long, MdlGradedEven
                   case _ => AppDB.dal.GradedEventAMSLinks.insert(v2GradedEventAMSLinks)
                 }
                 Redirect(routes.GradedEventAMSLinksController.list(v2GradedEventAMSLinks.vvGradedEventAMS))
-              case Some(badResult) =>
-                badResult
+              case Failure(ex) =>
+                Logger.debug(ex.getMessage)
+                Results.NotImplemented(ex.getMessage)
             }
           } else {
             val validationErrors = vGradedEventAMSLinks.validationErrors

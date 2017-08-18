@@ -14,10 +14,12 @@ trait ProgramOutcomesComponent  {
       def vProgramOutcomeNumber = column[Long]("ProgramOutcomeNumber", O.PrimaryKey, O.AutoInc)
       def vProgram = column[Long]("Program")
       def vProgramOutcome = column[String]("ProgramOutcome")
-      def * = vProgramOutcomeNumber.? ~ vProgram ~ vProgramOutcome<> (MdlProgramOutcomes.apply _, MdlProgramOutcomes.unapply _)
-      def forInsert = vProgram ~ vProgramOutcome <> 
-      ({t => MdlProgramOutcomes(None , t._1, t._2)},
-      {(vProgramOutcomes: MdlProgramOutcomes) => Some(vProgramOutcomes.vProgram, vProgramOutcomes.vProgramOutcome)})
+		  def vEvaluation = column[Long]("Evaluation")
+
+		def * = vProgramOutcomeNumber.? ~ vProgram ~ vProgramOutcome ~ vEvaluation<> (MdlProgramOutcomes.apply _, MdlProgramOutcomes.unapply _)
+      def forInsert = vProgram ~ vProgramOutcome ~ vEvaluation <>
+      ({t => MdlProgramOutcomes(None , t._1, t._2, t._3)},
+      {(vProgramOutcomes: MdlProgramOutcomes) => Some(vProgramOutcomes.vProgram, vProgramOutcomes.vProgramOutcome, vProgramOutcomes.vEvaluation)})
 
 	  def allQuery = {
 	    AppDB.database.withSession { implicit session: Session =>
@@ -58,7 +60,7 @@ trait ProgramOutcomesComponent  {
 
 	  def insert(vProgramOutcomes: MdlProgramOutcomes): Long = {
 	    AppDB.database.withSession { implicit session: Session =>
-	      ProgramOutcomes.forInsert returning ProgramOutcomes.vProgramOutcomeNumber insert MdlProgramOutcomes(None, vProgramOutcomes.vProgram, vProgramOutcomes.vProgramOutcome)
+	      ProgramOutcomes.forInsert returning ProgramOutcomes.vProgramOutcomeNumber insert MdlProgramOutcomes(None, vProgramOutcomes.vProgram, vProgramOutcomes.vProgramOutcome, vProgramOutcomes.vEvaluation)
 
 	    }
 	  }

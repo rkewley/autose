@@ -1,0 +1,70 @@
+
+@(f: Form[MdlCourseObjPerfInd], newEntry: Int)
+
+@import helper._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.CourseObjPerfIndController.save(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidCourseObjPerfInd")) { fidCourseObjPerfInd =>
+                <input type="hidden" name="@fidCourseObjPerfInd.name" id="@fidCourseObjPerfInd.id" value="@fidCourseObjPerfInd.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidCourseObjPerfInd")) { fidCourseObjPerfInd =>
+                <input type="hidden" name="@fidCourseObjPerfInd.name" id="@fidCourseObjPerfInd.id" value="@fidCourseObjPerfInd.value">
+			}
+    
+     	}
+
+        @defining(f("fPerformanceIndicator")) { fPerformanceIndicator =>
+            <input type="hidden" name="@fPerformanceIndicator.name" id="@fPerformanceIndicator.id" value="@fPerformanceIndicator.value">
+        }
+        <div style="font-weight:bold;">Select Course:</div>
+            <select id="CoursesSelect" onchange="filterSelect(this.value)>
+            @defining(slick.AppDB.dal.Courses.all) { courses =>
+                @courses.sortWith(Courses.compare).reverse.map { course =>
+                    <option value="@course.selectIdentifier._2">@course.selectIdentifier._2</option>
+                }
+            }
+            </select>
+
+
+            @{val selectvCourseObjectives = slick.AppDB.dal.CourseObjectives.courseAndObjective
+            select(field = f("fCourseObjective"), options = selectvCourseObjectives, args = '_label-> "Course Objective")}
+
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.CourseObjPerfIndController.list(0)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+
+    <script>
+            function filterSelect(v) {
+                objectiveSelect = document.getElementById("fCourseObjective");
+                for (var i = 0; i < objectiveSelect.length; i++) {
+                    var txt = objectiveSelect.options[i].text;
+                    var include = txt.toLowerCase().startsWith(v.toLowerCase());
+                    objectiveSelect.options[i].style.display = include ? 'list-item':'none';
+                }
+            }
+    </script>
+  }

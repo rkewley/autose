@@ -26,13 +26,13 @@ object PerfIndKSASubEventAMSController extends ControllerTrait[Long, MdlPerfIndK
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listPerfIndKSASubEventAMS(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlPerfIndKSASubEventAMS)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlPerfIndKSASubEventAMS)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listPerfIndKSASubEventAMS(getAll(item), item.vPerformanceIndicator)
  
-	override def showFunction(vPerfIndKSASubEventAMS: MdlPerfIndKSASubEventAMS)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vPerfIndKSASubEventAMS: MdlPerfIndKSASubEventAMS): Html =
 	  views.html.viewshow.showPerfIndKSASubEventAMS(vPerfIndKSASubEventAMS)
 	
 	override def editFunction(mdlPerfIndKSASubEventAMSForm: Form[MdlPerfIndKSASubEventAMS]): Html = 
@@ -43,7 +43,7 @@ object PerfIndKSASubEventAMSController extends ControllerTrait[Long, MdlPerfIndK
 	  
 	def crud = slick.AppDB.dal.PerfIndKSASubEventAMS
 
-	def create(perfIndId: Long, ksaId: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+	def create(perfIndId: Long, ksaId: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     	Ok(views.html.viewforms.formPerfIndKSASubEventAMS(form.fill(newItem(perfIndId)), 0, ksaId))
   	}
 	
@@ -66,7 +66,7 @@ object PerfIndKSASubEventAMSController extends ControllerTrait[Long, MdlPerfIndK
 	    Ok(resultJson)
 	}
 
-   override def delete(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   override def delete(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
 	  crud.select(id) match {
         case item: Some[MdlPerfIndKSASubEventAMS] =>
           crud.delete(id)

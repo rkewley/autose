@@ -26,8 +26,8 @@
     			
     		<tr>
 				<td>
-					@defining(Globals.updateLink(vReference.vLink)) { newLink =>
-         				<a href="@newLink">@vReference.vTitle</a>
+					@defining(Globals.stripLink(vReference.vLink)) { newLink =>
+						<a href="@routes.AmazonS3Controller.sendS3File(newLink)">@vReference.vTitle</a>
          			}
 				</td>
 				<td>@vReference.vText</td>

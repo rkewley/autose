@@ -27,13 +27,13 @@ object KSASubEventAMSController extends ControllerTrait[Long, MdlKSASubEventAMS,
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listKSASubEventAMS(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlKSASubEventAMS)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlKSASubEventAMS)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listKSASubEventAMS(getAll(item), item.vSubEventAMS)
  
-	override def showFunction(vKSASubEventAMS: MdlKSASubEventAMS)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vKSASubEventAMS: MdlKSASubEventAMS): Html =
 	  views.html.viewshow.showKSASubEventAMS(vKSASubEventAMS)
 	
 	override def editFunction(mdlKSASubEventAMSForm: Form[MdlKSASubEventAMS]): Html = 
@@ -55,7 +55,7 @@ object KSASubEventAMSController extends ControllerTrait[Long, MdlKSASubEventAMS,
       AppDB.dal.KSASubEventAMS.allQuery.filter(v1KSASubEventAMS => v1KSASubEventAMS.vSubEventAMS === vKSASubEventAMS.vSubEventAMS).elements.toList
     }
     
-    def importFromOnlineSubEvents = compositeAction(NormalUser){ user => implicit template => implicit request =>
+    def importFromOnlineSubEvents = compositeAction(Faculty){ implicit user => implicit template => implicit request =>
       // pull all KSA mappings from sub-events
       val subEventMappings = AppDB.dal.MappingSubEvent.all
       val ksaSubEvents = AppDB.dal.KSASubGradedEvent.all
@@ -76,7 +76,7 @@ object KSASubEventAMSController extends ControllerTrait[Long, MdlKSASubEventAMS,
       Redirect(routes.FacultyController.listFaculty)
     }
     
-    def importFromOnlineGradedEvents = compositeAction(NormalUser){ user => implicit template => implicit request =>
+    def importFromOnlineGradedEvents = compositeAction(Faculty){ implicit user => implicit template => implicit request =>
       // pull all KSA mappings from sub-events
       val gradedEventMappings = AppDB.dal.MappingGradedEvent.all
       val ksaGradedEvents = AppDB.dal.KSAGradedEvent.all

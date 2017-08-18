@@ -1,5 +1,5 @@
 
-@(listLessonLinkTopicObjectives: List[MdlLessonLinkTopicObjectives], idLessonLinks: Long)
+@(listLessonLinkTopicObjectives: List[MdlLessonLinkTopicObjectives], idLessonLinks: Long)(implicit user: MdlUser)
     
     @import persistence._
     @import slick.AppDB

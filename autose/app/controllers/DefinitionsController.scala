@@ -23,13 +23,13 @@ object DefinitionsController extends ControllerTrait[Long, MdlDefinitions, Long]
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listDefinitions(getAll(ffk))
  
-	override def listFunction(item: MdlDefinitions)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlDefinitions)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listDefinitions(getAll(item))
  
-	override def showFunction(vDefinitions: MdlDefinitions)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vDefinitions: MdlDefinitions): Html =
 	  views.html.viewshow.showDefinitions(vDefinitions)
 	
 	override def editFunction(mdlDefinitionsForm: Form[MdlDefinitions]): Html = 
@@ -39,6 +39,9 @@ object DefinitionsController extends ControllerTrait[Long, MdlDefinitions, Long]
 	  views.html.viewforms.formDefinitions(mdlDefinitionsForm, 1)
 	  
 	def crud = slick.AppDB.dal.Definitions
+
+	override def redirect(item: MdlDefinitions) = routes.DefinitionsController.list(0)
+
 
 
 	def newItem(fkId: Long) = new MdlDefinitions

@@ -23,13 +23,13 @@ object PerformanceIndicatorController extends ControllerTrait[Long, MdlPerforman
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listPerformanceIndicator(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlPerformanceIndicator)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlPerformanceIndicator)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listPerformanceIndicator(getAll(item), item.vProgramOutcome)
  
-	override def showFunction(vPerformanceIndicator: MdlPerformanceIndicator)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vPerformanceIndicator: MdlPerformanceIndicator): Html =
 	  views.html.viewshow.showPerformanceIndicator(vPerformanceIndicator)
 	
 	override def editFunction(mdlPerformanceIndicatorForm: Form[MdlPerformanceIndicator]): Html = 
@@ -40,6 +40,7 @@ object PerformanceIndicatorController extends ControllerTrait[Long, MdlPerforman
 	  
 	def crud = slick.AppDB.dal.PerformanceIndicator
 
+	override def redirect(item: MdlPerformanceIndicator) = routes.PerformanceIndicatorController.list(item.vProgramOutcome)
 
     def newItem(fkId: Long): MdlPerformanceIndicator = new MdlPerformanceIndicator(Option(0), "", fkId)
     

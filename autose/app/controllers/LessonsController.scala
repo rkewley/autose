@@ -34,25 +34,25 @@ object LessonsController extends Base with OptionalAuthElement {
     SqlLessons.selectWhere("`idCourse` = " + idCourses).sortWith(sortLessons)
   }
 
-  def listLessons(idCourses: Long) = StackAction { implicit request =>
+  def listLessons(idCourses: Long) = compositeAction(NormalUser) {implicit user => implicit template => implicit request =>
      Ok(viewlist.html.listLessons(getSortedLessons(idCourses), idCourses))
   }
 
-   def editLessons(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editLessons(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formLessons(formLessons.fill(SqlLessons.select(id)), 0))
   }
 
-   def showLessons(id: Long) = StackAction { implicit request => 
+   def showLessons(id: Long) = compositeAction(NormalUser) {implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showLessons(SqlLessons.select(id)))
   }
 
-   def deleteLessons(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteLessons(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vLessons = SqlLessons.select(id)
     SqlLessons.delete(id)
     Redirect(routes.LessonsController.listLessons(vLessons.vidCourse))
   }
 
-  def createLessons(idCourses: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createLessons(idCourses: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vLessons = new MdlLessons(0, 0, "", "", "", idCourses, 55, false, "")
     Ok(viewforms.html.formLessons(formLessons.fill(vLessons), 1))
   }

@@ -1,5 +1,5 @@
 
-@(listLessonLinks: List[MdlLessonLinks], idLessons: Long)
+@(listLessonLinks: List[MdlLessonLinks], idLessons: Long)(implicit user: MdlUser)
     
 @import persistence._
 @import slick.AppDB
@@ -34,8 +34,8 @@
         @listLessonLinks.map { vLessonLinks =>
           <tr>
             <td>
-				@defining(Globals.updateLink(vLessonLinks.vLink)) { newLink =>
-         			<a href="@newLink">@vLessonLinks.vDescription
+				@defining(Globals.stripLink(vLessonLinks.vLink)) { newLink =>
+                    <a href="@routes.AmazonS3Controller.sendS3File(newLink)">@vLessonLinks.vDescription
          		}
             </td>
             <td>@vLessonLinks.vIsFileLiink</td>

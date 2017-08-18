@@ -1,5 +1,5 @@
 
-@(listRequiredCourses: List[MdlRequiredCourses], idPrograms: Long, fCrs: Form[MdlRequiredCourses], electiveForms: List[Form[MdlElectiveGroupCourse]])(implicit userOption: Option[MdlUser])
+@(listRequiredCourses: List[MdlRequiredCourses], idPrograms: Long, fCrs: Form[MdlRequiredCourses], electiveForms: List[Form[MdlElectiveGroupCourse]])(implicit user: MdlUser)
     
     @import slick.AppDB
     @import helper._
@@ -23,7 +23,7 @@
 			<tr>
 				<th>Course</th>
 				<th>Course Title</th>
-				@if(userOption.isDefined) {
+				@if(user.hasEditPermission) {
 				<th>Edit</th>
 				<th>Delete</th>}
 			</tr>
@@ -42,7 +42,7 @@
 					}
 				} 
 				</td>
-				@if(userOption.isDefined) {
+				@if(user.hasEditPermission) {
     			<td><a href="@routes.RequiredCoursesController.edit(vRequiredCourses.vidRequiredCourses.get)">Edit</a></td>
     	  		<td>
     	  			<form action="@routes.RequiredCoursesController.delete(vRequiredCourses.vidRequiredCourses.get)" method="POST">
@@ -55,7 +55,7 @@
 
       	</table>
       	
-      	@if(userOption.isDefined) {
+      	@if(user.hasEditPermission) {
     	@helper.form(routes.RequiredCoursesController.save(1)) {
      	<fieldset>
             @defining(fCrs("fidRequiredCourses")) { fidRequiredCourses =>
@@ -79,7 +79,7 @@
     	@defining(AppDB.dal.ElectiveGroupCourse.all.filter(_.vElectiveGroup == eg_form._1.vidElectiveGroup.get)) { electiveGroupCourses =>
     		<table><tr>
     			<td><h4>@eg_form._1.vElectiveGroupName:  Select @eg_form._1.vNumberToChoose of @electiveGroupCourses.length</h4></td>
-    			@if(userOption.isDefined) {
+    			@if(user.hasEditPermission) {
     			<td><a href="@routes.ElectiveGroupController.edit(eg_form._1.vidElectiveGroup.get)">Edit Elective Group</a></td>
     	  		<td>
     	  			<form action="@routes.ElectiveGroupController.delete(eg_form._1.vidElectiveGroup.get)" method="POST">
@@ -93,7 +93,7 @@
 					<th>Course</th>
 					<th>Course Title</th>
 					<th>Required</th>
-					@if(userOption.isDefined) {
+					@if(user.hasEditPermission) {
 					<th>Edit</th>
 					<th>Delete</th>}
 				</tr>
@@ -111,7 +111,7 @@
 						} 
 						</td>
 						<td>@egCourse.vRequired</td>
-						@if(userOption.isDefined) {
+						@if(user.hasEditPermission) {
     					<td><a href="@routes.ElectiveGroupCourseController.edit(egCourse.vidElectiveGroupCourse.get)">Edit</a></td>
     	  				<td>
     	  					<form action="@routes.ElectiveGroupCourseController.delete(egCourse.vidElectiveGroupCourse.get)" method="POST">
@@ -123,7 +123,7 @@
 				}
     		</table>
     		
-    		@if(userOption.isDefined) {
+    		@if(user.hasEditPermission) {
     		@helper.form(routes.ElectiveGroupCourseController.save(1)) {
 				<fieldset>
             		@defining(eg_form._2("fidElectiveGroupCourse")) { fidElectiveGroupCourse =>
@@ -149,7 +149,7 @@
 		}
 	</div>  @* class="eg" *@		
     }
-    @if(userOption.isDefined) {
+    @if(user.hasEditPermission) {
     	<a href="@routes.ElectiveGroupController.create(idPrograms)">Create new elective group</a>
     }
       	

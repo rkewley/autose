@@ -6,9 +6,10 @@ import play.api.templates._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
-import models._
+import models.{MdlElectiveGroup, _}
 import views._
 import slick.AppDB
+
 import scala.slick.driver.MySQLDriver.simple._
 import jp.t2v.lab.play2.auth._
 
@@ -25,13 +26,13 @@ object ElectiveGroupController extends ControllerTrait[Long, MdlElectiveGroup, L
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listElectiveGroup(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlElectiveGroup)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlElectiveGroup)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listElectiveGroup(getAll(item), item.vProgram)
  
-	override def showFunction(vElectiveGroup: MdlElectiveGroup)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vElectiveGroup: MdlElectiveGroup): Html =
 	  views.html.viewshow.showElectiveGroup(vElectiveGroup)
 	
 	override def editFunction(mdlElectiveGroupForm: Form[MdlElectiveGroup]): Html = 
@@ -42,8 +43,10 @@ object ElectiveGroupController extends ControllerTrait[Long, MdlElectiveGroup, L
 	  
 	def crud = slick.AppDB.dal.ElectiveGroup
 
+  override def redirect(item: MdlElectiveGroup) = routes.ElectiveGroupController.list(item.vProgram)
 
-    def newItem(fkId: Long): MdlElectiveGroup = new MdlElectiveGroup(Option(0), "", 0, fkId, false)
+
+  def newItem(fkId: Long): MdlElectiveGroup = new MdlElectiveGroup(Option(0), "", 0, fkId, false)
     
     override def getAll(fkId: Long): List[MdlElectiveGroup] = AppDB.database.withSession { implicit session: Session =>
       AppDB.dal.ElectiveGroup.allQuery.filter(v1ElectiveGroup => v1ElectiveGroup.vProgram === fkId).elements.toList
@@ -82,7 +85,7 @@ object ElectiveGroupController extends ControllerTrait[Long, MdlElectiveGroup, L
       })
   }
   
-   override def delete(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   override def delete(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
 	  crud.select(id) match {
         case item: Some[MdlElectiveGroup] =>
           crud.delete(id)

@@ -28,13 +28,13 @@ object GradedRequirementsController extends ControllerTrait[Long, MdlGradedRequi
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listGradedRequirements(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlGradedRequirements)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlGradedRequirements)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listGradedRequirements(getAll(item), item.vCourse)
  
-	override def showFunction(vGradedRequirements: MdlGradedRequirements)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vGradedRequirements: MdlGradedRequirements): Html =
 	  views.html.viewshow.showGradedRequirements(vGradedRequirements)
 	
 	override def editFunction(mdlGradedRequirementsForm: Form[MdlGradedRequirements]): Html = 

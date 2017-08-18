@@ -10,7 +10,6 @@ import play.Logger
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
-import com.googlecode.sardine._
 import jp.t2v.lab.play2.auth._
 
 
@@ -26,28 +25,28 @@ object TopicsController extends Base with OptionalAuthElement{
   )
       
 
-  def listTopics = Action {
+  def listTopics = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listTopics(SqlTopics.all.sortWith(MdlTopics.compare)))
   }
 
-   def editTopics(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editTopics(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formTopics(formTopics.fill(SqlTopics.select(id)), 0))
   }
 
-   def showTopics(id: Long) = Action {
+   def showTopics(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showTopics(SqlTopics.select(id)))
   }
 
-   def homeTopics(id: Long) = StackAction { implicit request => 
-    Ok(viewhome.html.homeTopics(SqlTopics.select(id), !(loggedIn.isEmpty)))
+   def homeTopics(id: Long) = compositeAction(NormalUser) {implicit user => implicit template => implicit request =>
+    Ok(viewhome.html.homeTopics(SqlTopics.select(id), user.hasEditPermission))
   }
 
-   def deleteTopics(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteTopics(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     SqlTopics.delete(id)
     Ok(viewlist.html.listTopics(SqlTopics.all))
   }
 
-  def createTopics = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createTopics = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formTopics(formTopics.fill(new MdlTopics()), 1))
   }
 
@@ -60,15 +59,6 @@ object TopicsController extends Base with OptionalAuthElement{
       },
       vTopics => {
         if (vTopics.validate) {
-          val directory = Globals.webDavServer + "Topics/" + vTopics.vTopic
-          val dirPath = directory.replaceAll(" ", "%20")
-          val sardine = SardineFactory.begin("seweb", "G0Systems!")
-          try {
-            if (!sardine.exists(dirPath)) {
-              sardine.createDirectory(dirPath)
-              Logger.debug("Creating directory " + dirPath)
-            }
-          }
           newEntry match {
             case 0 => SqlTopics.update(vTopics)
             case _ => SqlTopics.insert(vTopics)

@@ -44,6 +44,8 @@ trait AuthConfigImpl extends AuthConfig {
   def authorize(user: MdlUser, authority: Authority) = (user.permission, authority) match {
     case (Administrator, _) => true
     case (NormalUser, NormalUser) => true
+    case (Faculty, Faculty) => true
+    case (Faculty, NormalUser) => true
     case _ => false
   }
 }

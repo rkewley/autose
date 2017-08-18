@@ -1,0 +1,38 @@
+
+@(vSubEventCourseObj: MdlSubEventCourseObj)
+
+    @import slick.AppDB
+		  
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+     <div class="column span-16">
+		  <h3>SubEventCourseObj Information</h3>
+		  <dl>
+
+		  	<dt>idSubEventCourseObj</dt>
+		  	<dd>@Html(vSubEventCourseObj.vidSubEventCourseObj.toString)</dd>
+
+    		@defining(AppDB.dal.SubEventAMS.select(vSubEventCourseObj.vSubEventAMS).get){pkModel =>
+      		  <dt>SubEventAMS</dt>
+      		  <dd><a href="@routes.SubEventAMSController.show(vSubEventCourseObj.vSubEventAMS)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+
+    		@defining(AppDB.dal.CourseObjectives.select(vSubEventCourseObj.vCourseObj).get){pkModel =>
+      		  <dt>CourseObj</dt>
+      		  <dd><a href="@routes.CourseObjectivesController.show(vSubEventCourseObj.vCourseObj)">@pkModel.selectIdentifier._2</a></dd>
+    		}
+	       </dl>
+     <div>
+       <a href="@routes.SubEventCourseObjController.list(vSubEventCourseObj.vSubEventAMS)">Return to listing</a>
+     </div>
+	</div>
+   <div class="column span-4 last">
+   </div>
+  </div>
+  }

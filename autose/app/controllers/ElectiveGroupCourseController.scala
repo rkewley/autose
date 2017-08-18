@@ -24,13 +24,13 @@ object ElectiveGroupCourseController extends ControllerTrait[Long, MdlElectiveGr
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listElectiveGroupCourse(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlElectiveGroupCourse)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlElectiveGroupCourse)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listElectiveGroupCourse(getAll(item), item.vElectiveGroup)
  
-	override def showFunction(vElectiveGroupCourse: MdlElectiveGroupCourse)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vElectiveGroupCourse: MdlElectiveGroupCourse): Html =
 	  views.html.viewshow.showElectiveGroupCourse(vElectiveGroupCourse)
 	
 	override def editFunction(mdlElectiveGroupCourseForm: Form[MdlElectiveGroupCourse]): Html = 
@@ -80,7 +80,7 @@ object ElectiveGroupCourseController extends ControllerTrait[Long, MdlElectiveGr
       })
   }
   
-   override def delete(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   override def delete(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
 	  crud.select(id) match {
         case item: Some[MdlElectiveGroupCourse] =>
           crud.delete(id)

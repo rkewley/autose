@@ -1,0 +1,52 @@
+
+@(listEvaluation: List[MdlEvaluation], idPrograms: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>Evaluation Listing</h3>
+		  <table>
+			<tr>
+				<th>Name</th>
+				<th>Program</th>
+				<th>Year</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listEvaluation.map { vEvaluation =>
+    			
+    		<tr>
+				<td><a href="@routes.EvaluationController.show(vEvaluation.vidEvaluation.get)">@vEvaluation.selectIdentifier._2</a></td>
+
+    		@defining(AppDB.dal.Programs.select(vEvaluation.vProgram).get){pkModel =>
+      		  <td><a href="@routes.ProgramsController.show(vEvaluation.vProgram)">@pkModel.selectIdentifier._2</a></td>
+    		}
+				<td>@vEvaluation.vYear</td>
+
+    			<td><a href="@routes.EvaluationController.show(vEvaluation.vidEvaluation.get)">Show</a></td>
+    			<td><a href="@routes.EvaluationController.edit(vEvaluation.vidEvaluation.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.EvaluationController.delete(vEvaluation.vidEvaluation.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.EvaluationController.create(idPrograms)">Create new evaluation for this program</a>
+    </div>
+  </div>
+  }

@@ -1,9 +1,9 @@
-@(course: MdlCourses, userOption: Option[MdlUser] = None)(content: Html)
+@(course: MdlCourses)(content: Html)(implicit user: MdlUser)
 
 @main("Systems Net", course.vCourseIDNumber) {
 
 	<div class="column span-4 colborder">
-		@if(userOption.isDefined){<form method="GET" action="@routes.CoursesController.edit(course.vidCourse.get)">
+		@if(user.hasEditPermission){<form method="GET" action="@routes.CoursesController.edit(course.vidCourse.get)">
 			<input type="submit" value="Edit Course Information">
 		</form>}
 		  <ul id="menu">
@@ -15,13 +15,11 @@
 			<li><a href="@routes.LessonsController.listLessons(course.vidCourse.get)">Syllabus</a></li>
 			@*<li><a href="@routes.GradedRequirementsController.list(course.vidCourse.get)">Graded Events</a></li>*@
 			<li><a href="@routes.GradedEventAMSController.list(course.vidCourse.get)">Graded Events AMS</a></li>
-			<li><a href="@routes.CourseTopicsController.showCourseTopics(course.vidCourse.get)">Topics</a></li> 
+			@*<li><a href="@routes.CourseTopicsController.showCourseTopics(course.vidCourse.get)">Topics</a></li> *@
 			@*<li><a href="@routes.CoursesController.abet(course.vidCourse.get, ProgramsController.seId)">ABET Syllabus SE</a></li>*@
 			<li><a href="@routes.CoursesController.publish(course.vidCourse.get, ProgramsController.seId)">ABET Syllabus PDF SE</a></li>
 			@*<li><a href="@routes.CoursesController.abet(course.vidCourse.get, ProgramsController.emId)">ABET Syllabus EM</a></li>*@
 			<li><a href="@routes.CoursesController.publish(course.vidCourse.get, ProgramsController.emId)">ABET Syllabus PDF EM</a></li>
-			<li><a href="@routes.MappingGradedEventController.list(course.vidCourse.get)">Map Graded Events</a></li>
-			<li><a href="@routes.MappingSubEventController.list(course.vidCourse.get)">Map Sub Events</a></li>
 		  </ul>
 
 	</div>

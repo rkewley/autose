@@ -1,5 +1,5 @@
 
-@(listCourseLinks: List[MdlCourseLinks], courseId: Long)
+@(listCourseLinks: List[MdlCourseLinks], courseId: Long)(implicit user: MdlUser)
     
     @import persistence._
     
@@ -32,8 +32,8 @@
       		  <td><a href="@routes.CoursesController.show(vCourseLinks.vCourse)">@pkModel.selectIdentifier._2</a></td>
     		}
 				<td>
-					@defining(Globals.updateLink(vCourseLinks.vLink)) { newLink =>
-         				<a href="@newLink">@vCourseLinks.vDisplayDescription
+					@defining(Globals.stripLink(vCourseLinks.vLink)) { newLink =>
+						<a href="@routes.AmazonS3Controller.sendS3File(newLink)">@vCourseLinks.vDisplayDescription
          			}
 				</td>
 				<td>@vCourseLinks.vIsFileLink</td>

@@ -10,6 +10,7 @@ import play.api.data.format.Formats._
 import models._
 import views._
 import slick.AppDB
+
 import scala.slick.driver.MySQLDriver.simple._
 import jp.t2v.lab.play2.auth._
 
@@ -31,19 +32,20 @@ object GradedEventAMSController extends ControllerTrait[Long, MdlGradedEventAMS,
   
   val fileUploadForm = CoursesController.form
   
-  	def listAll  = StackAction { implicit request => 
+  	def listAll  = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
 	  Ok(views.html.viewlist.listAllGradedEventAMS(crud.all.sortWith(GradedEventAMS.compare)))
 	}
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = {
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html = {
 	  views.html.viewlist.listGradedEventAMS(getAll(ffk), ffk)
   }
  
-	override def listFunction(item: MdlGradedEventAMS)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlGradedEventAMS)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listGradedEventAMS(getAll(item), item.vCourse)
  
-	override def showFunction(vGradedEventAMS: MdlGradedEventAMS)(implicit maybeUser: Option[MdlUser]): Html = 
-	  views.html.viewshow.showGradedEventAMS(vGradedEventAMS)
+	override def showFunction(vGradedEventAMS: MdlGradedEventAMS): Html = {
+    views.html.viewshow.showGradedEventAMS(vGradedEventAMS)
+  }
 	
 	override def editFunction(mdlGradedEventAMSForm: Form[MdlGradedEventAMS]): Html = 
 	  views.html.viewforms.formGradedEventAMS(mdlGradedEventAMSForm, 0)
@@ -64,7 +66,7 @@ object GradedEventAMSController extends ControllerTrait[Long, MdlGradedEventAMS,
       AppDB.dal.GradedEventAMS.allQuery.filter(v1GradedEventAMS => v1GradedEventAMS.vCourse === vGradedEventAMS.vCourse).elements.toList
     }
     
-  def uploadGradedEventsAMS = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def uploadGradedEventsAMS = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(views.html.viewforms.formGradedEventAMSUpload(fileUploadForm.fill(CoursesController.newItem(0))))
   }
 
@@ -77,7 +79,7 @@ object GradedEventAMSController extends ControllerTrait[Long, MdlGradedEventAMS,
   	}
   }
   
-    def importDescriptionsFromOnlineGradedEvents = compositeAction(NormalUser){ user => implicit template => implicit request =>
+    def importDescriptionsFromOnlineGradedEvents = compositeAction(Faculty){ implicit user => implicit template => implicit request =>
       // pull all graded event mappings
       val gradedEventMappings = AppDB.dal.MappingGradedEvent.all
       val gradedEvents = AppDB.dal.GradedRequirements.all

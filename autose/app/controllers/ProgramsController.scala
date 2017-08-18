@@ -27,13 +27,13 @@ object ProgramsController extends ControllerTrait[Long, MdlPrograms, Long] with 
     )(MdlPrograms.apply)(MdlPrograms.unapply) 
   )
   
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listPrograms(getAll(ffk))
  
-	override def listFunction(item: MdlPrograms)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlPrograms)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listPrograms(getAll(item))
  
-	override def showFunction(vMdlPrograms: MdlPrograms)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vMdlPrograms: MdlPrograms): Html =
 	  views.html.viewshow.showPrograms(vMdlPrograms)
 	
 	override def editFunction(mdlProgramsForm: Form[MdlPrograms]): Html = 

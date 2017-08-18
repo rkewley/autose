@@ -22,24 +22,24 @@ object DepartmentsController extends Base {
   )
       
 
-  def listDepartments = Action {
+  def listDepartments = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listDepartments(SqlDepartments.all))
   }
 
-   def editDepartments(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editDepartments(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formDepartments(formDepartments.fill(SqlDepartments.select(id)), 0))
   }
 
-   def showDepartments(id: Long) = Action {
+   def showDepartments(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showDepartments(SqlDepartments.select(id)))
   }
 
-   def deleteDepartments(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteDepartments(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     SqlDepartments.delete(id)
     Ok(viewlist.html.listDepartments(SqlDepartments.all))
   }
 
-  def createDepartments = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createDepartments = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formDepartments(formDepartments.fill(new MdlDepartments()), 1))
   }
 

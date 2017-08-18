@@ -10,8 +10,11 @@ import play.Logger
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
-import com.googlecode.sardine._
 import java.io._
+
+import com.amazonaws.services.s3.model.CompleteMultipartUploadResult
+
+import scala.util.{Failure, Success, Try}
 
 object FacultyController extends Base {
 
@@ -31,24 +34,24 @@ object FacultyController extends Base {
   )
       
 
-  def listFaculty = Action {
+  def listFaculty = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listFaculty(SqlFaculty.all))
   }
 
-   def editFaculty(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editFaculty(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formFaculty(formFaculty.fill(SqlFaculty.select(id)), 0))
   }
 
-   def showFaculty(id: Long) = Action {
+   def showFaculty(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showFaculty(SqlFaculty.select(id)))
   }
 
-   def deleteFaculty(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteFaculty(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     SqlFaculty.delete(id)
     Ok(viewlist.html.listFaculty(SqlFaculty.all))
   }
 
-  def createFaculty = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createFaculty = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formFaculty(formFaculty.fill(new MdlFaculty()), 1))
   }
 
@@ -74,12 +77,12 @@ object FacultyController extends Base {
       })
   }
   
-  def uploadFaculty = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def uploadFaculty = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vFaculty = new MdlFaculty
     Ok(viewforms.html.formFacultyFile(formFaculty.fill(vFaculty), 1))
   }
   
-  def newFacultyPhoto(vidFaculty: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def newFacultyPhoto(vidFaculty: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formNewFacultyPicture(vidFaculty))
   }
   
@@ -87,9 +90,11 @@ object FacultyController extends Base {
       request.body.file("facultyPictureFile").map { facultyPictureFile =>
             val vFaculty = SqlFaculty.select(vidFaculty)
             val fileExtension = facultyPictureFile.filename.substring(facultyPictureFile.filename.lastIndexOf("."))
-            val filename = Globals.webDavServer + "FacultyPhotos/" + vFaculty.vLastName + vFaculty.vFirstName + fileExtension
-            val path = filename.replaceAll(" ", "%20")
-            val contentType = facultyPictureFile.contentType
+            val path = "FacultyPhotos/" + vFaculty.vLastName + vFaculty.vFirstName + fileExtension
+            //val path = filename.replaceAll(" ", "%20")
+            val contentType = facultyPictureFile.contentType.getOrElse(Globals.defaultContentType)
+
+        /*
             val sardine = SardineFactory.begin("seweb", "G0Systems!")
             val simpleResult = try {
               Logger.debug("Path is " + path)
@@ -105,20 +110,22 @@ object FacultyController extends Base {
             } 
             catch {
               case e: Exception => Some(BadRequest(viewforms.html.formError(e.getMessage, request.headers("REFERER"))))
-            }
-            simpleResult match { // Only update the database if there is no file error
-              case None =>
+            }*/
+        val upload: Try[CompleteMultipartUploadResult] = AmazonS3Controller.uploadS3FileFuture(path, facultyPictureFile.ref.file, contentType)
+
+        upload match { // Only update the database if there is no file error
+          case Success(m) =>
                 val newFaculty = vFaculty.updatePhotoFile(path)
                 SqlFaculty.update(newFaculty)     
                 Redirect(routes.FacultyController.listFaculty)
-              case Some(badResult) =>
-                Logger.debug("WebDav upload error")
-                badResult
-            }
+          case Failure(ex) =>
+            Logger.debug(ex.getMessage)
+            Results.NotImplemented(ex.getMessage)
+        }
 
     }.getOrElse {
-          Logger.debug("File upload error")
-          BadRequest(viewforms.html.formError("File upload error", request.headers("REFERRER")))
+        Logger.debug("File upload error")
+        Results.NotImplemented("File upload error")
     }
   }
 
@@ -134,9 +141,10 @@ object FacultyController extends Base {
         request.body.file("facultyPictureFile").map { facultyPictureFile =>
           if (vFaculty.validate) {
             val fileExtension = facultyPictureFile.filename.substring(facultyPictureFile.filename.lastIndexOf("."))
-            val filename = Globals.webDavServer + "FacultyPhotos/" + vFaculty.vLastName + vFaculty.vFirstName + fileExtension
-            val path = filename.replaceAll(" ", "%20")
-            val contentType = facultyPictureFile.contentType
+            val path = "FacultyPhotos/" + vFaculty.vLastName + vFaculty.vFirstName + fileExtension
+            //val path = filename.replaceAll(" ", "%20")
+            val contentType = facultyPictureFile.contentType.getOrElse(Globals.defaultContentType)
+            /*
             val sardine = SardineFactory.begin("seweb", "G0Systems!")
             val simpleResult = try {
               val inputStream = new FileInputStream(facultyPictureFile.ref.file)
@@ -148,10 +156,12 @@ object FacultyController extends Base {
             } 
             catch {
               case e: Exception => Some(BadRequest(viewforms.html.formError(e.getMessage, request.headers("REFERER"))))
-            }
-            simpleResult match { // Only update the database if there is no file error
-              case None =>
-                val v2Faculty: MdlFaculty = new MdlFaculty(
+            }*/
+            val upload: Try[CompleteMultipartUploadResult] = AmazonS3Controller.uploadS3FileFuture(path, facultyPictureFile.ref.file, contentType)
+
+            upload match { // Only update the database if there is no file error
+              case Success(m) =>
+              val v2Faculty: MdlFaculty = new MdlFaculty(
                   vFaculty.vidFaculty,
                   vFaculty.vLastName,
                   vFaculty.vFirstName,
@@ -167,9 +177,9 @@ object FacultyController extends Base {
                   case _ => SqlFaculty.insert(v2Faculty)
                 }           
               Redirect(routes.FacultyController.listFaculty)
-              case Some(badResult) =>
-                Logger.debug("WebDav upload error")
-                badResult
+              case Failure(ex) =>
+                Logger.debug(ex.getMessage)
+                Results.NotImplemented(ex.getMessage)
             }
           } else {
         	  Logger.debug("Got a validation error")

@@ -1,0 +1,53 @@
+
+@(f: Form[MdlSubEventCourseObj], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fSubEventAMS").value.get.toLong) { vSubEventAMS =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.SubEventCourseObjController.save(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidSubEventCourseObj")) { fidSubEventCourseObj =>
+                <input type="hidden" name="@fidSubEventCourseObj.name" id="@fidSubEventCourseObj.id" value="@fidSubEventCourseObj.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidSubEventCourseObj")) { fidSubEventCourseObj =>
+                <input type="hidden" name="@fidSubEventCourseObj.name" id="@fidSubEventCourseObj.id" value="@fidSubEventCourseObj.value">
+			}
+    
+     	}
+
+            @defining(f("fSubEventAMS")) { fSubEventAMS =>
+                <input type="text" name="@fSubEventAMS.name" id="@fSubEventAMS.id" value="@fSubEventAMS.value">
+			}
+    
+            @{val selectvCourseObjectives = slick.AppDB.dal.CourseObjectives.all.map(vCourseObjectives => vCourseObjectives.selectIdentifier).toSeq
+            select(field = f("fCourseObj"), options = selectvCourseObjectives, args = '_label-> "CourseObj")}
+
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.SubEventCourseObjController.list(vSubEventAMS)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

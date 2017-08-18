@@ -1,5 +1,5 @@
 
-@(vTopics: MdlTopics, loggedIn: Boolean = false)
+@(vTopics: MdlTopics, hasEditPermissions: Boolean = false)
 
     @import persistence._
     @import slick.AppDB
@@ -35,7 +35,7 @@
 		   <a href="#" title="@AppDB.dal.Definitions.getDefinition("Skill").">Skills</a>, and 
 		   <a href="#" title="@AppDB.dal.Definitions.getDefinition("Behavior").">Behaviors</a>
 		 </h4>
-		 @if(loggedIn){<form method="GET" action="@routes.TopicObjectivesController.createTopicObjectives(vTopics.vTopicsIndex)">
+		 @if(hasEditPermissions){<form method="GET" action="@routes.TopicObjectivesController.createTopicObjectives(vTopics.vTopicsIndex)">
 			<input type="submit" value="Add new knowledge, skills, and behaviors to this topic">
 		 </form>}
 		 
@@ -55,8 +55,8 @@
 		       @if(whereClause.length > 0) {
 		         @defining(SqlReference.selectWhere(whereClause)) { listReferences =>
 		           @listReferences.map { vReference =>
-       					@defining(Globals.updateLink(vReference.vLink)) { newLink =>
-			 				<li><a href="@newLink">@vReference.vTitle.</a>  @vReference.vText</li>
+       					@defining(Globals.stripLink(vReference.vLink)) { newLink =>
+			 				<li><a href="@routes.AmazonS3Controller.sendS3File(newLink)">@vReference.vTitle.</a>  @vReference.vText</li>
          				}	
 			       }
 			     }
@@ -70,8 +70,8 @@
      <p><em><small>Click to enlarge</small></em></p>
    	 @defining(SqlTopicPicture.selectWhere("Topic = " + vTopics.vTopicsIndex)) { listTopicPictures =>
        @listTopicPictures.map { vPicture =>
-       	@defining(Globals.updateLink(vPicture.vHyperlink)) { newLink =>
-         	<p><a href="@newLink"><img src="@newLink" alt="@vPicture.vAlternateText" width=150></a></p>
+       	@defining(Globals.stripLink(vPicture.vHyperlink)) { newLink =>
+         	<p><a href="@routes.AmazonS3Controller.sendS3File(newLink)"><img src="@newLink" alt="@vPicture.vAlternateText" width=150></a></p>
          }
 		 <p><caption>@vPicture.vCaption</caption></p>
 		 <hr class="space">	
@@ -85,8 +85,8 @@
 		 <ul id="menu">
 		   <li id="label">Learn More</li>
 		   @listTopicLink.map { vTopicLink =>
-       			@defining(Globals.updateLink(vTopicLink.vLink)) { newLink =>
-			 		<li><a href="@newLink">@vTopicLink.vDescription</a></li>
+       			@defining(Globals.stripLink(vTopicLink.vLink)) { newLink =>
+			 		<li><<a href="@routes.AmazonS3Controller.sendS3File(newLink)">@vTopicLink.vDescription</a></li>
          		}		   
 		   }
 		 

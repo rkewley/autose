@@ -4,10 +4,11 @@
  case class MdlProgramOutcomes (
  	vProgramOutcomeNumber : Option[Long],
 	vProgram : Long,
-	vProgramOutcome : String
+	vProgramOutcome : String,
+  vEvaluation: Long
     ) extends Mdl[Long] {
     
-      def this() = this(Option(0), 0, "")
+      def this() = this(Option(0), 0, "", 0)
 
   	  def validate: Boolean = true
     

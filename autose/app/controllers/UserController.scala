@@ -24,24 +24,24 @@ object UserController extends Base {
   )
       
 
-  def listUser = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def listUser = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listUser(SqlUser.all))
   }
 
-   def editUser(id: String) = compositeAction(Administrator) { user => implicit template => implicit request =>
+   def editUser(id: String) = compositeAction(Administrator) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formUser(formUser.fill(SqlUser.select(id)), 0))
   }
 
-   def showUser(id: String) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def showUser(id: String) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showUser(SqlUser.select(id)))
   }
 
-   def deleteUser(id: String) = compositeAction(Administrator) { user => implicit template => implicit request =>
+   def deleteUser(id: String) = compositeAction(Administrator) { implicit user => implicit template => implicit request =>
     SqlUser.delete(id)
     Ok(viewlist.html.listUser(SqlUser.all))
   }
 
-  def createUser = compositeAction(Administrator) { user => implicit template => implicit request =>
+  def createUser = compositeAction(Administrator) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formUser(formUser.fill(new MdlUser()), 1))
   }
 

@@ -27,11 +27,11 @@ object StudentsController extends ControllerTrait[Long, MdlStudents, Long] with 
     )(MdlStudents.apply)(MdlStudents.unapply)
   )
       
-	override def list(ffk: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+	override def list(ffk: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
 	  Ok(views.html.viewlist.listStudents(getAll(ffk)))
 	}
   
-    override def show(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+    override def show(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
 	  crud.select(id) match {
         case item: Some[MdlStudents] =>
           Ok(views.html.viewshow.showStudents(item.get))
@@ -40,13 +40,13 @@ object StudentsController extends ControllerTrait[Long, MdlStudents, Long] with 
       }
 	}
 	
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listStudents(getAll(ffk))
  
-	override def listFunction(item: MdlStudents)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlStudents)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listStudents(getAll(item))
  
-	override def showFunction(vStudents: MdlStudents)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vStudents: MdlStudents): Html =
 	  views.html.viewshow.showStudents(vStudents)
 	
 	override def editFunction(mdlStudentsForm: Form[MdlStudents]): Html = 
@@ -60,11 +60,11 @@ object StudentsController extends ControllerTrait[Long, MdlStudents, Long] with 
 
 	def newItem(fkId: Long) = new MdlStudents
 	
-  def selectUploadType = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def selectUploadType = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(views.html.viewlist.listStudents(getAll(0)))
   }
 	
-  def uploadStudents = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def uploadStudents = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(views.html.viewforms.formStudentsUpload(form.fill(newItem(0))))
   }
 

@@ -1,5 +1,5 @@
 
-@(vGradedEventAMS: MdlGradedEventAMS)(implicit loggedIn: Option[MdlUser])
+@(vGradedEventAMS: MdlGradedEventAMS)
 
     @import slick.AppDB
 		  
@@ -40,10 +40,10 @@
      </div>
 	</div>
    <div class="column span-4 last">
-   		@if(loggedIn.isDefined){<form method="GET" action="@routes.GradedEventAMSLinksController.uploadGradedEventFile(vGradedEventAMS.vidGradedEventAMS.get)">
+   		{<form method="GET" action="@routes.GradedEventAMSLinksController.uploadGradedEventFile(vGradedEventAMS.vidGradedEventAMS.get)">
 			<input type="submit" value="Upload Graded Event File">
 		</form>}
-   		@if(loggedIn.isDefined){<form method="GET" action="@routes.GradedEventAMSLinksController.create(vGradedEventAMS.vidGradedEventAMS.get)">
+   		{<form method="GET" action="@routes.GradedEventAMSLinksController.create(vGradedEventAMS.vidGradedEventAMS.get)">
 			<input type="submit" value="Create Graded Event Link">
 		</form>}
    		 

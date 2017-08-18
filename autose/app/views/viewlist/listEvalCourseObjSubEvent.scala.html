@@ -1,0 +1,55 @@
+
+@(listEvalCourseObjSubEvent: List[MdlEvalCourseObjSubEvent], idEvaluation: Long)
+    
+    @import slick.AppDB
+    
+    
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+    
+    <div class="column span-20 last">
+		  <h3>EvalCourseObjSubEvent Listing</h3>
+		  <table>
+			<tr>
+				<th>idEvalCourseObjSubEvent</th>
+				<th>Evaluation</th>
+				<th>CourseObjSubEvent</th>
+				<th>Show</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+            @listEvalCourseObjSubEvent.map { vEvalCourseObjSubEvent =>
+    			
+    		<tr>
+				<td>@vEvalCourseObjSubEvent.vidEvalCourseObjSubEvent</td>
+
+    		@defining(AppDB.dal.Evaluation.select(vEvalCourseObjSubEvent.vEvaluation).get){pkModel =>
+      		  <td><a href="@routes.EvaluationController.show(vEvalCourseObjSubEvent.vEvaluation)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    		@defining(AppDB.dal.SubEventCourseObj.select(vEvalCourseObjSubEvent.vCourseObjSubEvent).get){pkModel =>
+      		  <td><a href="@routes.SubEventCourseObjController.show(vEvalCourseObjSubEvent.vCourseObjSubEvent)">@pkModel.selectIdentifier._2</a></td>
+    		}
+
+    			<td><a href="@routes.EvalCourseObjSubEventController.show(vEvalCourseObjSubEvent.vidEvalCourseObjSubEvent.get)">Show</a></td>
+    			<td><a href="@routes.EvalCourseObjSubEventController.edit(vEvalCourseObjSubEvent.vidEvalCourseObjSubEvent.get)">Edit</a></td>
+    	  		<td>
+    	  			<form action="@routes.EvalCourseObjSubEventController.delete(vEvalCourseObjSubEvent.vidEvalCourseObjSubEvent.get)" method="POST">
+    	  			<input type="button" onclick="if (confirm('Are you sure you want to delete?\n  This action cannot be undone.')) submit();" value="delete">
+    	  			</form>
+    	  		</td>
+    		</tr>
+    
+
+      		}
+
+      	</table>
+      <a href="@routes.EvalCourseObjSubEventController.create(idEvaluation)">Create new EvalCourseObjSubEvent</a>
+    </div>
+  </div>
+  }

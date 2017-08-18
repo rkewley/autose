@@ -24,13 +24,13 @@ object SubGradedEventController extends ControllerTrait[Long, MdlSubGradedEvent,
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listSubGradedEvent(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlSubGradedEvent)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlSubGradedEvent)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listSubGradedEvent(getAll(item), item.vGradedEvent)
  
-	override def showFunction(vSubGradedEvent: MdlSubGradedEvent)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vSubGradedEvent: MdlSubGradedEvent): Html =
 	  views.html.viewshow.showSubGradedEvent(vSubGradedEvent)
 	
 	override def editFunction(mdlSubGradedEventForm: Form[MdlSubGradedEvent]): Html = 

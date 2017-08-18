@@ -1,12 +1,12 @@
 
-@(vLessons: MdlLessons)(implicit loggedIn: Option[MdlUser])
+@(vLessons: MdlLessons)(implicit user: MdlUser)
 
 @import persistence._
 @import slick.AppDB
 @import utilities.FileGroup
 @import models._
 		    
-@lessonPage(vLessons.vLessonIndex, loggedIn) {
+@lessonPage(vLessons.vLessonIndex) {
 
     
      <div class="column span-14">
@@ -17,64 +17,20 @@
 		  <h4>Assignment</h4>
 		  <p>@Html(vLessons.vAssignment.toString)</p>
 
+		 @if(user.hasEditPermission){<form method="GET" action="@routes.LessonObjectiveController.list(vLessons.vLessonIndex)">
+			 <input type="submit" value="Edit Lesson Objectives">
+		 </form>}
+		  <h4>Lesson Objectives</h4>
+		  <ul>
+		  @for(lo <- AppDB.dal.LessonObjective.selectForLesson(vLessons.vLessonIndex)) {
+			  <li>@lo.vLessonObjective</li>
+		  }
+		  </ul>
+
 		  <h4>Lesson Summary</h4>
 		  <p>@Html(vLessons.vLessonSummary.toString)</p>
-		  
-		  <h4>
-		     <a href="#" title="@AppDB.dal.Definitions.getDefinition("Knowledge").">Knowledge</a>, 
-		     <a href="#" title="@AppDB.dal.Definitions.getDefinition("Skill").">Skills</a>, and 
-		     <a href="#" title="@AppDB.dal.Definitions.getDefinition("Behavior").">Behaviors</a>
-		    Covered During the Lesson
-		  </h4>
-		  @if(loggedIn.isDefined){<form method="GET" action="@routes.LessonTopicObjectivesController.createLessonTopicObjectivesList(vLessons.vLessonIndex)">
-			<input type="submit" value="Link Knowledge, Skills, and Behaviors to Lesson">
-		  </form>}
-		  
-		  @defining({ 
-		  	(SqlLessonTopicObjectives.selectWhere("Lesson = " + vLessons.vLessonIndex)).map(lto =>
-		  	  
-		  	    (SqlTopicObjectives.select(lto.vTopicObjective), SqlTopics.select((SqlTopicObjectives.select(lto.vTopicObjective)).vTopic))
-		  	  
-		  	)})  { toData =>
-  		@defining(AppDB.dal.LessonLinks.all.filter(lsnLink => lsnLink.vLesson == vLessons.vLessonIndex)) { lessonLinks =>
-  		@defining(SqlLessonLinkTopicObjectives.all) { lltos =>
-		  	<table>
-		  	  <tr>
-		  	    <th>Topic</th> 
-		  	    <th>Objective</th>
-		  	    <th>Type</th>
-		  	    <th>Files</th>
-		  	  </tr>
-		  	  @toData.map { dataRow =>
-		  	    <tr>
-		  	      @*<td>@dataRow._2.vTopic</td>*@
-		  	      <td><a href="@routes.TopicsController.homeTopics(dataRow._2.vTopicsIndex)">@dataRow._2.vTopic</a></td>
-		  	      <td>@dataRow._1.vObjective</td>
-		  	      <td>@dataRow._1.vKSAB</td>
-		  	      <td>
-		  	      @defining(lltos.filter(llto => llto.vTopicObjective == dataRow._1.vTopicObjectiveNumber)) { relevantlltos =>
-		  	        @defining(lessonLinks.filter(ll => relevantlltos.map(_.vLessonLink).contains(ll.vLessonLinkNumber.get))) { links =>
-					  @links.map { link =>
-		  			    <p><small><a href="@link.vLink">@link.vDescription</a></small></p>
-					  }
-					}
-				  }
-		  	      @*
-   		 			@{lessonLinks.filter(ll => 
-   		 			  (lltos.filter(llto => 
-   		 			    llto.vTopicObjective == dataRow._1.vTopicObjectiveNumber
-   		 			  ).map(_.vLessonLink).contains(ll.vLessonLinkNumber))
-   		 			)}.map { link =>
-		  			  <p><small><a href="@link.vLink">@link.vDescription</a></small></p>
-		 			} 
-				  *@
-				  
-		  	      </td>
-		  	    </tr>
-		  	  }
-		  	
-		  	</table>
-		  	}
+
+
 		
 		
 		
@@ -87,27 +43,28 @@
 	
 	<div class="column span-4 last">
 	  Files
-	  	@if(loggedIn.isDefined){<form method="GET" action="@routes.LessonLinksController.uploadLessonFile(vLessons.vLessonIndex)">
+	  	@if(user.hasEditPermission){<form method="GET" action="@routes.LessonLinksController.uploadLessonFile(vLessons.vLessonIndex)">
 			<input type="submit" value="Upload Lesson File">
 		</form>}
 	  
 	  <ul id="menu">
+	  @defining(AppDB.dal.LessonLinks.all.filter(lsnLink => lsnLink.vLesson == vLessons.vLessonIndex)) { lessonLinks =>
 		@defining(FileGroup.getFileGroupsLessonLinks(lessonLinks.filter(lessonLink => lessonLink.vIsFileLiink == true))) { listLessonLinks =>
        		@listLessonLinks.map { fileGroup =>
 
          		@if(fileGroup.owner == "Course level file") {
          			  <li id="label">Course level files</li>
          			  @fileGroup.links.map { fgLink =>
-         			 	@defining(Globals.updateLink(fgLink.href)) { newLink =>
-         			    	<li><a href=@newLink>@fgLink.description</a></li>
+         			 	@defining(Globals.stripLink(fgLink.href)) { newLink =>
+         			    	<li><a href="@routes.AmazonS3Controller.sendS3File(newLink)">@fgLink.description</a></li>
          			    }
          			  } 
          		} else {
          			  <li>< @fileGroup.owner
          			    <ul>
          			      @fileGroup.links.map { fgLink =>
-         			      	@defining(Globals.updateLink(fgLink.href)) { newLink =>
-         			    		<li><a href=@newLink>@fgLink.description</a></li>
+         			      	@defining(Globals.stripLink(fgLink.href)) { newLink =>
+         			    		<li><a href="@routes.AmazonS3Controller.sendS3File(newLink)">@fgLink.description</a></li>
          			    	}
          			      }
          			    </ul>
@@ -118,7 +75,7 @@
 	  </ul>
 
 	  Links
-	  	@if(loggedIn.isDefined){<form method="GET" action="@routes.LessonLinksController.create(vLessons.vLessonIndex)">
+	  	@if(user.hasEditPermission){<form method="GET" action="@routes.LessonLinksController.create(vLessons.vLessonIndex)">
 			<input type="submit" value="Create Lesson Link">
 		</form>}
 	  <ul id="menu">
@@ -144,7 +101,7 @@
 	  </ul>
 	</div>
 
-	}
+
   }
   </div>
 }

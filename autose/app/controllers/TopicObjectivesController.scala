@@ -27,25 +27,25 @@ object TopicObjectivesController extends Base {
 //    Ok(viewlist.html.listTopicObjectives(SqlTopicObjectives.all))
 //  }
 
-  def listSelectedTopicObjectives(topicId: Long) = Action {
+  def listSelectedTopicObjectives(topicId: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listTopicObjectives(SqlTopicObjectives.selectWhere("Topic = " + topicId), topicId))
   }
 
-   def editTopicObjectives(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editTopicObjectives(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formTopicObjectives(formTopicObjectives.fill(SqlTopicObjectives.select(id)), 0))
   }
 
-   def showTopicObjectives(id: Long) = Action {
+   def showTopicObjectives(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showTopicObjectives(SqlTopicObjectives.select(id)))
   }
 
-   def deleteTopicObjectives(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteTopicObjectives(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vTopicObjectives = SqlTopicObjectives.select(id)
     SqlTopicObjectives.delete(id)
     Redirect(routes.TopicObjectivesController.listSelectedTopicObjectives(vTopicObjectives.vTopic))
   }
 
-  def createTopicObjectives(topicId: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createTopicObjectives(topicId: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vTopicObjectives = new MdlTopicObjectives(0, "", topicId, "Skill")
     Ok(viewforms.html.formTopicObjectives(formTopicObjectives.fill(vTopicObjectives), 1))
   }

@@ -1,0 +1,54 @@
+
+@(f: Form[MdlEvaluation], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fProgram").value.get.toLong) { vProgram =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.EvaluationController.save(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidEvaluation")) { fidEvaluation =>
+                <input type="hidden" name="@fidEvaluation.name" id="@fidEvaluation.id" value="@fidEvaluation.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidEvaluation")) { fidEvaluation =>
+                <input type="hidden" name="@fidEvaluation.name" id="@fidEvaluation.id" value="@fidEvaluation.value">
+			}
+    
+     	}
+
+            @*@textarea(field = f("fName"), args = 'rows -> 2, 'cols -> 100, '_label-> "Name")*@
+        	@inputText(f("fName"), '_label -> "Name")
+
+            @defining(f("fProgram")) { fProgram =>
+                <input type="hidden" name="@fProgram.name" id="@fProgram.id" value="@fProgram.value">
+			}
+    
+            @inputText(f("fYear"), '_label -> "Year")
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.EvaluationController.list(vProgram)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

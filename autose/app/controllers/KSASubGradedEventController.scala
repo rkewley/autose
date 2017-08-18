@@ -26,13 +26,13 @@ object KSASubGradedEventController extends ControllerTrait[Long, MdlKSASubGraded
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listKSASubGradedEvent(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlKSASubGradedEvent)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlKSASubGradedEvent)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listKSASubGradedEvent(getAll(item), item.vSubGradedEvent)
  
-	override def showFunction(vKSASubGradedEvent: MdlKSASubGradedEvent)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vKSASubGradedEvent: MdlKSASubGradedEvent): Html =
 	  views.html.viewshow.showKSASubGradedEvent(vKSASubGradedEvent)
 	
 	override def editFunction(mdlKSASubGradedEventForm: Form[MdlKSASubGradedEvent]): Html = 

@@ -11,11 +11,16 @@ import models._
 import views._
 import slick.AppDB
 import persistence._
+
 import scala.slick.driver.MySQLDriver.simple._
-import com.googlecode.sardine._
 import play.api.libs.Files._
 import java.io._
+
+import com.amazonaws.services.s3.model.CompleteMultipartUploadResult
 import jp.t2v.lab.play2.auth._
+import play.Logger
+
+import scala.util.{Failure, Success, Try}
 
 object GradedRequirementLinksController extends ControllerTrait[Long, MdlGradedRequirementLinks, Long] with Base with OptionalAuthElement {
 
@@ -27,13 +32,13 @@ object GradedRequirementLinksController extends ControllerTrait[Long, MdlGradedR
       "fIsFileLink" -> of[Boolean],
       "fGradedRequirement" -> of[Long])(MdlGradedRequirementLinks.apply)(MdlGradedRequirementLinks.unapply))
 
-  override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html =
+  override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
     views.html.viewlist.listGradedRequirementLinks(getAll(ffk), ffk)
 
-  override def listFunction(item: MdlGradedRequirementLinks)(implicit maybeUser: Option[MdlUser]): Html =
+  override def listFunction(item: MdlGradedRequirementLinks)(implicit user: MdlUser): Html =
     views.html.viewlist.listGradedRequirementLinks(getAll(item), item.vGradedRequirement)
 
-  override def showFunction(vGradedRequirementLinks: MdlGradedRequirementLinks)(implicit maybeUser: Option[MdlUser]): Html =
+  override def showFunction(vGradedRequirementLinks: MdlGradedRequirementLinks): Html =
     views.html.viewshow.showGradedRequirementLinks(vGradedRequirementLinks)
 
   override def editFunction(mdlGradedRequirementLinksForm: Form[MdlGradedRequirementLinks]): Html =
@@ -42,24 +47,8 @@ object GradedRequirementLinksController extends ControllerTrait[Long, MdlGradedR
   override def createFunction(mdlGradedRequirementLinksForm: Form[MdlGradedRequirementLinks]): Html =
     views.html.viewforms.formGradedRequirementLinks(mdlGradedRequirementLinksForm, 1)
 
-  override def delete(id: Long) = {
-    val gradedRequirementLink = crud.select(id).get
-    if (gradedRequirementLink.vIsFileLink) {
-      val sardine = SardineFactory.begin("seweb", "G0Systems!")
-      try {
-        if (sardine.exists(gradedRequirementLink.vLink)) {
-          sardine.delete(gradedRequirementLink.vLink)
-        }
-      } catch {
-        case e: Exception => {
-          println("Could not delete file " + gradedRequirementLink.vLink)
-        }
-      }
-    }
-    super.delete(id)
-  }
 
-  def uploadGradedEventFile(gradedEventAMSId: Long) = compositeAction(NormalUser) { user =>
+  def uploadGradedEventFile(gradedEventAMSId: Long) = compositeAction(Faculty) { user =>
     implicit template => implicit request =>
       val vGradedEventLinks = new MdlGradedRequirementLinks(Option(0), "http:/", "", true, gradedEventAMSId)
       Ok(views.html.viewforms.formGradedRequirementFiles(form.fill(vGradedEventLinks), 1))
@@ -79,12 +68,14 @@ object GradedRequirementLinksController extends ControllerTrait[Long, MdlGradedR
             val course = slick.AppDB.dal.Courses.select(vGradedRequirements.vCourse).get
             val courseIdNumber = course.vCourseIDNumber
             val term = "AT" + (course.vAcademicYear - 2000) + "-" + course.vAcademicTerm
-            val directory = Globals.webDavServer + "Courses/" + term + "/" + courseIdNumber + "/GradedRequirementFiles/"
-            val directorypath = directory.replaceAll(" ", "%20")
-            val filename = directory + gradedRequirementFile.filename
-            val filepath = filename.replaceAll(" ", "%20")
+            val directory = "Courses/" + term + "/" + courseIdNumber + "/GradedRequirementFiles/"
+            //val directorypath = directory.replaceAll(" ", "%20")
+            val filepath = directory + gradedRequirementFile.filename
+            //val filepath = filename.replaceAll(" ", "%20")
             Logger.debug(filepath)
-            val contentType = gradedRequirementFile.contentType
+            val contentType = gradedRequirementFile.contentType.getOrElse(Globals.defaultContentType)
+
+            /*
             val sardine = SardineFactory.begin("seweb", "G0Systems!")
             val simpleResult = try {
               if (!sardine.exists(directorypath)) sardine.createDirectory(directorypath)
@@ -96,9 +87,11 @@ object GradedRequirementLinksController extends ControllerTrait[Long, MdlGradedR
               None
             } catch {
               case e: Exception => Some(BadRequest(viewforms.html.formError(e.getMessage, request.headers("REFERER"))))
-            }
-            simpleResult match { // Only update the database if there is no file error
-              case None =>
+            }*/
+            val upload: Try[CompleteMultipartUploadResult] = AmazonS3Controller.uploadS3FileFuture(filepath, gradedRequirementFile.ref.file, contentType)
+
+            upload match { // Only update the database if there is no file error
+              case Success(m) =>
                 val v2GradedReqiurementLinks = new MdlGradedRequirementLinks(
                   vGradedRequirementLinks.vidGradedRequirementLinks,
                   filepath,
@@ -110,8 +103,9 @@ object GradedRequirementLinksController extends ControllerTrait[Long, MdlGradedR
                   case _ => AppDB.dal.GradedRequirementLinks.insert(v2GradedReqiurementLinks)
                 }
                 Redirect(routes.GradedRequirementLinksController.list(vGradedRequirementLinks.vGradedRequirement))
-              case Some(badResult) =>
-                badResult
+              case Failure(ex) =>
+                Logger.debug(ex.getMessage)
+                Results.NotImplemented(ex.getMessage)
             }
           } else {
             val validationErrors = vGradedRequirementLinks.validationErrors

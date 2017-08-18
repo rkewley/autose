@@ -1,0 +1,56 @@
+
+@(f: Form[MdlLessonObjective], newEntry: Int)
+
+@import helper._
+@import persistence._
+
+
+    @main("Systems Net", "Systems Body of Knowledge") {
+	<div>
+	  <div class="column span-4">
+		 
+	  </div>
+
+
+@defining(f("fLesson").value.get.toLong) { vLesson =>  
+<div class="column span-20 last">
+    <fieldset>
+    @helper.form(routes.LessonObjectiveController.save(newEntry)) {
+
+
+        @if(newEntry == 0) {
+		  
+            @defining(f("fidLessonObjective")) { fidLessonObjective =>
+                <input type="hidden" name="@fidLessonObjective.name" id="@fidLessonObjective.id" value="@fidLessonObjective.value">
+			}
+    
+		}
+		@if(newEntry != 0) {
+     		
+            @defining(f("fidLessonObjective")) { fidLessonObjective =>
+                <input type="hidden" name="@fidLessonObjective.name" id="@fidLessonObjective.id" value="@fidLessonObjective.value">
+			}
+    
+     	}
+
+            @defining(f("fLesson")) { fLesson =>
+                <input type="hidden" name="@fLesson.name" id="@fLesson.id" value="@fLesson.value">
+			}
+    
+            @{val selectvCourseObjectives = slick.AppDB.dal.CourseObjectives.all.filter(co => co.vCourseIDNumber == SqlLessons.select(vLesson).vidCourse).map(vCourseObjectives => vCourseObjectives.selectIdentifier).toSeq
+            select(field = f("fSupportedCourseObjective"), options = selectvCourseObjectives, args = '_label-> "Supported Course Objective")}
+    		<a href="@routes.CourseObjectivesController.create(SqlLessons.select(vLesson).vidCourse)">Create new course objectives</a>
+
+            @textarea(field = f("fLessonObjective"), args = 'rows -> 2, 'cols -> 100, '_label-> "Lesson Objective")
+        	@*@inputText(f("fLessonObjective"), '_label -> "Lesson Objective")*@
+
+       		<fieldset style="margin-top: 10px;">
+          		<input type="submit" value="Submit" />
+          		<a href="@routes.LessonObjectiveController.list(vLesson)">Cancel and return to listing</a>
+      		</fieldset>
+        }
+	  	</fieldset></div>
+    </div>
+  </div>
+  }
+  }

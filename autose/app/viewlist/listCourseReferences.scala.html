@@ -1,5 +1,5 @@
 
-@(listCourseReferences: List[MdlCourseReferences], courseId: Long)
+@(listCourseReferences: List[MdlCourseReferences], courseId: Long)(implicit user: MdlUser)
     
     @import persistence._
     
@@ -26,7 +26,14 @@
     		}
 
     		@defining(SqlReference.select(vCourseReferences.vReference)){vReference =>
-      		  <td><a href="@vReference.vLink">@vReference.selectIdentifier._2</a></td>
+				@defining(Globals.stripLink(vReference.vLink)) { newLink =>
+					@if(newLink.startsWith("http")) {
+						<td><a href="@vReference.vLink">@vReference.selectIdentifier._2</a></td>
+					} else {
+
+						<td><a href="@routes.AmazonS3Controller.sendS3File(newLink)">@vReference.vTitle</td>
+					}
+				}
     		
 
     			<td><a href="@routes.ReferenceController.showReference(vReference.vidReference)">Show</a></td>

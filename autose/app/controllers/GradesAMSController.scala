@@ -26,17 +26,17 @@ object GradesAMSController extends ControllerTrait[Long, MdlGradesAMS, Long] wit
     )(MdlGradesAMS.apply)(MdlGradesAMS.unapply)
   )
       
-  	def listAll  = StackAction { implicit request => 
+  	def listAll  = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
 	  Ok(views.html.viewlist.listGradesAMS(crud.all, 0))
 	}
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listGradesAMS(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlGradesAMS)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlGradesAMS)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listGradesAMS(getAll(item), item.vGradedEventAMS)
  
-	override def showFunction(vGradesAMS: MdlGradesAMS)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vGradesAMS: MdlGradesAMS): Html =
 	  views.html.viewshow.showGradesAMS(vGradesAMS)
 	
 	override def editFunction(mdlGradesAMSForm: Form[MdlGradesAMS]): Html = 
@@ -58,7 +58,7 @@ object GradesAMSController extends ControllerTrait[Long, MdlGradesAMS, Long] wit
       AppDB.dal.GradesAMS.allQuery.filter(v1GradesAMS => v1GradesAMS.vGradedEventAMS === vGradesAMS.vGradedEventAMS).elements.toList
     }
     
-  def uploadGradesAMS = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def uploadGradesAMS = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(views.html.viewforms.formGradesAMSUpload(form.fill(newItem(0))))
   }
 

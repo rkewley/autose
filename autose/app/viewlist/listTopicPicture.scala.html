@@ -27,8 +27,8 @@
       		  <td><a href="@routes.TopicsController.showTopics(vTopicPicture.vTopic)">@pkModel.selectIdentifier._2</a></td>
     		}
 				<td>
-       				@defining(Globals.updateLink(vTopicPicture.vHyperlink)) { newLink =>
-         				<img src="@newLink" alt="@vTopicPicture.vAlternateText" width="150>"
+       				@defining(Globals.stripLink(vTopicPicture.vHyperlink)) { newLink =>
+         				<img src="@routes.AmazonS3Controller.sendS3File(newLink)" alt="@vTopicPicture.vAlternateText" width="150>"
          			}				
 				</td>
 				<td>@vTopicPicture.vAlternateText</td>

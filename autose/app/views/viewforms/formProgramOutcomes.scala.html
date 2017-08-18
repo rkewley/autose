@@ -12,7 +12,7 @@
 	  </div>
 
 
-@defining(f("fProgram").value.get.toLong) { vProgram =>  
+@defining(f("fEvaluation").value.get.toLong) { vEvaluation =>
 <div class="column span-20 last">
     <fieldset>
     @helper.form(routes.ProgramOutcomesController.save(newEntry)) {
@@ -33,8 +33,12 @@
     
      	}
 
-            @defining(f("fProgram")) { fProgram =>
-                <input type="hidden" name="@fProgram.name" id="@fProgram.id" value="@fProgram.value">
+        @defining(f("fEvaluation")) { fEvaluation =>
+            <input type="text" name="@fEvaluation.name" id="@fEvaluation.id" value="@fEvaluation.value">
+        }
+
+        @defining(f("fProgram")) { fProgram =>
+                <input type="hidden" name="@fProgram.name" id="@fProgram.id" value="0">
 			}
     
             @textarea(field = f("fProgramOutcome"), args = 'rows -> 2, 'cols -> 100, '_label-> "ProgramOutcome")
@@ -42,7 +46,7 @@
 
        		<fieldset style="margin-top: 10px;">
           		<input type="submit" value="Submit" />
-          		<a href="@routes.ProgramOutcomesController.list(vProgram)">Cancel and return to listing</a>
+          		<a href="@routes.ProgramOutcomesController.list(vEvaluation)">Cancel and return to listing</a>
       		</fieldset>
         }
 	  	</fieldset></div>

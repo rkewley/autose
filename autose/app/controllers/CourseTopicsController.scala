@@ -14,15 +14,15 @@ import play.api.data.format.Formats._
 
 object CourseTopicsController extends Base {
 
-  def listCourseTopics = Action {
+  def listCourseTopics = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listCourseTopics(SqlCourseTopics.all))
   }
   
-   def showCourseTopics(id: Long) = Action {
+   def showCourseTopics(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showCourseTopics(slick.AppDB.dal.Courses.select(id).get))
   }
 
-   def showTopicsCourses(id: Long) = Action {
+   def showTopicsCourses(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showTopicsCourses(SqlTopics.select(id)))
   }
 

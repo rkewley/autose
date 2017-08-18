@@ -9,6 +9,7 @@ import play.api.data.format.Formats._
 import models._
 import views._
 import slick.AppDB
+
 import scala.slick.driver.MySQLDriver.simple._
 import jp.t2v.lab.play2.auth._
 
@@ -23,13 +24,13 @@ object RequiredCoursesController extends ControllerTrait[Long, MdlRequiredCourse
   )
       
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listRequiredCourses(getAll(ffk), ffk, form.fill(newItem(ffk)), generateElectiveGroupCourseForms(ffk))
  
-	override def listFunction(item: MdlRequiredCourses)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlRequiredCourses)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listRequiredCourses(getAll(item), item.vProgram, form.fill(newItem(item.vProgram)), generateElectiveGroupCourseForms(item.vProgram))
  
-	override def showFunction(vRequiredCourses: MdlRequiredCourses)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vRequiredCourses: MdlRequiredCourses): Html =
 	  views.html.viewshow.showRequiredCourses(vRequiredCourses)
 	
 	override def editFunction(mdlRequiredCoursesForm: Form[MdlRequiredCourses]): Html = 

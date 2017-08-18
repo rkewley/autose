@@ -13,10 +13,11 @@
     
 	  def validationErrors: String = ""
     
-      def selectIdentifier: (String, String) = vObjectiveID.get.toString -> vObjectiveID.get.toString
+      def selectIdentifier: (String, String) = vObjectiveID.get.toString -> vObjective.toString
     
       def compare(a: MdlCourseObjectives, b: MdlCourseObjectives) = a.vObjectiveID.get.compareTo(b.vObjectiveID.get)
         
       def primaryKey = vObjectiveID
+
 }
     

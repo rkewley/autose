@@ -25,13 +25,13 @@ object KSAGradedEventController extends ControllerTrait[Long, MdlKSAGradedEvent,
     )(MdlKSAGradedEvent.apply)(MdlKSAGradedEvent.unapply)
   )
 
-	override def listFunction(ffk: Long)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(ffk: Long)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listKSAGradedEvent(getAll(ffk), ffk)
  
-	override def listFunction(item: MdlKSAGradedEvent)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def listFunction(item: MdlKSAGradedEvent)(implicit user: MdlUser): Html =
 	  views.html.viewlist.listKSAGradedEvent(getAll(item), item.vGradedEvent)
  
-	override def showFunction(vKSAGradedEvent: MdlKSAGradedEvent)(implicit maybeUser: Option[MdlUser]): Html = 
+	override def showFunction(vKSAGradedEvent: MdlKSAGradedEvent): Html =
 	  views.html.viewshow.showKSAGradedEvent(vKSAGradedEvent)
 	
 	override def editFunction(mdlKSAGradedEventForm: Form[MdlKSAGradedEvent]): Html = 

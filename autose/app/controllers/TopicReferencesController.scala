@@ -22,26 +22,26 @@ object TopicReferencesController extends Base {
   )
   
 
-  def listSelectedTopicReferences(topicId: Long) = Action {
+  def listSelectedTopicReferences(topicId: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listTopicReferences(SqlTopicReferences.selectWhere("Topic = " + topicId), topicId))
   }
 
-  def deleteTopicReferences(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def deleteTopicReferences(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vTopicReferences = SqlTopicReferences.select(id)
     SqlTopicReferences.delete(id)
     Redirect(routes.TopicReferencesController.listSelectedTopicReferences(vTopicReferences.vTopic))
   }
 
-  def editTopicReferences(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def editTopicReferences(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vTopicReferences = SqlTopicReferences.select(id)
     Ok(viewforms.html.formTopicReferences(formTopicReferences.fill(vTopicReferences), 0))
   }
 
-  def showTopicReferences(id: Long) = Action {
+  def showTopicReferences(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showTopicReferences(SqlTopicReferences.select(id)))
   }
 
-  def createTopicReferences(topicId: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createTopicReferences(topicId: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val mdlTopicReferences = new MdlTopicReferences(0, topicId, 0)
     Ok(viewforms.html.formTopicReferences(formTopicReferences.fill(mdlTopicReferences), 1))
   }

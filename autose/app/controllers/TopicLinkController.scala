@@ -22,25 +22,25 @@ object TopicLinkController extends Base {
     )(MdlTopicLink.apply)(MdlTopicLink.unapply)
   )
 
-  def listSelectedTopicLink(topicId: Long) = Action {
+  def listSelectedTopicLink(topicId: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewlist.html.listTopicLink(SqlTopicLink.selectWhere("Topic = " + topicId), topicId))
   }
 
-   def editTopicLink(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def editTopicLink(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     Ok(viewforms.html.formTopicLink(formTopicLink.fill(SqlTopicLink.select(id)), 0))
   }
 
-   def showTopicLink(id: Long) = Action {
+   def showTopicLink(id: Long) = compositeAction(NormalUser) { implicit user => implicit template => implicit request =>
     Ok(viewshow.html.showTopicLink(SqlTopicLink.select(id)))
   }
 
-   def deleteTopicLink(id: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+   def deleteTopicLink(id: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vTopicLink = SqlTopicLink.select(id)
     SqlTopicLink.delete(id)
     Redirect(routes.TopicLinkController.listSelectedTopicLink(vTopicLink.vTopic))
   }
 
-  def createTopicLink(topicId: Long) = compositeAction(NormalUser) { user => implicit template => implicit request =>
+  def createTopicLink(topicId: Long) = compositeAction(Faculty) { implicit user => implicit template => implicit request =>
     val vTopicLink = new MdlTopicLink(0, topicId, "http://", "")
     Ok(viewforms.html.formTopicLink(formTopicLink.fill(vTopicLink), 1))
   }
